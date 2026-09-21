@@ -1,0 +1,115 @@
+{
+  "name": "SrMatchResult",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Sportradar sport event id \u2014 primary key, one row per match"
+    },
+    "competition_id": {
+      "type": "string"
+    },
+    "competition_name": {
+      "type": "string"
+    },
+    "category_name": {
+      "type": "string"
+    },
+    "season_id": {
+      "type": "string"
+    },
+    "season_name": {
+      "type": "string"
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "home_id": {
+      "type": "string",
+      "description": "sr:competitor id \u2014 IDs are keys, names are display only"
+    },
+    "home_name": {
+      "type": "string"
+    },
+    "away_id": {
+      "type": "string"
+    },
+    "away_name": {
+      "type": "string"
+    },
+    "home_score": {
+      "type": "number"
+    },
+    "away_score": {
+      "type": "number"
+    },
+    "ht_home": {
+      "type": "number",
+      "description": "First-half goals \u2014 from the real period_scores, never derived"
+    },
+    "ht_away": {
+      "type": "number"
+    },
+    "match_status": {
+      "type": "string",
+      "description": "ended | cancelled | postponed | not_started \u2026"
+    },
+    "winner_id": {
+      "type": "string"
+    },
+    "match_tie": {
+      "type": "boolean",
+      "default": false
+    },
+    "coverage_level": {
+      "type": "string",
+      "description": "FULL | HIGH | MEDIUM | LOW | INSUFFICIENT \u2014 from provider coverage flags"
+    },
+    "coverage_score": {
+      "type": "number",
+      "default": 0,
+      "description": "DATA_COVERAGE_SCORE 0-100, provider-flags only"
+    },
+    "team_stats": {
+      "type": "string",
+      "description": "JSON of the Extended team statistics the provider actually returned (empty = none)"
+    },
+    "has_statistics": {
+      "type": "boolean",
+      "default": false
+    },
+    "raw_ref": {
+      "type": "string",
+      "description": "RawProviderFeed cache_key of the exact stored response"
+    },
+    "data_as_of": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this row was ingested \u2014 chronological bookkeeping"
+    }
+  },
+  "required": [
+    "event_id",
+    "home_id",
+    "away_id"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

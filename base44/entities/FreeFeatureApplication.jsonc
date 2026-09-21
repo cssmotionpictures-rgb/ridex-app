@@ -1,0 +1,134 @@
+{
+  "name": "FreeFeatureApplication",
+  "type": "object",
+  "properties": {
+    "artist_name": {
+      "type": "string",
+      "description": "Applying / principal artist name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Contact email for the approval certificate"
+    },
+    "song_title": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string"
+    },
+    "music_url": {
+      "type": "string",
+      "description": "Link to the music (Audiomack / Spotify / YouTube / Boomplay etc.)"
+    },
+    "social_handle": {
+      "type": "string"
+    },
+    "ncc_certificate_number": {
+      "type": "string",
+      "description": "Active NCC Copyright Registration Certificate number proving composition ownership"
+    },
+    "mcsn_catalog_number": {
+      "type": "string",
+      "description": "Active MCSN catalog number proving composition ownership"
+    },
+    "feature_tier": {
+      "type": "string",
+      "enum": [
+        "macro",
+        "mid",
+        "micro",
+        "nano"
+      ],
+      "default": "macro",
+      "description": "Feature tier the artist is applying for \u2014 sets the processing fee (Macro \u20a6100k \u2192 Nano \u20a615k)"
+    },
+    "terms_accepted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Artist accepted the Free Feature terms & conditions"
+    },
+    "application_fee": {
+      "type": "number",
+      "default": 100000,
+      "description": "Non-refundable tiered processing fee (NGN), captured immediately by the platform"
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "NGN"
+      ],
+      "default": "NGN"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid"
+      ],
+      "default": "pending"
+    },
+    "paystack_reference": {
+      "type": "string"
+    },
+    "transaction_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "Algorithmic A&R score \u2014 \u22659.5/10 auto-approves the free feature, below is declined."
+    },
+    "quality_score": {
+      "type": "number",
+      "description": "Algorithmic A&R vetting score (0-10) returned by the server-side engine"
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rejection_reason": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string",
+      "description": "A&R summary justification returned by the scoring engine"
+    }
+  },
+  "required": [
+    "artist_name",
+    "song_title",
+    "music_url",
+    "terms_accepted",
+    "application_fee"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

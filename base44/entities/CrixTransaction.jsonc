@@ -1,0 +1,155 @@
+{
+  "name": "CrixTransaction",
+  "type": "object",
+  "properties": {
+    "crix_id": {
+      "type": "string",
+      "description": "Permanent customer-facing transaction ID \u2014 CRX-<year>-<12 chars>. The customer tracks money by this ID; provider references are never the main identifier"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "description": "Client-generated idempotency id \u2014 the same submit NEVER moves money twice; a retry returns the same transaction"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "crix_to_crix",
+        "wallet_funding",
+        "withdrawal",
+        "fx_conversion",
+        "bill_payment",
+        "merchant_payment",
+        "escrow_release"
+      ],
+      "description": "Money flow this record belongs to \u2014 new rails are added as they genuinely come online, never before"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "REQUESTED",
+        "VALIDATED",
+        "RESERVED",
+        "PROCESSING",
+        "COMPLETED",
+        "FAILED",
+        "UNKNOWN",
+        "REVERSED",
+        "CANCELLED"
+      ],
+      "default": "REQUESTED",
+      "description": "Honest state machine \u2014 the money only ever moves forward through validation \u2192 reservation \u2192 settlement; UNKNOWN is a real state (provider timeout), never silently resolved"
+    },
+    "risk_state": {
+      "type": "string",
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "REVIEW_REQUIRED",
+        "BLOCKED"
+      ],
+      "default": "LOW",
+      "description": "Evidence-based risk assessment from recorded history only \u2014 never a fabricated score"
+    },
+    "sender_id": {
+      "type": "string",
+      "description": "Sending user id"
+    },
+    "sender_email": {
+      "type": "string",
+      "default": ""
+    },
+    "recipient_id": {
+      "type": "string",
+      "default": "",
+      "description": "Receiving user id (internal transfers require a real Crix account \u2014 money is never sent to a guessed recipient)"
+    },
+    "recipient_email": {
+      "type": "string",
+      "default": ""
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency the transfer settles in"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Exact amount the recipient receives"
+    },
+    "fee_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Crix fee charged at execution \u2014 computed by the central fee engine from the active fee rule, never hard-coded in a screen"
+    },
+    "fee_breakdown_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "Full quote at execution \u2014 fee, total debited, recipient gets, rule used. No hidden charges"
+    },
+    "provider": {
+      "type": "string",
+      "default": "crix_internal",
+      "description": "Rail that actually moved the money \u2014 crix_internal for wallet-to-wallet ledger movement; external providers appear here only once genuinely integrated"
+    },
+    "provider_ref": {
+      "type": "string",
+      "default": "",
+      "description": "External provider reference when one exists"
+    },
+    "ledger_pair": {
+      "type": "string",
+      "default": "",
+      "description": "Double-entry pair key in CrixLedgerEntry this transaction balanced through \u2014 every debit equals credits"
+    },
+    "note": {
+      "type": "string",
+      "default": "",
+      "description": "Customer's own reference note (never sensitive data)"
+    },
+    "timeline_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Immutable step history \u2014 requested, validated, reserved, completed/failed \u2014 with timestamps and detail"
+    },
+    "protection_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "What Crix Protection actually verified on this transaction (session, recipient, fee source, atomic reservation, double-entry ledger). Protection = real process guarantees, never insurance or a payment guarantee"
+    }
+  },
+  "required": [
+    "crix_id",
+    "idempotency_key",
+    "type",
+    "status",
+    "currency",
+    "amount"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.sender_id": "{{user.id}}"
+        },
+        {
+          "data.recipient_id": "{{user.id}}"
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

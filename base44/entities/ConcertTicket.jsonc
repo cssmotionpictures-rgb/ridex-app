@@ -1,0 +1,51 @@
+{
+  "name": "ConcertTicket",
+  "type": "object",
+  "properties": {
+    "concert_id": {
+      "type": "string"
+    },
+    "concert_title": {
+      "type": "string"
+    },
+    "artist": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "regular",
+        "vip"
+      ],
+      "default": "regular"
+    },
+    "price": {
+      "type": "number"
+    },
+    "payment_reference": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "refunded",
+        "cancelled"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "concert_id",
+    "user_id"
+  ]
+}

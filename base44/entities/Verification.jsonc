@@ -1,0 +1,34 @@
+{
+  "name": "Verification",
+  "type": "object",
+  "properties": {
+    "user_name": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "id_document_url": {
+      "type": "string"
+    },
+    "selfie_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "rejection_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id_document_url",
+    "selfie_url"
+  ]
+}

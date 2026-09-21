@@ -1,0 +1,103 @@
+{
+  "name": "MingleMessage",
+  "type": "object",
+  "properties": {
+    "match_id": {
+      "type": "string",
+      "description": "The ACTIVE match this message belongs to \u2014 unmatched/blocked matches stop accepting messages"
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "The two matched user ids \u2014 RLS anchor. A user can only ever read or write messages of conversations they are a participant in; conversation enumeration is impossible"
+    },
+    "sender_id": {
+      "type": "string",
+      "description": "Author \u2014 RLS requires the sender to be the creator, so nobody can spoof a message from someone else"
+    },
+    "client_id": {
+      "type": "string",
+      "default": "",
+      "description": "Client-generated idempotency id \u2014 a retried/duplicated realtime delivery can never create a duplicate message"
+    },
+    "body": {
+      "type": "string",
+      "default": "",
+      "description": "Message text. Chat stays inside RideX \u2014 phone numbers, emails and account ids are never shared by the system"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "text",
+        "image"
+      ],
+      "default": "text"
+    },
+    "attachment_url": {
+      "type": "string",
+      "default": "",
+      "description": "Public image file URL for image messages"
+    },
+    "reactions_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "Map of userId \u2192 emoji reaction"
+    },
+    "read_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "When the other participant read it (read status)"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "match_id",
+    "members",
+    "sender_id",
+    "type"
+  ],
+  "rls": {
+    "read": {
+      "data.members": "{{user.id}}"
+    },
+    "create": {
+      "$and": [
+        {
+          "data.sender_id": "{{user.id}}"
+        },
+        {
+          "data.members": {
+            "$in": [
+              "{{user.id}}"
+            ]
+          }
+        }
+      ]
+    },
+    "update": {
+      "data.members": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.sender_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

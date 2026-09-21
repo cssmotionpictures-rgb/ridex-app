@@ -1,0 +1,89 @@
+{
+  "name": "CallRoom",
+  "type": "object",
+  "properties": {
+    "caller_id": {
+      "type": "string"
+    },
+    "caller_name": {
+      "type": "string"
+    },
+    "callee_id": {
+      "type": "string"
+    },
+    "callee_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ringing",
+        "answered",
+        "declined",
+        "ended"
+      ],
+      "default": "ringing"
+    },
+    "call_type": {
+      "type": "string",
+      "enum": [
+        "audio",
+        "video"
+      ],
+      "default": "audio"
+    },
+    "offer_sdp": {
+      "type": "string"
+    },
+    "answer_sdp": {
+      "type": "string"
+    },
+    "caller_ice": {
+      "type": "string",
+      "default": ""
+    },
+    "callee_ice": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "required": [
+    "caller_id",
+    "callee_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.caller_id": "{{user.id}}"
+        },
+        {
+          "data.callee_id": "{{user.id}}"
+        }
+      ]
+    },
+    "create": {
+      "data.caller_id": "{{user.id}}"
+    },
+    "update": {
+      "$or": [
+        {
+          "data.caller_id": "{{user.id}}"
+        },
+        {
+          "data.callee_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.caller_id": "{{user.id}}"
+        },
+        {
+          "data.callee_id": "{{user.id}}"
+        }
+      ]
+    }
+  }
+}

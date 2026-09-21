@@ -1,0 +1,13 @@
+{
+  "name": "card-daily-summary",
+  "entry": "entry.ts",
+  "automations": [
+    {
+      "type": "scheduled",
+      "name": "daily_card_summary_1150pm_lagos",
+      "schedule_mode": "recurring",
+      "schedule_type": "cron",
+      "cron_expression": "50 22 * * *"
+    }
+  ]
+}

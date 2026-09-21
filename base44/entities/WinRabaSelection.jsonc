@@ -1,0 +1,159 @@
+{
+  "name": "WinRabaSelection",
+  "type": "object",
+  "properties": {
+    "fixture_id": {
+      "type": "string",
+      "description": "Provider fixture id (API-Football) \u2014 dedup key. One row per fixture+market+prediction version"
+    },
+    "home": {
+      "type": "string"
+    },
+    "away": {
+      "type": "string"
+    },
+    "league": {
+      "type": "string"
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Real provider kickoff (UTC) \u2014 sessions are classified from the LAGOS time, never server UTC"
+    },
+    "lagos_date_key": {
+      "type": "string",
+      "description": "Kickoff date in Africa/Lagos (YYYY-MM-DD) \u2014 the 5-day board's own day key"
+    },
+    "day_index": {
+      "type": "number",
+      "default": 0,
+      "description": "1\u20135 board day at record time (0 = legacy)"
+    },
+    "session": {
+      "type": "string",
+      "enum": [
+        "morning",
+        "evening"
+      ],
+      "description": "Lagos kickoff 00:00\u201316:59 = morning, 17:00\u201323:59 = evening \u2014 never classified from server UTC"
+    },
+    "market_key": {
+      "type": "string",
+      "description": "Normalized market key used for settlement \u2014 1, X, 2, 1X, X2, 12, O<line>, U<line>, BTTS_Y, BTTS_N, DNB1, DNB2"
+    },
+    "market_label": {
+      "type": "string",
+      "description": "Human-readable pick label shown on the board"
+    },
+    "model_probability": {
+      "type": "number",
+      "description": "Model probability estimate at record time (0\u20131) \u2014 an estimate, never a guarantee"
+    },
+    "confidence": {
+      "type": "number",
+      "description": "RIDE X confidence shown to the user (0\u2013100), from the model probability and evidence quality"
+    },
+    "market_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "REAL bookmaker decimal price when the odds provider carried the market \u2014 0 = model-only pick, never a substitute price"
+    },
+    "bookmaker": {
+      "type": "string",
+      "default": "",
+      "description": "The bookmaker that actually quoted the price (empty on model-only picks)"
+    },
+    "market_probability": {
+      "type": "number",
+      "default": 0,
+      "description": "Bookmaker-implied probability 1/odds (0 = no real price)"
+    },
+    "edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Model probability minus implied probability, in percentage points (0 = no real price)"
+    },
+    "data_quality": {
+      "type": "string",
+      "default": "",
+      "description": "Evidence summary, e.g. 'Form 5+5 \u00b7 H2H 4 meetings'"
+    },
+    "odds_status": {
+      "type": "string",
+      "default": "",
+      "description": "priced | model_only \u2014 why no real price exists, when it doesn't"
+    },
+    "prediction_version": {
+      "type": "number",
+      "default": 1,
+      "description": "Pre-kickoff refresh creates Version 2 \u2014 Version 1 is never overwritten"
+    },
+    "supersedes_id": {
+      "type": "string",
+      "default": "",
+      "description": "Id of the prediction row this pre-kickoff refresh replaced"
+    },
+    "model_version": {
+      "type": "string",
+      "default": "wr-v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "won",
+        "lost",
+        "void",
+        "cancelled",
+        "superseded"
+      ],
+      "default": "open",
+      "description": "Graded from the real final score; void = no result within 7 days, counts toward nothing; superseded = replaced by a newer version before kickoff (history kept)"
+    },
+    "actual_home": {
+      "type": "number",
+      "description": "Real final home goals once settled"
+    },
+    "actual_away": {
+      "type": "number",
+      "description": "Real final away goals once settled"
+    },
+    "result_source": {
+      "type": "string",
+      "default": "",
+      "description": "Verified feed the score was graded from (e.g. 'API-Football fixture result')"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the prediction was permanently recorded (before kickoff)"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the pick was graded against the real result"
+    }
+  },
+  "required": [
+    "fixture_id",
+    "home",
+    "away",
+    "league",
+    "kickoff",
+    "lagos_date_key",
+    "session",
+    "market_key",
+    "market_label",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "name": "CrxsBillPayment",
+  "type": "object",
+  "properties": {
+    "bill_key": {
+      "type": "string",
+      "description": "Client-supplied idempotency key \u2014 the SAME key NEVER pays a bill twice: a retry returns the original bill record instead of debiting CRIXCOIN or calling the bill provider again"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Paying user \u2014 must own the CRIXCOIN account that was debited"
+    },
+    "bill_category": {
+      "type": "string",
+      "enum": [
+        "AIRTIME",
+        "MOBILEDATA",
+        "CABLEBILLS",
+        "INTSERVICE",
+        "UTILITYBILLS",
+        "TAX"
+      ],
+      "description": "Nigerian biller category sent to the bill provider"
+    },
+    "biller_name": {
+      "type": "string",
+      "description": "Exact biller item code from the provider's biller catalogue"
+    },
+    "customer_reference": {
+      "type": "string",
+      "description": "The customer identifier being topped up (phone number, smartcard number, meter number, account\u2026)"
+    },
+    "amount_ngn": {
+      "type": "number",
+      "description": "Exact NGN amount paid to the biller"
+    },
+    "crxs_amount_raw": {
+      "type": "string",
+      "default": "0",
+      "description": "Raw CRXS units debited \u2014 computed ONLY from live market quotes (real pool quote + real FX rate), never a typed or guessed rate"
+    },
+    "price_evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Live pricing evidence \u2014 the pool quote and FX rate responses used to compute the CRXS equivalent"
+    },
+    "crxs_debit_tx_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL Base Mainnet transaction hash of the CRIXCOIN debit \u2014 empty until the chain actually confirmed it"
+    },
+    "crxs_debit_user_op_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL UserOperation hash of the debit submission \u2014 empty until actually submitted"
+    },
+    "flutterwave_ref": {
+      "type": "string",
+      "default": "",
+      "description": "The bill provider's transaction reference from its live API response"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "created",
+        "debit_pending",
+        "debit_confirmed",
+        "bill_submitted",
+        "confirmed",
+        "failed",
+        "refunded",
+        "refund_pending",
+        "unknown"
+      ],
+      "default": "created",
+      "description": "Honest state machine \u2014 CRIXCOIN is debited FIRST and the provider is only called after a real debit confirmation; a provider failure triggers a real refund. unknown is a real state, resolved on chain before any action"
+    },
+    "crxs_refund_tx_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL transaction hash of the CRIXCOIN refund when the provider failed \u2014 empty until confirmed"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real failure reason \u2014 kept verbatim, never overwritten silently"
+    },
+    "evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side evidence trail \u2014 debit receipt, provider response, refund receipt \u2014 from real responses only"
+    }
+  },
+  "required": [
+    "bill_key",
+    "user_id",
+    "bill_category",
+    "biller_name",
+    "customer_reference",
+    "amount_ngn",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

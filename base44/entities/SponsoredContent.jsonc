@@ -1,0 +1,40 @@
+{
+  "name": "SponsoredContent",
+  "type": "object",
+  "properties": {
+    "content_title": {
+      "type": "string"
+    },
+    "sponsor_name": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "content_url": {
+      "type": "string"
+    },
+    "placement": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "live",
+        "rejected"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "content_title"
+  ]
+}

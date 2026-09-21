@@ -1,0 +1,152 @@
+{
+  "name": "CrxsMainnetDeploymentRecord",
+  "type": "object",
+  "properties": {
+    "registry_key": {
+      "type": "string",
+      "description": "Registry identity \u2014 'crxs-mainnet-deployment'. Single row holding the REAL Base MAINNET (production) deployment record. Every value is written ONLY by the server-side crxs-mainnet-deployment-verify function after it independently verifies the facts against the actual Base Mainnet chain \u2014 never typed in manually, never fabricated. This record is completely separate from the Base Sepolia testnet deployment record and the two are never mixed."
+    },
+    "deployment_status": {
+      "type": "string",
+      "enum": [
+        "NOT_DEPLOYED",
+        "DEPLOYED",
+        "FAILED"
+      ],
+      "default": "NOT_DEPLOYED",
+      "description": "NOT_DEPLOYED = no production contract exists (the ONLY honest state until the owner signs a real Base Mainnet deployment) \u00b7 DEPLOYED = a real owner-signed transaction was confirmed on Base Mainnet and the contract state was verified server-side \u00b7 FAILED = a signed transaction reverted \u2014 the real failure reason is kept"
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "NOT_VERIFIED",
+        "ONCHAIN_VERIFIED",
+        "SOURCE_VERIFIED"
+      ],
+      "default": "NOT_VERIFIED",
+      "description": "ONCHAIN_VERIFIED = name/symbol/decimals/totalSupply/deployer balance were read directly from the production contract by the server \u00b7 SOURCE_VERIFIED = additionally verified & published on basescan.org"
+    },
+    "launch_status": {
+      "type": "string",
+      "enum": [
+        "NOT_DEPLOYED",
+        "DEPLOYED",
+        "VERIFIED",
+        "LIVE"
+      ],
+      "default": "NOT_DEPLOYED",
+      "description": "Public production status. NOT_DEPLOYED \u2192 DEPLOYED (receipt confirmed) \u2192 VERIFIED (server-side on-chain verification passed) \u2192 LIVE (only after the full launch checklist passes: source verification, controlled transfer, wallet/indexer/explorer, liquidity \u2014 never automatic)"
+    },
+    "chain": {
+      "type": "string",
+      "default": "BASE_MAINNET",
+      "description": "Production asset layer: Base MAINNET (chain ID 8453). Completely separate from the Base Sepolia testnet record \u2014 a testnet address can never appear here"
+    },
+    "chain_id": {
+      "type": "number",
+      "default": 8453
+    },
+    "network": {
+      "type": "string",
+      "default": "Base Mainnet"
+    },
+    "token_name": {
+      "type": "string",
+      "default": "CrixCoin"
+    },
+    "symbol": {
+      "type": "string",
+      "default": "CRXS"
+    },
+    "decimals": {
+      "type": "number",
+      "default": 18
+    },
+    "total_supply_raw": {
+      "type": "string",
+      "default": "",
+      "description": "Raw units read from the REAL production contract's totalSupply() \u2014 only stored after the server read it from Base Mainnet"
+    },
+    "human_total_supply": {
+      "type": "string",
+      "default": ""
+    },
+    "deployer": {
+      "type": "string",
+      "default": "0xA6647b69af892b0F2894fC24FB58b2aDCbedaDE1",
+      "description": "Approved deployment wallet (public address only \u2014 the private key never touches this app)"
+    },
+    "contract_address": {
+      "type": "string",
+      "default": "",
+      "description": "ACTUAL production address from the real Base Mainnet receipt \u2014 empty until a real deployment exists. Never a placeholder, never the Sepolia address"
+    },
+    "deployment_tx_hash": {
+      "type": "string",
+      "default": "",
+      "description": "ACTUAL transaction hash of the owner-signed production deployment \u2014 empty until real"
+    },
+    "block_number": {
+      "type": "number",
+      "default": 0
+    },
+    "deployment_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "default": ""
+    },
+    "gas_used": {
+      "type": "number",
+      "default": 0
+    },
+    "explorer_url": {
+      "type": "string",
+      "default": "",
+      "description": "Derived only from the actual production contract address (https://basescan.org/address/\u2026)"
+    },
+    "compiler_version": {
+      "type": "string",
+      "default": ""
+    },
+    "optimizer": {
+      "type": "string",
+      "default": ""
+    },
+    "bytecode_sha256": {
+      "type": "string",
+      "default": ""
+    },
+    "verification_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side on-chain verification evidence \u2014 each check with pass/value, from real Base Mainnet RPC responses only"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real failure reason when a signed production deployment reverted \u2014 kept for diagnosis, never overwritten silently"
+    }
+  },
+  "required": [
+    "registry_key",
+    "deployment_status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

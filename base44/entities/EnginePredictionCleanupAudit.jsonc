@@ -1,0 +1,95 @@
+{
+  "name": "EnginePredictionCleanupAudit",
+  "type": "object",
+  "properties": {
+    "cleanup_batch_id": {
+      "type": "string",
+      "description": "Cleanup batch identity \u2014 every deletion of one approved batch carries it; the batch manifest is created BEFORE mutation and is immutable"
+    },
+    "duplicate_group": {
+      "type": "string",
+      "description": "Canonical duplicate group identity \u2014 prediction_key|v<prediction_version>. Same group = same canonical prediction, same version"
+    },
+    "duplicate_row_id": {
+      "type": "string",
+      "description": "Id of the redundant EnginePrediction row removed from the group"
+    },
+    "retained_row_id": {
+      "type": "string",
+      "description": "Id of the authoritative row retained for the group (earliest recorded_at \u2014 immutable history wins)"
+    },
+    "prediction_key": {
+      "type": "string",
+      "description": "Canonical prediction identity of the group (fixture_id|market_key)"
+    },
+    "prediction_version": {
+      "type": "number",
+      "description": "Version of the removed duplicate row"
+    },
+    "reason": {
+      "type": "string",
+      "default": "",
+      "description": "Why the row was removed \u2014 exact-duplicate proof, or the supersedes reference repoint for the referenced duplicate"
+    },
+    "downstream_reference_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Downstream references (supersedes_id chains, ledger row-id references) found pointing at the duplicate row before removal"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "exact_duplicate_removed",
+        "referenced_duplicate_removed_after_repoint"
+      ],
+      "description": "What was done \u2014 only manifest-approved redundant duplicates are removed; the referenced duplicate is removed only after its supersedes reference was repointed and verified"
+    },
+    "operator": {
+      "type": "string",
+      "default": "authorized cleanup run",
+      "description": "Who/what performed the action"
+    },
+    "manifest_created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the immutable manifest record was created \u2014 BEFORE any database mutation of the batch"
+    },
+    "executed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the deletion was executed"
+    }
+  },
+  "required": [
+    "cleanup_batch_id",
+    "duplicate_group",
+    "duplicate_row_id",
+    "retained_row_id",
+    "prediction_key",
+    "prediction_version",
+    "action",
+    "manifest_created_at"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

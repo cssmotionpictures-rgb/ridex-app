@@ -1,0 +1,120 @@
+{
+  "name": "Transaction",
+  "type": "object",
+  "properties": {
+    "amount": {
+      "type": "number"
+    },
+    "commission": {
+      "type": "number",
+      "default": 0,
+      "description": "Platform fee/commission/processing fee \u2014 captured immediately on payment, never held in escrow."
+    },
+    "discount": {
+      "type": "number",
+      "default": 0,
+      "description": "Promo-code discount applied to this transaction (NGN). amount is the post-discount charge."
+    },
+    "promo_code": {
+      "type": "string",
+      "description": "Promo code applied to this transaction (for receipts/reconciliation)."
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "USD",
+        "NGN"
+      ],
+      "default": "NGN"
+    },
+    "service": {
+      "type": "string",
+      "enum": [
+        "ride",
+        "logistics",
+        "equipment",
+        "carwash",
+        "movie",
+        "subscription",
+        "ads",
+        "marketplace",
+        "boost",
+        "card",
+        "free_feature",
+        "crix_funding"
+      ],
+      "default": "ride"
+    },
+    "description": {
+      "type": "string"
+    },
+    "reference_id": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "card",
+        "bank_transfer",
+        "cash",
+        "opay_wallet",
+        "ridex_card",
+        "crix_wallet",
+        "admin_bypass",
+        "free"
+      ],
+      "default": "card"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "failed",
+        "refunded"
+      ],
+      "default": "paid"
+    },
+    "gateway_reference": {
+      "type": "string",
+      "default": "",
+      "description": "Flutterwave order/charge id for this payment \u2014 used to verify and settle gateway events. For CRIXCOIN wallet payments this holds the idempotency purchase key instead."
+    },
+    "escrow_status": {
+      "type": "string",
+      "enum": [
+        "held",
+        "released",
+        "refunded"
+      ],
+      "default": "held",
+      "description": "Customer-protection escrow: only the PROVIDER portion (amount - commission) is held until the customer confirms. The platform fee is captured immediately and is never escrowed."
+    },
+    "escrow_released_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "escrow_released_by_name": {
+      "type": "string"
+    },
+    "refund_reason": {
+      "type": "string"
+    },
+    "platform_fee_settled": {
+      "type": "boolean",
+      "default": false,
+      "description": "True once the platform commission/processing fee has been captured by the platform. The fee is never held in escrow and is not refundable from escrow \u2014 only the provider's earnings are."
+    },
+    "settled_to_opay": {
+      "type": "boolean",
+      "default": false
+    },
+    "opay_account": {
+      "type": "string",
+      "default": "8061197339"
+    }
+  },
+  "required": [
+    "amount"
+  ]
+}

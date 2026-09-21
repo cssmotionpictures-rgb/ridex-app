@@ -1,0 +1,50 @@
+{
+  "name": "DigitalAutograph",
+  "type": "object",
+  "properties": {
+    "artist_name": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "buyer_id": {
+      "type": "string"
+    },
+    "buyer_name": {
+      "type": "string"
+    },
+    "autograph_type": {
+      "type": "string",
+      "enum": [
+        "digital",
+        "video",
+        "nft"
+      ],
+      "default": "digital"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "delivered",
+        "rejected"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "artist_name",
+    "autograph_type"
+  ]
+}

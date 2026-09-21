@@ -1,0 +1,42 @@
+{
+  "name": "EventSourceFetch",
+  "type": "object",
+  "properties": {
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "artist_schedule",
+        "venue_calendar",
+        "social_media",
+        "ticket_platform"
+      ],
+      "default": "social_media"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "query": {
+      "type": "string"
+    },
+    "events_found": {
+      "type": "number",
+      "default": 0
+    },
+    "events_created": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "success",
+        "failed"
+      ],
+      "default": "running"
+    }
+  },
+  "required": [
+    "source_type"
+  ]
+}

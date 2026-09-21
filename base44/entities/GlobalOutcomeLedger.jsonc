@@ -1,0 +1,181 @@
+{
+  "name": "GlobalOutcomeLedger",
+  "type": "object",
+  "properties": {
+    "global_prediction_id": {
+      "type": "string",
+      "description": "Link to the immutable GlobalPredictionLedger row this outcome grades \u2014 one outcome per prediction, created once, never rewritten"
+    },
+    "source_section": {
+      "type": "string",
+      "description": "Section the graded prediction came from \u2014 cross-section comparison key"
+    },
+    "model_version": {
+      "type": "string",
+      "description": "Engine version that produced the graded prediction"
+    },
+    "home": {
+      "type": "string"
+    },
+    "away": {
+      "type": "string"
+    },
+    "league": {
+      "type": "string",
+      "default": ""
+    },
+    "market_key": {
+      "type": "string",
+      "description": "Normalized market key the prediction was graded under"
+    },
+    "market_label": {
+      "type": "string",
+      "default": ""
+    },
+    "predicted_probability": {
+      "type": "number",
+      "description": "Model probability recorded pre-kickoff (0\u20131) \u2014 the calibration input, never rewritten"
+    },
+    "actual_result": {
+      "type": "string",
+      "enum": [
+        "won",
+        "lost",
+        "void",
+        "push",
+        "cancelled"
+      ],
+      "description": "The real graded outcome under the market's settlement rule"
+    },
+    "final_home": {
+      "type": "number",
+      "description": "Real final home goals the prediction was graded from"
+    },
+    "final_away": {
+      "type": "number",
+      "description": "Real final away goals the prediction was graded from"
+    },
+    "market_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Real T0 price (0 = model-only prediction)"
+    },
+    "closing_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Verified pre-kickoff closing price (0 = none captured)"
+    },
+    "clv_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Closing-line value where computable (0 = not computable)"
+    },
+    "fair_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Model fair odds recorded pre-kickoff"
+    },
+    "edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Edge recorded pre-kickoff (0 = model-only)"
+    },
+    "adjusted_edge_pct": {
+      "type": "number",
+      "default": 0
+    },
+    "confidence": {
+      "type": "number",
+      "default": 0
+    },
+    "data_quality": {
+      "type": "string",
+      "default": ""
+    },
+    "model_disagreement": {
+      "type": "number",
+      "default": 0,
+      "description": "Model disagreement at prediction time (1 \u2212 agreement, 0\u20131)"
+    },
+    "injury_state": {
+      "type": "string",
+      "default": "",
+      "description": "Injury state recorded with the prediction (matched | unmatched | unavailable | empty)"
+    },
+    "lineup_state": {
+      "type": "string",
+      "default": "",
+      "description": "Lineup state recorded with the prediction (confirmed | no_lineup | unmatched | unavailable | empty)"
+    },
+    "odds_movement": {
+      "type": "string",
+      "default": "",
+      "description": "Recorded price movement T0 \u2192 close where both exist (e.g. 'drifted 1.90\u21921.78', 'none captured')"
+    },
+    "settlement": {
+      "type": "string",
+      "description": "Settlement verdict under the market's canonical rule \u2014 won | lost | void | push | cancelled"
+    },
+    "verification_source": {
+      "type": "string",
+      "description": "verified_provider | user_supplied | conflict \u2014 user results NEVER override a conflicting verified provider result"
+    },
+    "result_source": {
+      "type": "string",
+      "default": "",
+      "description": "The specific verified feed or import batch the score came from"
+    },
+    "win_factors_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Automated WIN analysis \u2014 factors with LIKELY / POSSIBLE / NOT SUPPORTED / UNKNOWN attribution; never invented causation"
+    },
+    "loss_factors_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Automated LOSS analysis \u2014 factors with LIKELY / POSSIBLE / NOT SUPPORTED / UNKNOWN attribution; UNKNOWN when evidence is insufficient"
+    },
+    "loss_class": {
+      "type": "string",
+      "default": "",
+      "description": "Error classification for a lost prediction (A bad data, G model disagreement, H odds mispricing, \u2026) \u2014 UNCLASSIFIED when attribution is impossible"
+    },
+    "analysis_status": {
+      "type": "string",
+      "default": "analyzed",
+      "description": "analyzed | pending \u2014 whether the automated factor analysis has run"
+    },
+    "learning_status": {
+      "type": "string",
+      "default": "pending",
+      "description": "pending | counted \u2014 whether this outcome has been folded into the global pattern scan"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the outcome was graded and recorded"
+    }
+  },
+  "required": [
+    "global_prediction_id",
+    "source_section",
+    "market_key",
+    "predicted_probability",
+    "settlement",
+    "verification_source"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

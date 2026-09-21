@@ -1,0 +1,39 @@
+{
+  "name": "DriverSafetySettings",
+  "type": "object",
+  "properties": {
+    "driver_id": {
+      "type": "string"
+    },
+    "auto_record_audio": {
+      "type": "boolean",
+      "default": true
+    },
+    "panic_mode": {
+      "type": "boolean",
+      "default": true
+    },
+    "share_live_location": {
+      "type": "boolean",
+      "default": true
+    },
+    "sos_alert_type": {
+      "type": "string",
+      "enum": [
+        "All",
+        "Police+Admin",
+        "Admin Only"
+      ],
+      "default": "All"
+    },
+    "emergency_contact_name": {
+      "type": "string"
+    },
+    "emergency_contact_phone": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "driver_id"
+  ]
+}

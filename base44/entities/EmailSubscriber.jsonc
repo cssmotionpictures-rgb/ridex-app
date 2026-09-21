@@ -1,0 +1,69 @@
+{
+  "name": "EmailSubscriber",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Subscriber email (stored lowercase)"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country/region selection, e.g. 'Nigeria - Lagos', 'Ghana', 'Other'"
+    },
+    "ref_code": {
+      "type": "string",
+      "description": "Unique referral code for this subscriber"
+    },
+    "referrer": {
+      "type": "string",
+      "default": "",
+      "description": "Email of the referring subscriber (empty if none)"
+    },
+    "referrals": {
+      "type": "number",
+      "default": 0,
+      "description": "Count of subscribers attributed to this subscriber's referral link"
+    },
+    "opted_out": {
+      "type": "boolean",
+      "default": false,
+      "description": "True once the subscriber unsubscribes \u2014 skipped by all broadcasts"
+    },
+    "last_sent_date": {
+      "type": "string",
+      "default": "",
+      "description": "Last Monday this subscriber received the weekly services email (YYYY-MM-DD). Rotates the weekly individual blast so everyone gets a turn without repeats."
+    },
+    "source": {
+      "type": "string",
+      "default": "subscribe-page",
+      "description": "Where this subscriber came from \u2014 'subscribe-page' or 'web-search' (individual auto-discovered by the Monday broadcast)."
+    }
+  },
+  "required": [
+    "email",
+    "country"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

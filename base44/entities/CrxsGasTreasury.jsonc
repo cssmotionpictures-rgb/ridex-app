@@ -1,0 +1,134 @@
+{
+  "name": "CrxsGasTreasury",
+  "type": "object",
+  "properties": {
+    "registry_key": {
+      "type": "string",
+      "description": "Registry identity \u2014 'crxs-gas-treasury'. Single row for the CRIXCOIN_GAS_TREASURY_ADDRESS on Base Mainnet. The wallet address is written ONLY by the server-side crxs-gas-treasury-sync function after it locates the EXISTING CRIXCOIN deployment wallet in the project's own records and verifies it live on Base Mainnet \u2014 never generated, never typed in, never a placeholder"
+    },
+    "chain_id": {
+      "type": "number",
+      "default": 8453,
+      "description": "Base MAINNET production chain (8453). Base Sepolia values never appear here"
+    },
+    "network": {
+      "type": "string",
+      "default": "Base Mainnet"
+    },
+    "wallet_address": {
+      "type": "string",
+      "default": "",
+      "description": "CRIXCOIN_GAS_TREASURY_ADDRESS \u2014 the EXISTING real CRIXCOIN deployment wallet, reused (public address only; the private key never touches this app). Empty until the server function has verified it on-chain"
+    },
+    "wallet_address_source": {
+      "type": "string",
+      "default": "",
+      "description": "Which project record the address was discovered in \u2014 the audit path proving the wallet was reused, not created"
+    },
+    "wallet_type": {
+      "type": "string",
+      "default": "",
+      "description": "EOA or CONTRACT as read from the chain"
+    },
+    "crxs_contract_address": {
+      "type": "string",
+      "default": "",
+      "description": "The production CRXS contract on Base Mainnet once a real deployment exists \u2014 empty until then; the Base Sepolia test contract is never copied here"
+    },
+    "eth_balance": {
+      "type": "number",
+      "default": 0,
+      "description": "REAL ETH balance read live from Base Mainnet RPC \u2014 0 means 0, never 'pending' or assumed"
+    },
+    "eth_balance_raw": {
+      "type": "string",
+      "default": "0",
+      "description": "Exact wei value from the RPC response \u2014 the authoritative raw figure"
+    },
+    "reserved_eth": {
+      "type": "number",
+      "default": 0,
+      "description": "ETH committed to in-flight operations \u2014 reserved before movement, never debited on click alone"
+    },
+    "available_eth": {
+      "type": "number",
+      "default": 0,
+      "description": "Live chain balance minus reserved ETH"
+    },
+    "target_eth": {
+      "type": "number",
+      "default": 0.05,
+      "description": "Treasury buffer target \u2014 configurable from real production usage"
+    },
+    "minimum_eth": {
+      "type": "number",
+      "default": 0.01,
+      "description": "Below this, replenishment is triggered (only through a REAL settlement route)"
+    },
+    "critical_eth": {
+      "type": "number",
+      "default": 0.005,
+      "description": "Below this the treasury is CRITICAL and sponsored transactions must halt honestly"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NOT_CONFIGURED",
+        "HEALTHY",
+        "BELOW_TARGET",
+        "LOW",
+        "CRITICAL",
+        "SYNC_FAILED"
+      ],
+      "default": "NOT_CONFIGURED",
+      "description": "Derived only from the live chain balance against the thresholds \u2014 CRITICAL at 0 ETH is the honest state until real funding arrives"
+    },
+    "verification_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side verification evidence from real Base Mainnet RPC responses \u2014 format check, chain id, balance read, account type. Never fabricated"
+    },
+    "total_eth_received": {
+      "type": "number",
+      "default": 0,
+      "description": "Cumulative ETH confirmed received \u2014 updated only from real on-chain reconciliation"
+    },
+    "total_eth_spent": {
+      "type": "number",
+      "default": 0,
+      "description": "Cumulative ETH confirmed spent on gas/paymaster funding \u2014 real on-chain reconciliation only"
+    },
+    "last_synced_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "When the server last verified the treasury against the real Base Mainnet chain"
+    }
+  },
+  "required": [
+    "registry_key",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

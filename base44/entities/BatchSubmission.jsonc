@@ -1,0 +1,93 @@
+{
+  "name": "BatchSubmission",
+  "type": "object",
+  "properties": {
+    "feature_type": {
+      "type": "string",
+      "enum": [
+        "digital_product",
+        "digital_product_purchase",
+        "collaboration",
+        "song_premiere",
+        "artist_showcase",
+        "movie_premiere",
+        "artist_analytics",
+        "podcast_hosting",
+        "vip_tier",
+        "live_chat",
+        "digital_autograph",
+        "song_license",
+        "sponsored_content",
+        "ai_songwriter",
+        "virtual_studio",
+        "merchandise",
+        "fan_club",
+        "remix_contest",
+        "video_contest",
+        "audiobook"
+      ],
+      "default": "digital_product"
+    },
+    "approver_type": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "provider",
+        "artist",
+        "licensing_agency",
+        "auto"
+      ],
+      "default": "admin"
+    },
+    "reference_id": {
+      "type": "string",
+      "description": "Id of the created feature record this submission approves"
+    },
+    "title": {
+      "type": "string"
+    },
+    "submitter_id": {
+      "type": "string"
+    },
+    "submitter_name": {
+      "type": "string"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "User id of the party who should approve (artist/provider/creator/licensing agency); empty routes to admin only"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "approver_id": {
+      "type": "string"
+    },
+    "approver_name": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "extra_data": {
+      "type": "string",
+      "description": "JSON string of feature-specific context (license type, autograph type, vip tier, etc.)"
+    }
+  },
+  "required": [
+    "feature_type",
+    "title"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "PaymentConfig",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "default": "global",
+      "description": "Singleton config key \u2014 always 'global'"
+    },
+    "paystack_public_key": {
+      "type": "string",
+      "default": "",
+      "description": "Paystack PUBLIC key used by the in-browser inline checkout. Safe to expose to the frontend (like a Stripe publishable key). Seeded from the PAYSTACK_PUBLIC_KEY secret."
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

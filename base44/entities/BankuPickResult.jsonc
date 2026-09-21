@@ -1,0 +1,123 @@
+{
+  "name": "BankuPickResult",
+  "type": "object",
+  "properties": {
+    "slip": {
+      "type": "string",
+      "enum": [
+        "banku",
+        "kala",
+        "monster"
+      ],
+      "default": "banku",
+      "description": "Which drop this leg belongs to \u2014 banku (the morning 15), kala (the daily 10 \u00d7 2.50), or monster (the 6-day no-draw rollover). Each drop's results ledger stays its own."
+    },
+    "date_key": {
+      "type": "string",
+      "description": "Drop date (YYYY-MM-DD) this leg belonged to"
+    },
+    "home": {
+      "type": "string",
+      "description": "Home team name as dealt on the drop"
+    },
+    "away": {
+      "type": "string",
+      "description": "Away team name as dealt on the drop"
+    },
+    "league": {
+      "type": "string",
+      "default": "",
+      "description": "Competition the game belongs to"
+    },
+    "fixture_id": {
+      "type": "string",
+      "default": "",
+      "description": "Provider fixture id (e.g. espn-\u2026) \u2014 the leg's unique fixture key. The same fixture never enters a slip's ledger twice; empty on legacy rows recorded before the field existed."
+    },
+    "sport": {
+      "type": "string",
+      "default": "",
+      "description": "Sport of the fixture (Tennis, Basketball, American football, Baseball, Ice hockey\u2026) \u2014 empty on legacy football rows"
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Real scheduled kickoff timestamp when the provider carried one \u2014 empty when the feed had no time (never a guessed time)"
+    },
+    "day_index": {
+      "type": "number",
+      "default": 0,
+      "description": "1-based day inside the 6-day rollover chain (monster legs only; 0 = not part of a chain)"
+    },
+    "market_label": {
+      "type": "string",
+      "description": "Human-readable pick label shown on the drop (e.g. 'Under 2.5')"
+    },
+    "market_key": {
+      "type": "string",
+      "description": "Normalized market key used for settlement \u2014 1, X, 2, 1X, X2, 12, O<line>, U<line>, BTTS_Y, BTTS_N"
+    },
+    "probability": {
+      "type": "number",
+      "default": 0,
+      "description": "Model probability estimate at deal time (0-1) \u2014 an estimate, never a guarantee"
+    },
+    "fair_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Model fair odds at deal time (1 \u00f7 probability) \u2014 an estimate, never a bookmaker price"
+    },
+    "src": {
+      "type": "string",
+      "default": "",
+      "description": "Which pool the leg came from \u2014 90%+ verified deep pool, market pool, or live capture"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "win",
+        "loss",
+        "void"
+      ],
+      "default": "open",
+      "description": "Settled against the real final score; void = no result data available within 7 days, counts toward nothing"
+    },
+    "actual_home": {
+      "type": "number",
+      "description": "Real final home goals once settled"
+    },
+    "actual_away": {
+      "type": "number",
+      "description": "Real final away goals once settled"
+    },
+    "result_source": {
+      "type": "string",
+      "default": "",
+      "description": "Verified feed the final score was graded from (e.g. 'ESPN verified feed (espn-proxy)') \u2014 empty until settled; a pick is NEVER marked won from the prediction itself"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the pick was graded against the real result"
+    }
+  },
+  "required": [
+    "date_key",
+    "home",
+    "away",
+    "market_label",
+    "market_key",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

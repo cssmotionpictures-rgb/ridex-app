@@ -1,0 +1,65 @@
+{
+  "name": "LiveMatch",
+  "type": "object",
+  "properties": {
+    "team_a": {
+      "type": "string"
+    },
+    "team_b": {
+      "type": "string"
+    },
+    "team_a_color": {
+      "type": "string",
+      "default": "#1e6f5c"
+    },
+    "team_b_color": {
+      "type": "string",
+      "default": "#2563eb"
+    },
+    "league": {
+      "type": "string"
+    },
+    "stream_url": {
+      "type": "string"
+    },
+    "poster_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "live",
+        "upcoming",
+        "ended"
+      ],
+      "default": "upcoming"
+    },
+    "score_a": {
+      "type": "number",
+      "default": 0
+    },
+    "score_b": {
+      "type": "number",
+      "default": 0
+    },
+    "minute": {
+      "type": "string",
+      "default": "0'"
+    },
+    "kickoff_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "venue": {
+      "type": "string"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "team_a",
+    "team_b"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "name": "TourRun",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Tour / run name (e.g. Davido \u2014 Lagos x Abuja x PH Run)"
+    },
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "promoter_company": {
+      "type": "string"
+    },
+    "legs": {
+      "type": "string",
+      "description": "JSON array of {date, city, venue, capacity}"
+    },
+    "leg_count": {
+      "type": "number",
+      "default": 0
+    },
+    "per_leg_gross": {
+      "type": "number",
+      "default": 0,
+      "description": "Promoter gross (20% grossed-up) per leg"
+    },
+    "total_gross": {
+      "type": "number",
+      "default": 0
+    },
+    "deposit_50": {
+      "type": "number",
+      "default": 0,
+      "description": "50% non-refundable escrow deposit for the whole run"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "completed"
+      ],
+      "default": "draft"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

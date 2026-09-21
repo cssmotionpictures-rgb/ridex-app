@@ -1,0 +1,304 @@
+{
+  "name": "GlobalPredictionLedger",
+  "type": "object",
+  "properties": {
+    "global_prediction_id": {
+      "type": "string",
+      "description": "Deterministic global identity \u2014 source_section | model_version | fixture_id | market_key | vN. Idempotent ingestion: the same prediction never enters twice; a pre-kickoff change creates a NEW version id, never an overwrite"
+    },
+    "kind": {
+      "type": "string",
+      "default": "prediction",
+      "description": "Row kind \u2014 prediction (single selection). Accumulators are analyzed separately and never contaminate individual prediction quality"
+    },
+    "source_section": {
+      "type": "string",
+      "description": "The RIDE X prediction surface this prediction came from \u2014 kala | win-raba | big-hammer | rollover | banku | kala-drop | monster | manual | future section"
+    },
+    "source_entity": {
+      "type": "string",
+      "default": "",
+      "description": "Origin ledger this row was ingested from (KalaModelObservation | WinRabaSelection | BankuPickResult | result-import) \u2014 full traceability"
+    },
+    "source_row_id": {
+      "type": "string",
+      "default": "",
+      "description": "Id of the origin ledger row \u2014 the audit trail back to the source section's own immutable record"
+    },
+    "source_model": {
+      "type": "string",
+      "default": "",
+      "description": "Section model identity (RX-2.0, RX-2.1, wr-v1\u2026) \u2014 each section keeps its own model identity"
+    },
+    "model_version": {
+      "type": "string",
+      "description": "Forecasting engine version that produced this prediction \u2014 predictions are reproducible to their model"
+    },
+    "learning_version": {
+      "type": "string",
+      "default": "L-000",
+      "description": "Global learning version active when this prediction was made \u2014 what the learning engine knew at prediction time"
+    },
+    "big_hammer": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when this is a BIG HAMMER selection \u2014 real price \u2265 3.00 that passed the BIG HAMMER gates (tracked separately in global learning)"
+    },
+    "fixture_id": {
+      "type": "string",
+      "description": "Stable fixture key from the section's own feed \u2014 the join key across sections"
+    },
+    "home": {
+      "type": "string"
+    },
+    "away": {
+      "type": "string"
+    },
+    "league": {
+      "type": "string",
+      "description": "Competition label shown to the user"
+    },
+    "league_code": {
+      "type": "string",
+      "default": "",
+      "description": "Verified-feed league key \u2014 used to verify results against the verified provider"
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Real provider kickoff (UTC) \u2014 empty when the source feed carried no time (never a guessed time)"
+    },
+    "lagos_date_key": {
+      "type": "string",
+      "description": "Kickoff date in Africa/Lagos (YYYY-MM-DD)"
+    },
+    "session": {
+      "type": "string",
+      "default": "",
+      "description": "Lagos session \u2014 morning | evening (empty when the source section had no session concept)"
+    },
+    "market_key": {
+      "type": "string",
+      "description": "Normalized engine market key used for settlement \u2014 1, X, 2, 1X, X2, 12, O<line>, U<line>, BTTS_Y, BTTS_N, DNB1, DNB2"
+    },
+    "market_label": {
+      "type": "string",
+      "description": "Human-readable selection label"
+    },
+    "canonical_market": {
+      "type": "string",
+      "default": "",
+      "description": "Canonical internal market ID this selection maps to \u2014 incompatible markets are never compared"
+    },
+    "settlement_rule": {
+      "type": "string",
+      "default": "",
+      "description": "The market-specific settlement definition this prediction is graded under"
+    },
+    "probability": {
+      "type": "number",
+      "description": "Model calibrated probability estimate at record time (0\u20131) \u2014 an estimate, never a guarantee"
+    },
+    "confidence": {
+      "type": "number",
+      "default": 0,
+      "description": "Confidence shown to the user (0\u2013100)"
+    },
+    "grade": {
+      "type": "string",
+      "default": "",
+      "description": "Section grade recorded at prediction time (ULTRA ELITE / ELITE / STRONG / QUALIFYING / WATCH where applicable)"
+    },
+    "kala_score": {
+      "type": "number",
+      "default": 0,
+      "description": "RIDE X MASTER SCORE 0\u2013100 where the section records one"
+    },
+    "qualified": {
+      "type": "boolean",
+      "default": false,
+      "description": "True ONLY when the candidate passed its section's full qualification gate. Rejected research candidates stay false \u2014 they are still recorded and still learn"
+    },
+    "reject_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Exact reason the candidate failed its section gate (empty on qualified picks) \u2014 rejection learning input"
+    },
+    "market_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "REAL bookmaker decimal price at record time (T0) \u2014 0 = model-only, never a substitute price"
+    },
+    "bookmaker": {
+      "type": "string",
+      "default": ""
+    },
+    "market_probability": {
+      "type": "number",
+      "default": 0,
+      "description": "RAW bookmaker-implied probability 1/odds at T0 (0 = no real price)"
+    },
+    "margin_probability": {
+      "type": "number",
+      "default": 0,
+      "description": "Margin-adjusted market probability at T0 where the overround was known (0 = unknown)"
+    },
+    "fair_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Model fair odds at record time \u2014 an estimate, never a bookmaker price"
+    },
+    "edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Edge vs the appropriate benchmark at T0, percentage points (0 = no real price)"
+    },
+    "adjusted_edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Uncertainty-adjusted edge at T0 (0 = no real price)"
+    },
+    "ev_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Expected value of the real price vs the model at T0, percentage points"
+    },
+    "odds_status": {
+      "type": "string",
+      "default": "",
+      "description": "priced | model_only \u2014 whether a real T0 price existed"
+    },
+    "agreement": {
+      "type": "number",
+      "default": 1,
+      "description": "Model consensus at record time (0\u20131) \u2014 high probability with low agreement is a known failure pattern the engine learns from"
+    },
+    "uncertainty": {
+      "type": "number",
+      "default": 0,
+      "description": "Independent uncertainty estimate at record time (0\u20131)"
+    },
+    "data_quality": {
+      "type": "string",
+      "default": "",
+      "description": "Data quality recorded at prediction time \u2014 HIGH | MEDIUM | LOW (sections without the concept may carry an evidence summary)"
+    },
+    "injury_status": {
+      "type": "string",
+      "default": "",
+      "description": "Injury state recorded with the prediction \u2014 matched | unmatched | unavailable (empty = not evaluated by this section). Missing injury data is UNKNOWN, never zero"
+    },
+    "injury_absences_home": {
+      "type": "number",
+      "default": 0
+    },
+    "injury_absences_away": {
+      "type": "number",
+      "default": 0
+    },
+    "lineup_status": {
+      "type": "string",
+      "default": "",
+      "description": "Lineup state recorded with the prediction \u2014 confirmed | no_lineup | unmatched | unavailable (empty = not checked). Unconfirmed lineups are never treated as neutral"
+    },
+    "prediction_version": {
+      "type": "number",
+      "default": 1,
+      "description": "Immutable versioning \u2014 a pre-kickoff change creates Version 2; Version 1 always stays on record"
+    },
+    "supersedes_global_id": {
+      "type": "string",
+      "default": "",
+      "description": "Global id of the version this row replaced before kickoff (kept on both records)"
+    },
+    "models_json": {
+      "type": "string",
+      "default": "",
+      "description": "Per-model vote snapshot at prediction time \u2014 model-component learning input"
+    },
+    "snapshot_json": {
+      "type": "string",
+      "default": "",
+      "description": "Immutable prediction snapshot \u2014 never rewritten by future state"
+    },
+    "provenance_json": {
+      "type": "string",
+      "default": "",
+      "description": "Data provenance \u2014 source, timestamp and quality of every major input at prediction time"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the prediction was permanently recorded \u2014 before kickoff, no data leakage"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "won",
+        "lost",
+        "void",
+        "push",
+        "cancelled",
+        "superseded",
+        "unverified",
+        "conflict"
+      ],
+      "default": "open",
+      "description": "Settlement state \u2014 graded under the market's canonical settlement rule; unverified = settled from a user-supplied score not confirmed by a verified provider; conflict = sources disagree (never silently settled)"
+    },
+    "verification": {
+      "type": "string",
+      "default": "",
+      "description": "verified_provider | user_supplied | conflict \u2014 exactly where the result came from"
+    },
+    "actual_home": {
+      "type": "number",
+      "description": "Real final home goals once settled"
+    },
+    "actual_away": {
+      "type": "number",
+      "description": "Real final away goals once settled"
+    },
+    "result_source": {
+      "type": "string",
+      "default": "",
+      "description": "Where the result was graded from (e.g. 'openfootball verified result', 'user import', 'ESPN verified feed')"
+    },
+    "closing_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Latest verified pre-kickoff price captured (0 = not available \u2014 never a post-kickoff price)"
+    },
+    "clv_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Closing-line value (closing \u00f7 T0 \u2212 1) \u00d7 100 \u2014 computed only when both prices exist (0 = not computable)"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the prediction was graded against the real result"
+    }
+  },
+  "required": [
+    "global_prediction_id",
+    "source_section",
+    "home",
+    "away",
+    "market_key",
+    "market_label",
+    "model_version",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

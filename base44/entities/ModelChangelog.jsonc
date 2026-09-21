@@ -1,0 +1,108 @@
+{
+  "name": "ModelChangelog",
+  "type": "object",
+  "properties": {
+    "previous_version": {
+      "type": "string",
+      "description": "Champion version before the change"
+    },
+    "new_version": {
+      "type": "string",
+      "description": "Version after the change (candidate or promoted)"
+    },
+    "scope": {
+      "type": "string",
+      "description": "GLOBAL | SECTION | MODEL \u2014 where the change applies"
+    },
+    "affected_sections": {
+      "type": "string",
+      "default": "",
+      "description": "Prediction sections the change affects"
+    },
+    "change": {
+      "type": "string",
+      "description": "Exactly what changed \u2014 never a vague description"
+    },
+    "reason": {
+      "type": "string",
+      "description": "The validated learning insight that motivated the change"
+    },
+    "insight_key": {
+      "type": "string",
+      "default": "",
+      "description": "Link to the GlobalLearningInsight the change implements"
+    },
+    "evidence_json": {
+      "type": "string",
+      "default": "",
+      "description": "The evidence record \u2014 sample, OOS result, walk-forward outcome, promotion decision"
+    },
+    "sample_size": {
+      "type": "number",
+      "default": 0,
+      "description": "Out-of-sample observations behind the change"
+    },
+    "brier_before": {
+      "type": "number",
+      "default": 0
+    },
+    "brier_after": {
+      "type": "number",
+      "default": 0
+    },
+    "logloss_before": {
+      "type": "number",
+      "default": 0
+    },
+    "logloss_after": {
+      "type": "number",
+      "default": 0
+    },
+    "oos_result": {
+      "type": "string",
+      "default": "",
+      "description": "Walk-forward / out-of-sample test outcome"
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "PROMOTED",
+        "NOT_PROMOTED",
+        "ROLLED_BACK",
+        "PROPOSED"
+      ],
+      "description": "Promotion decision \u2014 NOT_PROMOTED until the OOS gate passes"
+    },
+    "rollback_version": {
+      "type": "string",
+      "default": "",
+      "description": "The previous verified champion this change can revert to"
+    },
+    "changed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the changelog entry was recorded"
+    }
+  },
+  "required": [
+    "previous_version",
+    "new_version",
+    "scope",
+    "change",
+    "decision"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

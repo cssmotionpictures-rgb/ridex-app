@@ -1,0 +1,127 @@
+{
+  "name": "TalentArtist",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Linked app user who owns this artist profile (empty = catalog-only)"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "stage_name": {
+      "type": "string"
+    },
+    "talent_type": {
+      "type": "string",
+      "enum": [
+        "musician",
+        "actor",
+        "comedian",
+        "dancer",
+        "dj"
+      ],
+      "default": "musician"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "mega_star",
+        "superstar",
+        "a_list",
+        "mid",
+        "rising",
+        "emerging"
+      ],
+      "default": "emerging"
+    },
+    "tier_label": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string",
+      "default": "",
+      "description": "Official booking contact email found by live web search \u2014 used for automatic booking delivery to catalog-only artists."
+    },
+    "profile_image": {
+      "type": "string"
+    },
+    "video_url": {
+      "type": "string"
+    },
+    "booking_price": {
+      "type": "number",
+      "default": 0,
+      "description": "Fixed LOCAL (Nigeria) performance fee in NGN \u2014 the starting baseline, net to artist before platform commission."
+    },
+    "international_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Fixed INTERNATIONAL performance fee in USD ($). Shown as 'on request' \u2014 handled offline."
+    },
+    "logistics_rider": {
+      "type": "string",
+      "description": "Flights, 5-star hotel, VVIP ground/security convoy, technical stage/audio setup and daily crew per diems. 100% paid by the event owner (promoter/brand), never the agency."
+    },
+    "availability_days": {
+      "type": "string",
+      "default": "0,1,2,3,4,5,6",
+      "description": "Comma-separated weekday indices the artist is available"
+    },
+    "auto_accept_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "total_bookings": {
+      "type": "number",
+      "default": 0
+    },
+    "rating": {
+      "type": "number",
+      "default": 0
+    },
+    "acceptance_rate": {
+      "type": "number",
+      "default": 100,
+      "description": "Percentage of bookings accepted (not declined). 100% earns premium placement."
+    },
+    "rejected_bookings": {
+      "type": "number",
+      "default": 0,
+      "description": "Bookings declined by this artist (triggers reputation penalty)"
+    },
+    "reschedule_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Times this artist rescheduled a booking (no penalty)"
+    },
+    "premium_placement": {
+      "type": "boolean",
+      "default": false,
+      "description": "Featured in discovery. Granted at 100% acceptance, revoked below 80%."
+    },
+    "location": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string",
+      "default": "Nigeria"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "suspended"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "stage_name",
+    "talent_type"
+  ]
+}

@@ -1,0 +1,272 @@
+{
+  "name": "RunOPick",
+  "type": "object",
+  "properties": {
+    "runo_id": {
+      "type": "string",
+      "description": "Deterministic RUN O identity \u2014 runo|fixture_id|market_key|vN. Idempotent: the same fixture+market never enters twice; a material pre-kickoff change (score, price, confirmed lineup) creates a NEW version and supersedes nothing silently"
+    },
+    "observation_key": {
+      "type": "string",
+      "default": "",
+      "description": "Link to the shared immutable KalaModelObservation research row this selection is built from \u2014 the authoritative settlement record"
+    },
+    "global_prediction_id": {
+      "type": "string",
+      "default": "",
+      "description": "The global-ledger row id (kala section, shared RX-2.0 candidate) this selection already learns through \u2014 RUN O never duplicates global ingestion"
+    },
+    "model_version": {
+      "type": "string",
+      "default": "RX-2.0",
+      "description": "Forecasting engine version that produced the underlying candidate"
+    },
+    "runo_version": {
+      "type": "string",
+      "default": "RUNO-1.0",
+      "description": "RUN O selector version \u2014 the gate/ranking logic that chose this candidate as a premium selection"
+    },
+    "fixture_id": {
+      "type": "string",
+      "description": "Stable fixture key from the verified feed"
+    },
+    "home": {
+      "type": "string"
+    },
+    "away": {
+      "type": "string"
+    },
+    "league": {
+      "type": "string",
+      "description": "Competition label shown to the user"
+    },
+    "league_code": {
+      "type": "string",
+      "default": "",
+      "description": "Verified-feed league key"
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Real provider kickoff (UTC) \u2014 stored UTC, displayed Africa/Lagos"
+    },
+    "lagos_date_key": {
+      "type": "string",
+      "description": "Kickoff date in Africa/Lagos (YYYY-MM-DD)"
+    },
+    "session": {
+      "type": "string",
+      "enum": [
+        "morning",
+        "evening"
+      ],
+      "description": "Lagos kickoff 00:00\u201316:59 = morning, 17:00\u201323:59 = evening"
+    },
+    "market_key": {
+      "type": "string",
+      "description": "Normalized engine market key used for settlement \u2014 1, X, 2, 1X, X2, 12, O<line>, U<line>, BTTS_Y, BTTS_N, DNB1, DNB2"
+    },
+    "market_label": {
+      "type": "string",
+      "description": "Human-readable selection label"
+    },
+    "canonical_market": {
+      "type": "string",
+      "default": "",
+      "description": "Canonical internal market ID this selection maps to"
+    },
+    "settlement_rule": {
+      "type": "string",
+      "default": "",
+      "description": "The market-specific settlement definition this selection is graded under"
+    },
+    "rank": {
+      "type": "number",
+      "default": 0,
+      "description": "Position on the RUN O daily board (1\u20138, 0 = legacy)"
+    },
+    "tier": {
+      "type": "string",
+      "default": "",
+      "description": "RUN O tier band of the score \u2014 ULTRA ELITE / ELITE / STRONG / QUALIFIED"
+    },
+    "runo_score": {
+      "type": "number",
+      "default": 0,
+      "description": "RUN O SCORE 0\u2013100 recorded at selection time \u2014 the engine master score under the RUN O gate, never inflated to fill a position"
+    },
+    "probability": {
+      "type": "number",
+      "default": 0,
+      "description": "Calibrated model probability at record time (0\u20131) \u2014 an estimate, never a guarantee"
+    },
+    "confidence": {
+      "type": "number",
+      "default": 0,
+      "description": "Confidence shown to the user (0\u2013100)"
+    },
+    "market_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "REAL bookmaker decimal price at record time (T0) \u2014 0 = model-only, never a substitute price"
+    },
+    "bookmaker": {
+      "type": "string",
+      "default": "",
+      "description": "The bookmaker that actually quoted the T0 price"
+    },
+    "market_probability": {
+      "type": "number",
+      "default": 0,
+      "description": "Bookmaker-implied probability 1/odds at T0 (0 = no real price)"
+    },
+    "fair_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Model fair odds at record time \u2014 an estimate, never a bookmaker price"
+    },
+    "edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Edge vs the appropriate benchmark at T0, percentage points (0 = no real price)"
+    },
+    "adjusted_edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Uncertainty-adjusted edge at T0 (0 = no real price)"
+    },
+    "ev_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Expected value of the real price vs the model at T0, percentage points"
+    },
+    "odds_status": {
+      "type": "string",
+      "default": "",
+      "description": "priced | model_only \u2014 whether a real T0 price existed"
+    },
+    "agreement": {
+      "type": "number",
+      "default": 1,
+      "description": "Model consensus at record time (0\u20131)"
+    },
+    "uncertainty": {
+      "type": "number",
+      "default": 0,
+      "description": "Independent uncertainty estimate at record time (0\u20131)"
+    },
+    "data_quality": {
+      "type": "string",
+      "default": "",
+      "description": "Data quality recorded at selection time \u2014 HIGH | MEDIUM | LOW"
+    },
+    "injury_status": {
+      "type": "string",
+      "default": "",
+      "description": "RX-2.1 injury enrichment at record time \u2014 matched | unmatched | unavailable (empty = not evaluated \u2014 displayed as INJURY DATA UNKNOWN, never zero)"
+    },
+    "injury_absences_home": {
+      "type": "number",
+      "default": 0,
+      "description": "Confirmed unavailable/doubtful home players (meaningful only when injury_status = matched)"
+    },
+    "injury_absences_away": {
+      "type": "number",
+      "default": 0,
+      "description": "Confirmed unavailable/doubtful away players (meaningful only when injury_status = matched)"
+    },
+    "lineup_status": {
+      "type": "string",
+      "default": "",
+      "description": "RX-2.1 lineup state at record time \u2014 confirmed | no_lineup | unmatched | unavailable (empty = not checked; displayed as LINEUP UNCONFIRMED)"
+    },
+    "why_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "WHY RUN O SELECTED IT \u2014 factual reasons supported by the recorded data only, never invented"
+    },
+    "risk_flags_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Risk flags recorded with the selection \u2014 disclosed, never hidden"
+    },
+    "correlation_risk": {
+      "type": "string",
+      "default": "LOW",
+      "description": "Correlation risk vs the rest of the RUN O board \u2014 LOW | MEDIUM | HIGH"
+    },
+    "prediction_version": {
+      "type": "number",
+      "default": 1,
+      "description": "Immutable versioning \u2014 a material pre-kickoff change creates Version 2; Version 1 always stays on record"
+    },
+    "supersedes_runo_id": {
+      "type": "string",
+      "default": "",
+      "description": "RUN O id of the version this row replaced before kickoff (kept on both records)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "won",
+        "lost",
+        "void",
+        "superseded"
+      ],
+      "default": "open",
+      "description": "Mirrored from the linked observation's authoritative verified settlement \u2014 RUN O never settles independently"
+    },
+    "actual_home": {
+      "type": "number",
+      "description": "Real final home goals once the linked observation settled"
+    },
+    "actual_away": {
+      "type": "number",
+      "description": "Real final away goals once the linked observation settled"
+    },
+    "result_source": {
+      "type": "string",
+      "default": "",
+      "description": "Verified feed the linked settlement was graded from"
+    },
+    "clv_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Closing-line value mirrored from the linked observation (0 = not computable)"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the selection was permanently recorded \u2014 before kickoff, no data leakage"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the mirrored settlement was recorded"
+    }
+  },
+  "required": [
+    "runo_id",
+    "fixture_id",
+    "home",
+    "away",
+    "league",
+    "kickoff",
+    "lagos_date_key",
+    "session",
+    "market_key",
+    "market_label",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "EventSponsor",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "sponsor_name": {
+      "type": "string"
+    },
+    "sponsor_logo": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "platinum",
+        "gold",
+        "silver",
+        "bronze"
+      ],
+      "default": "silver"
+    }
+  },
+  "required": [
+    "event_id",
+    "sponsor_name"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "name": "DigitalProduct",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Beats",
+        "eBooks",
+        "Courses",
+        "Presets",
+        "Stock Photos"
+      ],
+      "default": "Beats"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "cover_url": {
+      "type": "string"
+    },
+    "downloads": {
+      "type": "number",
+      "default": 0
+    },
+    "rating": {
+      "type": "number",
+      "default": 0
+    },
+    "rating_count": {
+      "type": "number",
+      "default": 0
+    },
+    "seller_id": {
+      "type": "string"
+    },
+    "seller_name": {
+      "type": "string"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "published",
+        "rejected"
+      ],
+      "default": "published"
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "price"
+  ]
+}

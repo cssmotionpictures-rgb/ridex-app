@@ -1,0 +1,99 @@
+{
+  "name": "CardProviderDiagnostic",
+  "type": "object",
+  "properties": {
+    "correlation_id": {
+      "type": "string",
+      "default": "",
+      "description": "Trace ID linking this failed provider request to the app operation that triggered it"
+    },
+    "http_status": {
+      "type": "number",
+      "default": 0,
+      "description": "HTTP status the provider returned (0 = network failure / timeout)"
+    },
+    "error_code": {
+      "type": "string",
+      "default": "",
+      "description": "Provider error code when reported"
+    },
+    "error_message": {
+      "type": "string",
+      "default": "",
+      "description": "Provider error message when reported \u2014 never PAN, CVV, PIN, API keys, webhook secrets or tokens"
+    },
+    "method": {
+      "type": "string",
+      "default": "",
+      "description": "HTTP method of the failed request"
+    },
+    "endpoint": {
+      "type": "string",
+      "default": "",
+      "description": "Provider path that failed (card ids allowed \u2014 PAN/CVV never appear in paths)"
+    },
+    "card_id": {
+      "type": "string",
+      "default": "",
+      "description": "INTERNAL VirtualCard id involved \u2014 never the card number"
+    },
+    "transaction_id": {
+      "type": "string",
+      "default": "",
+      "description": "Internal transaction reference for the operation"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Amount involved in the failed operation (0 for non-financial calls)"
+    },
+    "currency": {
+      "type": "string",
+      "default": "",
+      "description": "Currency of the operation"
+    },
+    "transaction_type": {
+      "type": "string",
+      "default": "",
+      "description": "Operation type: issue, fund, status, freeze, history, daily-summary, status-check, validation-probe"
+    },
+    "network_error": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when the request timed out or never completed \u2014 the outcome is UNKNOWN and must never be blind-retried"
+    },
+    "ambiguous_outcome": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when the provider may still have applied the operation despite the failure"
+    },
+    "classification": {
+      "type": "string",
+      "default": "",
+      "description": "Grouping: A our request/config error, B card/account configuration, C provider API validation, D provider service issue, E merchant/category restriction, F insufficient balance/limit, G unknown"
+    }
+  },
+  "required": [
+    "http_status",
+    "method",
+    "endpoint"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "description": "The role of the user in the app",
+      "enum": [
+        "admin",
+        "user"
+      ]
+    },
+    "has_analytics": {
+      "type": "boolean",
+      "default": false,
+      "description": "Unlocked when the user pays for the Artist Analytics premium dashboard"
+    },
+    "vip_tier": {
+      "type": "string",
+      "enum": [
+        "bronze",
+        "silver",
+        "gold",
+        "platinum"
+      ],
+      "default": "bronze",
+      "description": "Active VIP gamification tier unlocked on VIP membership payment"
+    },
+    "kyc_status": {
+      "type": "string",
+      "enum": [
+        "unverified",
+        "pending",
+        "verified",
+        "restricted",
+        "suspended",
+        "rejected"
+      ],
+      "default": "unverified",
+      "description": "Financial KYC / compliance status for card & banking products. Only 'verified' is set server-side after a REAL compliance provider (e.g. Flutterwave KYC) confirms identity \u2014 never fabricated, never set by the client. Default 'unverified' until a real check passes."
+    }
+  },
+  "required": [
+    "role"
+  ]
+}

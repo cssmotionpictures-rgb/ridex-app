@@ -1,0 +1,73 @@
+{
+  "name": "KalaTicket",
+  "type": "object",
+  "properties": {
+    "ticket_name": {
+      "type": "string",
+      "description": "User label for the imported bet slip"
+    },
+    "bookmaker": {
+      "type": "string",
+      "default": "",
+      "description": "Bookmaker the slip was placed with"
+    },
+    "stake": {
+      "type": "number",
+      "default": 0,
+      "description": "Real stake on the slip (display only \u2014 KALA never places or executes bets)"
+    },
+    "potential_return": {
+      "type": "number",
+      "default": 0,
+      "description": "Full potential return if every leg wins"
+    },
+    "cashout_offered": {
+      "type": "number",
+      "default": 0,
+      "description": "Latest cashout amount offered by the bookmaker (0 = none entered)"
+    },
+    "legs_json": {
+      "type": "string",
+      "description": "Permanent snapshot of the slip legs (home, away, market, odds, current odds, status)"
+    },
+    "analysis_json": {
+      "type": "string",
+      "default": "",
+      "description": "Latest KALA cashout analysis snapshot \u2014 kept so probability-drop rules can compare against the previous estimate"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "won",
+        "lost",
+        "void",
+        "archived"
+      ],
+      "default": "open",
+      "description": "User-maintained slip state"
+    },
+    "notes": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "required": [
+    "ticket_name",
+    "legs_json"
+  ],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

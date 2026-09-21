@@ -1,0 +1,43 @@
+{
+  "name": "DriverReview",
+  "type": "object",
+  "properties": {
+    "driver_id": {
+      "type": "string"
+    },
+    "ride_id": {
+      "type": "string"
+    },
+    "logistics_id": {
+      "type": "string"
+    },
+    "service": {
+      "type": "string",
+      "enum": [
+        "ride",
+        "logistics"
+      ],
+      "default": "ride"
+    },
+    "courier_name": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number",
+      "default": 5
+    },
+    "review": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "complaint": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "rating"
+  ]
+}

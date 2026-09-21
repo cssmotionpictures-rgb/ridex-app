@@ -1,0 +1,59 @@
+{
+  "name": "Concert",
+  "type": "object",
+  "properties": {
+    "artist": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "poster_url": {
+      "type": "string"
+    },
+    "stream_url": {
+      "type": "string",
+      "description": "HLS/MP4 link for the live concert stream"
+    },
+    "ticket_price_regular": {
+      "type": "number",
+      "default": 2000
+    },
+    "ticket_price_vip": {
+      "type": "number",
+      "default": 7500
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "venue": {
+      "type": "string"
+    },
+    "is_live": {
+      "type": "boolean",
+      "default": false
+    },
+    "tickets_sold": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "live",
+        "ended",
+        "cancelled"
+      ],
+      "default": "scheduled"
+    }
+  },
+  "required": [
+    "artist",
+    "title"
+  ]
+}

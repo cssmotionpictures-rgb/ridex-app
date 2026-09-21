@@ -1,0 +1,128 @@
+{
+  "name": "LearningCycleReport",
+  "type": "object",
+  "properties": {
+    "registry_key": {
+      "type": "string",
+      "description": "Registry identity \u2014 'learning-cycle-latest'. Single latest-cycle row; the permanent evidence lives in LearningEvent, GlobalLearningInsight and ModelChangelog"
+    },
+    "last_ran_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the cycle last completed"
+    },
+    "runs_count": {
+      "type": "number",
+      "default": 0,
+      "description": "How many learning cycles have completed"
+    },
+    "status": {
+      "type": "string",
+      "default": "",
+      "description": "completed | failed:<step> \u2014 a failed or interrupted cycle is never reported as completed"
+    },
+    "outcomes_seen": {
+      "type": "number",
+      "default": 0,
+      "description": "Graded outcome rows read by the cycle"
+    },
+    "eligible": {
+      "type": "number",
+      "default": 0,
+      "description": "Settled WON/LOSS outcomes eligible to train"
+    },
+    "skipped_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Per-outcome skip reasons (VOID/PUSH/CANCELLED, unusable probability) \u2014 reported honestly, never forced into training"
+    },
+    "events_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Counted learning events on record after the cycle"
+    },
+    "events_created": {
+      "type": "number",
+      "default": 0,
+      "description": "Events created THIS run \u2014 0 on a re-run is the idempotency proof"
+    },
+    "events_existing": {
+      "type": "number",
+      "default": 0,
+      "description": "Events that already existed when this run started"
+    },
+    "wins": {
+      "type": "number",
+      "default": 0
+    },
+    "losses": {
+      "type": "number",
+      "default": 0
+    },
+    "feature_evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Per-segment evidence table (market, league, section, model, probability/confidence/odds/value buckets, data quality, agreement) with sample-gated verdicts \u2014 segments under 5 samples are labelled INSUFFICIENT SAMPLE, never forced"
+    },
+    "insights_upserted": {
+      "type": "number",
+      "default": 0,
+      "description": "Evidence-gated insight rows created/refreshed \u2014 only segments with 10+ samples and a material gap; never from tiny samples"
+    },
+    "calibration_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "Brier, log loss, ECE, reliability buckets and explicit status \u2014 INSUFFICIENT EVIDENCE while under the recalibration sample floor"
+    },
+    "evaluation_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "Chronological model evaluation \u2014 train/OOS boundary, per-model metrics, decision (older = train, newer = OOS, zero future leakage)"
+    },
+    "promotion_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "Promotion-gate checks and the explicit decision"
+    },
+    "drift_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "Recent vs historical drift check \u2014 alarms only at sufficient history, never from one bad period"
+    },
+    "no_pick_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "Abstention statistics \u2014 candidates evaluated vs rejected by the NO-PICK gates"
+    },
+    "chain_health_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Stage-by-stage chain health with COMPLETE/PARTIAL/BLOCKED and database-backed detail"
+    },
+    "notes": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "required": [
+    "registry_key"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

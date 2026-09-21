@@ -1,0 +1,42 @@
+{
+  "name": "ReferralCustomer",
+  "type": "object",
+  "properties": {
+    "referrer_id": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "customer_email": {
+      "type": "string"
+    },
+    "referral_code": {
+      "type": "string"
+    },
+    "commission_earned": {
+      "type": "number",
+      "default": 0
+    },
+    "rides_completed": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "paid"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "referrer_id",
+    "customer_id"
+  ]
+}

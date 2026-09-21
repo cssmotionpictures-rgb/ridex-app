@@ -1,0 +1,15 @@
+{
+  "name": "learning-cycle",
+  "entry": "entry.ts",
+  "automations": [
+    {
+      "type": "scheduled",
+      "name": "daily_learning_cycle_0200am_lagos",
+      "description": "Autonomous self-learning cycle — counts learning events exactly once, builds feature evidence, measures calibration, runs chronological OOS evaluation, executes the promotion gate and updates the active-model registry. Runs daily at 02:00 Lagos (01:00 UTC) with no browser and no admin required.",
+      "is_active": true,
+      "schedule_mode": "recurring",
+      "schedule_type": "cron",
+      "cron_expression": "0 1 * * *"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "name": "CrixWalletIdentity",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Owning app user \u2014 one identity row per user. Written ONLY by the server-side crxs-wallet-verify function: a wallet address is only marked verified after the server cryptographically verifies a SIWE-style signature proving control of that address. A user can never claim an address by typing it."
+    },
+    "wallet_address": {
+      "type": "string",
+      "default": "",
+      "description": "Verified wallet public address (lowercase). Public by design \u2014 it is the receiving destination the Crix ID resolves to for payments"
+    },
+    "crix_id": {
+      "type": "string",
+      "default": "",
+      "description": "Permanent human-readable payment identity (@username, lowercase, 3-24 chars a-z 0-9 _). Unique across users \u2014 claiming or changing it requires a fresh verified wallet signature"
+    },
+    "wallet_verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": ""
+    },
+    "pending_message": {
+      "type": "string",
+      "default": "",
+      "description": "The EXACT human-readable sign-in message awaiting this wallet's signature \u2014 built server-side with a single-use nonce, expires in 15 minutes, cleared on verification"
+    },
+    "nonce_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": ""
+    },
+    "network": {
+      "type": "string",
+      "default": "BASE_MAINNET",
+      "description": "Identity/network the verification was performed against"
+    },
+    "signature_verified_count": {
+      "type": "number",
+      "default": 0,
+      "description": "How many wallet-ownership signatures this user has completed (audit trail)"
+    }
+  },
+  "required": [
+    "user_id"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

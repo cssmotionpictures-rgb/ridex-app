@@ -1,0 +1,128 @@
+{
+  "name": "CrixSettlementRail",
+  "type": "object",
+  "properties": {
+    "registry_key": {
+      "type": "string",
+      "description": "Deterministic rail identity \u2014 'rail|BASE_MAINNET' or 'rail|SOLANA_MAINNET'. One row per settlement rail. Written ONLY by the server-side settlement router/health functions after live verification \u2014 never typed in as a claim"
+    },
+    "rail": {
+      "type": "string",
+      "enum": [
+        "BASE",
+        "SOLANA"
+      ],
+      "description": "Settlement rail"
+    },
+    "network": {
+      "type": "string",
+      "description": "Network the rail settles on \u2014 BASE_MAINNET or SOLANA_MAINNET"
+    },
+    "asset_id": {
+      "type": "string",
+      "description": "Internal asset identifier. CRXS (Base ERC-20) and CRIX_SOL (Solana SPL) are SEPARATE assets \u2014 a Solana representation is never presented as the same blockchain token as Base CRXS"
+    },
+    "token_standard": {
+      "type": "string",
+      "enum": [
+        "ERC20",
+        "SPL"
+      ],
+      "description": "Token standard of this rail's asset"
+    },
+    "token_contract": {
+      "type": "string",
+      "default": "",
+      "description": "REAL on-chain token contract/mint address once verified \u2014 empty until a real deployment exists. Never a placeholder, never the Sepolia test contract"
+    },
+    "is_primary": {
+      "type": "boolean",
+      "default": false,
+      "description": "True for the preferred rail (Base). Failover to another rail happens only BEFORE an irreversible submission, per the server-side router"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NOT_IMPLEMENTED",
+        "CONFIGURED",
+        "PAUSED",
+        "OPERATIONAL"
+      ],
+      "default": "NOT_IMPLEMENTED",
+      "description": "Rail lifecycle status. PAUSED = settlement halted honestly. OPERATIONAL only after the full activation gate list passes \u2014 never automatic"
+    },
+    "health": {
+      "type": "string",
+      "enum": [
+        "NOT_CONFIGURED",
+        "HEALTHY",
+        "DEGRADED",
+        "UNAVAILABLE"
+      ],
+      "default": "NOT_CONFIGURED",
+      "description": "Server-side health verdict ONLY \u2014 a browser probe is never the failover authority. Written by the server-side health check from live RPC, slot freshness, contract read, submission and receipt availability"
+    },
+    "send_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Feature flag: sends on this rail"
+    },
+    "deposit_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Feature flag: deposits on this rail"
+    },
+    "withdrawal_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Feature flag: withdrawals on this rail"
+    },
+    "conversion_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Feature flag: rail conversion on this rail"
+    },
+    "fallback_enabled": {
+      "type": "boolean",
+      "default": "false",
+      "description": "SOLANA_FALLBACK_ENABLED equivalent \u2014 OFF until the full dual-rail test suite passes and the supply/backing model is documented and approved. Never enabled by a timeout"
+    },
+    "notes": {
+      "type": "string",
+      "default": "",
+      "description": "Honest explanation of the current state and the exact real-world action that unlocks the next stage"
+    },
+    "last_health_check_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "When the server-side health check last probed this rail"
+    }
+  },
+  "required": [
+    "registry_key",
+    "rail",
+    "network",
+    "asset_id",
+    "token_standard",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

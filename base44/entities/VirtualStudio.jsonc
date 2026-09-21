@@ -1,0 +1,39 @@
+{
+  "name": "VirtualStudio",
+  "type": "object",
+  "properties": {
+    "studio_name": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "booked_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_hours": {
+      "type": "number",
+      "default": 1
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "cancelled"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "studio_name"
+  ]
+}

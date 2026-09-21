@@ -1,0 +1,81 @@
+{
+  "name": "ActiveModel",
+  "type": "object",
+  "properties": {
+    "registry_key": {
+      "type": "string",
+      "description": "Registry identity \u2014 'active-model'. Single row: the source of truth for which production model FUTURE predictions resolve to"
+    },
+    "champion_version": {
+      "type": "string",
+      "description": "The PROMOTED production champion future predictions use"
+    },
+    "challenger_version": {
+      "type": "string",
+      "default": "",
+      "description": "Challenger recording in parallel, awaiting chronological OOS validation \u2014 never active until the promotion gate passes"
+    },
+    "champion_since": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the current champion took office"
+    },
+    "promotion_status": {
+      "type": "string",
+      "default": "",
+      "description": "Latest promotion-gate decision (e.g. INSUFFICIENT EVIDENCE \u2014 CURRENT CHAMPION RETAINED)"
+    },
+    "last_decision_reason": {
+      "type": "string",
+      "default": "",
+      "description": "The exact evidence-based reason behind the latest decision"
+    },
+    "last_evaluated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the promotion gate last ran"
+    },
+    "rollback_target": {
+      "type": "string",
+      "default": "",
+      "description": "Champion to revert to if the active model is ever rolled back \u2014 old models are never overwritten"
+    },
+    "evaluation_summary_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "Compact OOS metrics behind the current decision"
+    },
+    "drift_status": {
+      "type": "string",
+      "default": "",
+      "description": "Latest drift check verdict"
+    },
+    "drift_note": {
+      "type": "string",
+      "default": "",
+      "description": "What the drift check observed \u2014 alarms only at sufficient history"
+    }
+  },
+  "required": [
+    "registry_key",
+    "champion_version"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

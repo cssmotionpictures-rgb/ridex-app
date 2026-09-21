@@ -1,0 +1,307 @@
+{
+  "name": "EnginePrediction",
+  "type": "object",
+  "properties": {
+    "prediction_key": {
+      "type": "string",
+      "default": "",
+      "description": "Deterministic prediction identity \u2014 fixture_id + market key. Duplicate protection: the same fixture/market never creates a second open prediction; a material pre-kickoff change creates a new version instead"
+    },
+    "model_version": {
+      "type": "string",
+      "default": "RX-2.0",
+      "description": "Forecasting engine version that produced this prediction (RX-2.0 = multi-model ensemble). Changed algorithms require a new version \u2014 old results are never rewritten"
+    },
+    "prediction_version": {
+      "type": "number",
+      "default": 1,
+      "description": "Immutable versioning \u2014 a pre-kickoff forecast change creates Version 2 and supersedes nothing silently; Version 1 always stays on record"
+    },
+    "supersedes_id": {
+      "type": "string",
+      "default": "",
+      "description": "Id of the prediction row this version replaced before kickoff"
+    },
+    "fixture_id": {
+      "type": "string",
+      "description": "Stable fixture key (of-<league code>-<date>-<team slugs>) \u2014 one row per fixture+market+version"
+    },
+    "home": {
+      "type": "string"
+    },
+    "away": {
+      "type": "string"
+    },
+    "league": {
+      "type": "string",
+      "description": "Competition label shown to the user"
+    },
+    "league_code": {
+      "type": "string",
+      "default": "",
+      "description": "Verified-feed league key (e.g. en.1) \u2014 used to fetch the real final score at settlement"
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Real provider kickoff (UTC) \u2014 stored UTC, displayed Africa/Lagos"
+    },
+    "lagos_date_key": {
+      "type": "string",
+      "description": "Kickoff date in Africa/Lagos (YYYY-MM-DD)"
+    },
+    "session": {
+      "type": "string",
+      "enum": [
+        "morning",
+        "evening"
+      ],
+      "description": "Lagos kickoff 00:00\u201316:59 = morning, 17:00\u201323:59 = evening"
+    },
+    "market_key": {
+      "type": "string",
+      "description": "Normalized market key used for settlement \u2014 1, X, 2, 1X, X2, 12, O<line>, U<line>, BTTS_Y, BTTS_N, DNB1, DNB2"
+    },
+    "market_label": {
+      "type": "string",
+      "description": "Human-readable selection label"
+    },
+    "models_json": {
+      "type": "string",
+      "description": "JSON snapshot of each voting model's independent probability for this market \u2014 the raw material for weight learning and model comparison"
+    },
+    "models_used": {
+      "type": "string",
+      "default": "0",
+      "description": "Number of independent models that voted on this market"
+    },
+    "models_unavailable": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated model keys that could not vote (data requirement not met) \u2014 honest availability, never padded"
+    },
+    "ensemble_probability": {
+      "type": "number",
+      "description": "Weighted ensemble estimate before calibration (0\u20131) \u2014 an estimate, never a guarantee"
+    },
+    "calibrated_probability": {
+      "type": "number",
+      "description": "Calibrated probability after historical reliability correction (0\u20131)"
+    },
+    "confidence": {
+      "type": "number",
+      "description": "Confidence shown to the user (0\u2013100), capped by pricing status, uncertainty and model agreement \u2014 never inflated by consensus alone"
+    },
+    "master_score": {
+      "type": "number",
+      "description": "RIDE X MASTER SCORE 0\u2013100 \u2014 probability, consensus, calibration, edge, data quality, uncertainty and market reliability blended; no single statistic dominates"
+    },
+    "grade": {
+      "type": "string",
+      "enum": [
+        "ultra_elite",
+        "elite",
+        "strong",
+        "qualifying",
+        "watch"
+      ],
+      "description": "Five-level classification \u2014 ULTRA ELITE/ELITE require verified edge or exceptional unpriced consensus. Never implies a guaranteed win"
+    },
+    "agreement": {
+      "type": "number",
+      "description": "Model consensus 0\u20131 (weighted dispersion of the voting models) \u2014 high average probability with low agreement is penalized"
+    },
+    "uncertainty": {
+      "type": "number",
+      "description": "Independent uncertainty estimate 0\u20131 \u2014 reduces the master score and the displayed confidence, never ignored"
+    },
+    "data_quality": {
+      "type": "string",
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ],
+      "description": "Data quality score \u2014 LOW quality never enters premium selections"
+    },
+    "pick_quality": {
+      "type": "string",
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ],
+      "default": "MEDIUM",
+      "description": "PREDICTION QUALITY \u2014 reliability of the entire prediction process, explicitly separate from the estimated probability. A 72% probability can be MEDIUM quality because lineup data is missing"
+    },
+    "evidence": {
+      "type": "string",
+      "default": "",
+      "description": "Evidence summary, e.g. 'Form 6+5 \u00b7 H2H 4 meetings'"
+    },
+    "market_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "REAL bookmaker decimal price when the odds provider carried the market \u2014 0 = model-only pick, never a substitute price"
+    },
+    "bookmaker": {
+      "type": "string",
+      "default": "",
+      "description": "The bookmaker that actually quoted the price"
+    },
+    "market_probability": {
+      "type": "number",
+      "default": 0,
+      "description": "RAW bookmaker-implied probability 1/odds (0 = no real price)"
+    },
+    "margin_probability": {
+      "type": "number",
+      "default": 0,
+      "description": "MARGIN-ADJUSTED market probability (raw implied \u00f7 three-way overround) where the overround is known \u2014 the edge benchmark (0 = margin unknown)"
+    },
+    "raw_edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Raw edge vs RAW implied probability, in percentage points (0 = no real price)"
+    },
+    "edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Edge vs the appropriate benchmark \u2014 margin-adjusted where the overround is known, raw otherwise (0 = no real price)"
+    },
+    "adjusted_edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "UNCERTAINTY-ADJUSTED edge \u2014 benchmark edge minus the explicit haircut for model disagreement and uncertainty. A tiny edge with large uncertainty becomes NO BET (0 = no real price)"
+    },
+    "ev_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Expected value of the real price vs the calibrated model (p \u00d7 odds \u2212 1), in percentage points"
+    },
+    "fair_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Model fair odds 1 / calibrated probability \u2014 an estimate, never shown as a bookmaker price"
+    },
+    "pinnacle_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "The sharp book's own price when Pinnacle quoted the market (0 = not quoted) \u2014 market consensus cross-check"
+    },
+    "explanation": {
+      "type": "string",
+      "default": "",
+      "description": "Why the model likes it, why the market price matters, and what supports the pick \u2014 prevents a black box"
+    },
+    "failure_modes": {
+      "type": "string",
+      "default": "",
+      "description": "Top generated failure risks for this specific selection ( \u00b7 separated)"
+    },
+    "odds_status": {
+      "type": "string",
+      "default": "",
+      "description": "priced | model_only \u2014 why no real price exists, when it doesn't"
+    },
+    "weights_basis": {
+      "type": "string",
+      "enum": [
+        "baseline",
+        "learned"
+      ],
+      "default": "baseline",
+      "description": "Whether the ensemble weights used were learned from out-of-sample history (learned) or transparent conservative defaults (baseline). Baseline weights are never presented as machine-learned"
+    },
+    "calibration_sample": {
+      "type": "number",
+      "default": 0,
+      "description": "Settled-prediction sample the live calibration was built from at record time (0 = no calibration claimed)"
+    },
+    "provenance_json": {
+      "type": "string",
+      "default": "",
+      "description": "DATA PROVENANCE \u2014 source, timestamp, freshness, value and quality of every major input (fixture feed, form, ratings, odds, calibration, weights) so any prediction can be audited back to its inputs"
+    },
+    "validation_json": {
+      "type": "string",
+      "default": "",
+      "description": "The validation-gate record: checks passed, input freshness labels and red flags at prediction time"
+    },
+    "snapshot_json": {
+      "type": "string",
+      "default": "",
+      "description": "IMMUTABLE PREDICTION SNAPSHOT \u2014 every input used at creation: model outputs, ensemble weights, market model, calibration state, unavailable models. The future state of the database never alters this"
+    },
+    "big_hammer": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when this pick met the BIG HAMMER gates \u2014 real price 3.00+, adjusted edge 4pp+, master score STRONG+, high model agreement, HIGH data quality, no blocking red flag"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the prediction was permanently recorded \u2014 before kickoff, using only information available at that timestamp (no data leakage)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "won",
+        "lost",
+        "void",
+        "cancelled",
+        "superseded"
+      ],
+      "default": "open",
+      "description": "Graded from the real final score; void = no result within 7 days, counts toward nothing; superseded = replaced by a newer version before kickoff (history kept)"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the pick was graded against the real result"
+    },
+    "actual_home": {
+      "type": "number",
+      "description": "Real final home goals once settled"
+    },
+    "actual_away": {
+      "type": "number",
+      "description": "Real final away goals once settled"
+    },
+    "result_source": {
+      "type": "string",
+      "default": "",
+      "description": "Verified feed the score was graded from (e.g. 'openfootball verified result')"
+    },
+    "closing_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Closing price captured near kickoff when available \u2014 closing-line value analysis input, never backfilled onto the original prediction"
+    }
+  },
+  "required": [
+    "fixture_id",
+    "home",
+    "away",
+    "league",
+    "kickoff",
+    "lagos_date_key",
+    "session",
+    "market_key",
+    "market_label",
+    "model_version",
+    "prediction_version",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

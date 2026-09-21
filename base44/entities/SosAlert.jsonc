@@ -1,0 +1,43 @@
+{
+  "name": "SosAlert",
+  "type": "object",
+  "properties": {
+    "driver_id": {
+      "type": "string"
+    },
+    "driver_name": {
+      "type": "string"
+    },
+    "ride_id": {
+      "type": "string"
+    },
+    "location_lat": {
+      "type": "number"
+    },
+    "location_lng": {
+      "type": "number"
+    },
+    "audio_recording_url": {
+      "type": "string"
+    },
+    "panic_mode": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Acknowledged",
+        "Resolved"
+      ],
+      "default": "Active"
+    },
+    "admin_response": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "driver_id"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "name": "CrixSecurityPin",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Owning user \u2014 ONE transaction PIN row per user. The PIN protects every purchase (bills, betting top-ups, dollar cards) and is verified server-side BEFORE any wallet money moves"
+    },
+    "pin_hash": {
+      "type": "string",
+      "description": "Salted SHA-256 hash of the customer's transaction PIN. The PIN itself is NEVER stored, logged or returned anywhere \u2014 only this hash exists"
+    },
+    "pin_salt": {
+      "type": "string",
+      "description": "Per-user random salt mixed into the hash \u2014 regenerated on every PIN change"
+    },
+    "failed_attempts": {
+      "type": "number",
+      "default": 0,
+      "description": "Consecutive wrong attempts \u2014 reset to 0 on a successful verification"
+    },
+    "locked_until": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "After 5 wrong attempts the PIN locks for 5 minutes \u2014 honest, server-side protection against guessing"
+    }
+  },
+  "required": [
+    "user_id",
+    "pin_hash",
+    "pin_salt"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "name": "CrxsAAProviderStatus",
+  "type": "object",
+  "properties": {
+    "registry_key": {
+      "type": "string",
+      "description": "Deterministic row identity \u2014 'aa-provider|<provider>' (alchemy, cdp) or 'crxs-aa-transfer-gate'. Every value is written ONLY by the server-side crxs-aa-health-check function after probing the provider with real credentials \u2014 never typed in manually, never fabricated"
+    },
+    "provider": {
+      "type": "string",
+      "description": "Provider this row reports on \u2014 alchemy (PRIMARY ERC-4337 candidate) | cdp (paymaster/bundler + wallet candidate) | system (the external-transfer gate)"
+    },
+    "role": {
+      "type": "string",
+      "default": "",
+      "description": "Role in the CRIXCOIN architecture \u2014 EmbeddedWalletProvider | PaymasterProvider | Bundler | SettlementProvider | TRANSFER_GATE"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "NOT_CONFIGURED",
+        "CONFIGURED",
+        "VERIFIED",
+        "OPERATIONAL",
+        "FAILED",
+        "PAUSED"
+      ],
+      "default": "NOT_CONFIGURED",
+      "description": "Honest state derived ONLY from live provider responses. NOT_CONFIGURED = a required credential/network/policy is missing. VERIFIED = the capability answered a real probe. OPERATIONAL = a real end-to-end flow completed on-chain. Nothing is ever assumed"
+    },
+    "capabilities_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "Per-capability states (bundler, paymaster, smart_accounts, embedded_wallet, server_side) \u2014 each backed by real probe evidence"
+    },
+    "entry_points_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "RAW eth_supportedEntryPoints response from the provider's bundler on Base Mainnet \u2014 verifiable EntryPoint addresses"
+    },
+    "missing_credentials": {
+      "type": "string",
+      "default": "",
+      "description": "Exact credential/policy NAMES still missing (names only \u2014 values never touch this record)"
+    },
+    "required_credentials_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Full list of credential names this provider requires before its capabilities can be VERIFIED"
+    },
+    "verification_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side verification evidence \u2014 each check with pass/value, from real provider RPC responses only"
+    },
+    "notes": {
+      "type": "string",
+      "default": "",
+      "description": "Honest explanation of the current state and the exact real-world action that unlocks the next stage"
+    },
+    "last_checked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the server last probed this provider with real credentials"
+    }
+  },
+  "required": [
+    "registry_key",
+    "provider",
+    "state"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

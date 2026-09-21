@@ -1,0 +1,67 @@
+{
+  "name": "ValueAlert",
+  "type": "object",
+  "properties": {
+    "date_key": {
+      "type": "string",
+      "description": "Alert date (YYYY-MM-DD) \u2014 one alert per match per day"
+    },
+    "home": {
+      "type": "string",
+      "description": "Home team of the value opportunity"
+    },
+    "away": {
+      "type": "string",
+      "description": "Away team of the value opportunity"
+    },
+    "league": {
+      "type": "string",
+      "default": "",
+      "description": "Competition the game belongs to"
+    },
+    "market": {
+      "type": "string",
+      "description": "Human-readable market label of the pick"
+    },
+    "prob": {
+      "type": "number",
+      "default": 0,
+      "description": "Model confidence estimate (0-100) \u2014 must be 80+ to appear here"
+    },
+    "price": {
+      "type": "number",
+      "default": 0,
+      "description": "REAL bookmaker decimal price that triggered the alert \u2014 model numbers never trigger alerts"
+    },
+    "bookmaker": {
+      "type": "string",
+      "default": "",
+      "description": "The bookmaker that actually quoted the price"
+    },
+    "edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Model probability minus the bookmaker implied probability, in percentage points"
+    }
+  },
+  "required": [
+    "date_key",
+    "home",
+    "away",
+    "market"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

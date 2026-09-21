@@ -1,0 +1,89 @@
+{
+  "name": "GameProfile",
+  "type": "object",
+  "properties": {
+    "player_name": {
+      "type": "string",
+      "description": "Display name on the leaderboard"
+    },
+    "level": {
+      "type": "number",
+      "default": 1
+    },
+    "xp": {
+      "type": "number",
+      "default": 0
+    },
+    "spirit_points": {
+      "type": "number",
+      "default": 100,
+      "description": "In-game currency earned through battles and daily rewards"
+    },
+    "highest_episode": {
+      "type": "number",
+      "default": 1,
+      "description": "Furthest episode unlocked"
+    },
+    "completed_levels": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated eL keys, e.g. 1-1,1-2"
+    },
+    "unlocked_characters": {
+      "type": "string",
+      "default": "1,2,3,4,5",
+      "description": "Comma-separated character ids the player can field"
+    },
+    "active_character_id": {
+      "type": "number",
+      "default": 1
+    },
+    "active_fighter_key": {
+      "type": "string",
+      "default": "babatunde",
+      "description": "Registry key of the selected 3D fighter (babatunde, fbx1..fbx6). The real-time 3D arena spawns this fighter."
+    },
+    "login_streak": {
+      "type": "number",
+      "default": 0
+    },
+    "last_login_date": {
+      "type": "string"
+    },
+    "last_daily_claim": {
+      "type": "string"
+    },
+    "premium": {
+      "type": "boolean",
+      "default": false
+    },
+    "booster_battles": {
+      "type": "number",
+      "default": 0,
+      "description": "Remaining 2x XP booster battles"
+    },
+    "battles_won": {
+      "type": "number",
+      "default": 0
+    },
+    "battles_lost": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "player_name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

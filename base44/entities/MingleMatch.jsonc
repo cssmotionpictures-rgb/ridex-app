@@ -1,0 +1,75 @@
+{
+  "name": "MingleMatch",
+  "type": "object",
+  "properties": {
+    "match_key": {
+      "type": "string",
+      "description": "Deterministic identity \u2014 mingle|<smallerUserId>|<largerUserId>. Created once per mutual pair; a double detection from both sides never creates a second match"
+    },
+    "user_a": {
+      "type": "string",
+      "description": "The alphabetically-smaller user id"
+    },
+    "user_b": {
+      "type": "string",
+      "description": "The alphabetically-larger user id"
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Plain user-id list [user_a, user_b] \u2014 used by RLS so ONLY the two matched users can read, update or even see this match"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "UNMATCHED",
+        "BLOCKED"
+      ],
+      "default": "ACTIVE",
+      "description": "UNMATCHED/BLOCKED immediately disables new messages and calls in both directions. Only the two participants (or an admin) can change this"
+    },
+    "unmatched_by": {
+      "type": "string",
+      "default": "",
+      "description": "Who ended the match (audit trail)"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "match_key",
+    "user_a",
+    "user_b",
+    "members",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "data.members": "{{user.id}}"
+    },
+    "create": {
+      "data.members": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "update": {
+      "data.members": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

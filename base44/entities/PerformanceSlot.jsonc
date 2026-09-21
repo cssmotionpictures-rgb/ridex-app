@@ -1,0 +1,50 @@
+{
+  "name": "PerformanceSlot",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "set_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "default": 45
+    },
+    "slot_order": {
+      "type": "number",
+      "default": 1
+    },
+    "stage": {
+      "type": "string",
+      "default": "Main Stage"
+    },
+    "slot_price": {
+      "type": "number",
+      "default": 500000,
+      "description": "Per-slot booking fee paid by the event promoter to secure this artist (\u20a6500K\u2013\u20a65M, scaled to event tier)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "confirmed",
+        "performed",
+        "cancelled"
+      ],
+      "default": "scheduled"
+    }
+  },
+  "required": [
+    "event_id",
+    "artist_name"
+  ]
+}

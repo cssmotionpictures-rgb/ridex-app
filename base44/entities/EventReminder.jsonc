@@ -1,0 +1,43 @@
+{
+  "name": "EventReminder",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "reminder_type": {
+      "type": "string",
+      "enum": [
+        "on_sale",
+        "1_week",
+        "1_day",
+        "1_hour",
+        "live"
+      ],
+      "default": "1_day"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "sent",
+        "failed"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "event_id",
+    "user_id"
+  ]
+}

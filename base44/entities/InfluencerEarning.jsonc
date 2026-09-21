@@ -1,0 +1,39 @@
+{
+  "name": "InfluencerEarning",
+  "type": "object",
+  "properties": {
+    "influencer_id": {
+      "type": "string"
+    },
+    "influencer_name": {
+      "type": "string"
+    },
+    "submission_id": {
+      "type": "string"
+    },
+    "submission_title": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid"
+      ],
+      "default": "pending"
+    },
+    "paid_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "influencer_id",
+    "submission_id",
+    "amount"
+  ]
+}

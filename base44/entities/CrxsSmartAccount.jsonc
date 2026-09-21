@@ -1,0 +1,109 @@
+{
+  "name": "CrxsSmartAccount",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Owning app user \u2014 ONE unique CRIXCOIN address per user, forever. The address itself is only ever resolved by the server-side engine (platform function first, external crxs-engine fallback while the platform function is not deployed \u2014 idempotent per user, never typed in). A user can create only their OWN row; updates and deletes stay admin-only so evidence can never be edited after recording."
+    },
+    "owner_address": {
+      "type": "string",
+      "default": "",
+      "description": "REAL per-user owner EOA address from the live CDP getOrCreateAccount response \u2014 one EOA owns exactly one smart account. Key material lives only in Coinbase's secure infrastructure; never in this app"
+    },
+    "account_name": {
+      "type": "string",
+      "default": "",
+      "description": "Deterministic CDP smart account name (crixcoin-user-<user id>) \u2014 the idempotency anchor: a repeat call resolves the SAME account instead of creating another"
+    },
+    "account_address": {
+      "type": "string",
+      "default": "",
+      "description": "The user's permanent CRIXCOIN address \u2014 REAL smart account address from the live CDP response, derived deterministically (CREATE2). It is known before deployment and never changes. Empty until CDP actually returned it; never typed in, never fabricated"
+    },
+    "network": {
+      "type": "string",
+      "default": "base",
+      "description": "CDP network the smart account lives on (base = Base Mainnet, chain 8453). The same address works across all EVM chains"
+    },
+    "chain_id": {
+      "type": "number",
+      "default": 8453
+    },
+    "flutterwave_virtual_account": {
+      "type": "string",
+      "default": "",
+      "description": "REAL Flutterwave virtual account number for NGN deposits \u2014 written ONLY by the server-side crxs-virtual-account function after Flutterwave actually issued it. Empty until then"
+    },
+    "flutterwave_bank_name": {
+      "type": "string",
+      "default": "",
+      "description": "The bank name Flutterwave assigned to the virtual account \u2014 from the live Flutterwave response only"
+    },
+    "flutterwave_account_reference": {
+      "type": "string",
+      "default": "",
+      "description": "The Flutterwave account reference (tx_ref) that ties deposits on this virtual account back to this user"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NOT_CREATED",
+        "CREATED",
+        "FAILED"
+      ],
+      "default": "NOT_CREATED",
+      "description": "CREATED only after a live response carried a valid address; FAILED keeps the real failure reason \u2014 never silently retried into success"
+    },
+    "evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side verification evidence \u2014 each check with pass/value/source, from real CDP responses only"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real failure reason when the address could not be resolved \u2014 kept for diagnosis"
+    }
+  },
+  "required": [
+    "user_id",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "name": "LogisticsRequest",
+  "type": "object",
+  "properties": {
+    "tracking_number": {
+      "type": "string"
+    },
+    "pickup_address": {
+      "type": "string"
+    },
+    "pickup_lat": {
+      "type": "number"
+    },
+    "pickup_lng": {
+      "type": "number"
+    },
+    "delivery_address": {
+      "type": "string"
+    },
+    "delivery_lat": {
+      "type": "number"
+    },
+    "delivery_lng": {
+      "type": "number"
+    },
+    "package_description": {
+      "type": "string"
+    },
+    "weight_kg": {
+      "type": "number"
+    },
+    "dimensions": {
+      "type": "string"
+    },
+    "delivery_speed": {
+      "type": "string",
+      "enum": [
+        "express",
+        "standard",
+        "economy"
+      ],
+      "default": "standard"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "driver_name": {
+      "type": "string"
+    },
+    "driver_lat": {
+      "type": "number"
+    },
+    "driver_lng": {
+      "type": "number"
+    },
+    "eta_minutes": {
+      "type": "number"
+    },
+    "proof_photo_url": {
+      "type": "string"
+    },
+    "receiver_email": {
+      "type": "string"
+    },
+    "delivery_code": {
+      "type": "string"
+    },
+    "notified_milestones": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated delivery statuses the customer has already been emailed about (dedup for automatic milestone notifications)."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "driver_assigned",
+        "pickup",
+        "in_transit",
+        "arriving_soon",
+        "delivered",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "unpaid",
+        "paid",
+        "refunded"
+      ],
+      "default": "unpaid"
+    }
+  },
+  "required": [
+    "pickup_address",
+    "delivery_address"
+  ]
+}

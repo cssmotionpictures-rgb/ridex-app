@@ -1,0 +1,44 @@
+{
+  "name": "SportsMembership",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "club_id": {
+      "type": "string"
+    },
+    "club_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "cancelled"
+      ],
+      "default": "expired"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payment_reference": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "default": 2000
+    }
+  },
+  "required": [
+    "user_id"
+  ]
+}

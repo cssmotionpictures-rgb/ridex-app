@@ -1,0 +1,90 @@
+{
+  "name": "LedgerCleanupAudit",
+  "type": "object",
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "description": "Cleanup run identity \u2014 every action of one run shares it; the run is resumable and idempotent (already-audited identities are never processed twice)"
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "settled",
+        "open",
+        "outcome"
+      ],
+      "description": "Cleanup phase the action belongs to \u2014 settled ledger, open ledger, or outcome ledger"
+    },
+    "stable_identity": {
+      "type": "string",
+      "description": "The deterministic prediction identity (global_prediction_id) the action concerned \u2014 display text is never an identity"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "exact_duplicate_removed",
+        "review_retained"
+      ],
+      "description": "What was done \u2014 ONLY exact proven duplicates are ever removed; ambiguous groups are retained and flagged for review"
+    },
+    "kept_row_id": {
+      "type": "string",
+      "default": "",
+      "description": "Canonical row retained for the identity (earliest created \u2014 immutable history wins)"
+    },
+    "removed_row_ids": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-joined ids of the exact-duplicate rows removed (review rows: the ids retained for review)"
+    },
+    "removed_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Exact duplicate rows removed for this identity"
+    },
+    "reason": {
+      "type": "string",
+      "default": "",
+      "description": "Why the action was taken \u2014 the exact-duplicate proof or the review reason"
+    },
+    "operator": {
+      "type": "string",
+      "default": "authorized repair run",
+      "description": "Who/what performed the action"
+    },
+    "executed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the action was recorded"
+    }
+  },
+  "required": [
+    "run_id",
+    "phase",
+    "stable_identity",
+    "action",
+    "executed_at"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

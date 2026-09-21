@@ -1,0 +1,17 @@
+{
+  "name": "ledger-integrity-read",
+  "entry": "entry.ts",
+  "automations": [
+    {
+      "type": "scheduled",
+      "name": "daily_ledger_recount",
+      "description": "Automatic daily ledger recount — refreshes the stored live totals and change markers in the integrity summary record every morning (05:30 UTC = 06:30 WAT) so the report is fresh without a manual trigger.",
+      "function_args": { "recount": true, "source": "daily-scan" },
+      "is_active": true,
+      "schedule_mode": "recurring",
+      "schedule_type": "simple",
+      "repeat_unit": "days",
+      "start_time": "05:30"
+    }
+  ]
+}

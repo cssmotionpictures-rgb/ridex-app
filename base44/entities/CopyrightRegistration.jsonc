@@ -1,0 +1,136 @@
+{
+  "name": "CopyrightRegistration",
+  "type": "object",
+  "properties": {
+    "song_title": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "client_email": {
+      "type": "string"
+    },
+    "studio_location": {
+      "type": "string"
+    },
+    "isrc_code": {
+      "type": "string"
+    },
+    "upc_code": {
+      "type": "string"
+    },
+    "vault_timestamped": {
+      "type": "boolean",
+      "default": true,
+      "description": "Step 1 \u2014 cryptographic vault timestamp archived"
+    },
+    "vault_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "content_id_setup": {
+      "type": "boolean",
+      "default": true,
+      "description": "Step 2 \u2014 ISRC/UPC & Content ID fingerprinting configured"
+    },
+    "ncc_deposited": {
+      "type": "boolean",
+      "default": false,
+      "description": "Step 3 \u2014 federal NCC deposit completed"
+    },
+    "ncc_certificate_id": {
+      "type": "string"
+    },
+    "split_sheet_id": {
+      "type": "string"
+    },
+    "publishing_admin_fee": {
+      "type": "number",
+      "default": 2500000
+    },
+    "agency_legal_fee": {
+      "type": "number",
+      "default": 500000,
+      "description": "20% gross-up legal counsel surcharge"
+    },
+    "content_id_fee": {
+      "type": "number",
+      "default": 200000
+    },
+    "total": {
+      "type": "number",
+      "default": 3200000
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "NGN"
+      ],
+      "default": "NGN"
+    },
+    "escrow_status": {
+      "type": "string",
+      "enum": [
+        "held",
+        "released",
+        "refunded"
+      ],
+      "default": "held"
+    },
+    "escrow_released_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "fee_bypassed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Admin waived the agency legal + content ID surcharges"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "protected",
+        "registered",
+        "cancelled"
+      ],
+      "default": "protected"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "song_title",
+    "total"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

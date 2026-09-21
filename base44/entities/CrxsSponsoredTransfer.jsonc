@@ -1,0 +1,120 @@
+{
+  "name": "CrxsSponsoredTransfer",
+  "type": "object",
+  "properties": {
+    "transfer_key": {
+      "type": "string",
+      "description": "Client-supplied idempotency key \u2014 the SAME key NEVER sends twice: a retry returns the original transfer record unchanged instead of moving CRXS again"
+    },
+    "from_user_id": {
+      "type": "string",
+      "description": "Sending user \u2014 must own the sending smart account; a caller can only send from their own account (admins excepted for controlled testing)"
+    },
+    "to_user_id": {
+      "type": "string",
+      "default": "",
+      "description": "Receiving app user id when the recipient is a RIDE X user (empty for pure external addresses)"
+    },
+    "to_address": {
+      "type": "string",
+      "description": "REAL recipient address on Base Mainnet \u2014 validated, never a placeholder"
+    },
+    "amount_raw": {
+      "type": "string",
+      "description": "Raw CRXS units at 18 decimals as a bigint string \u2014 the exact amount the recipient receives, never floating point"
+    },
+    "fee_raw": {
+      "type": "string",
+      "default": "0",
+      "description": "Network fee in raw CRXS units (0.2%, paid in CRIXCOIN \u2014 the user never sees or pays ETH). Accumulates in the platform fee wallet and funds gas via the settlement route"
+    },
+    "fee_wallet": {
+      "type": "string",
+      "default": "",
+      "description": "The platform fee collection address the fee was actually sent to on this transfer"
+    },
+    "user_op_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL ERC-4337 UserOperation hash from the CDP sendUserOperation live response \u2014 empty until the op was actually submitted"
+    },
+    "tx_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL Base Mainnet transaction hash \u2014 empty until the chain actually answered"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "created",
+        "submitted",
+        "pending",
+        "confirmed",
+        "failed",
+        "unknown"
+      ],
+      "default": "created",
+      "description": "Honest state machine: created \u2192 submitted \u2192 pending \u2192 confirmed | failed | unknown. UNKNOWN is a real state \u2014 it is never flipped to failed without a chain query, and confirmed requires a real independently-verified Base Mainnet receipt"
+    },
+    "block_number": {
+      "type": "number",
+      "default": 0,
+      "description": "Real confirmation block from the independently verified Base Mainnet receipt \u2014 0 until confirmed"
+    },
+    "confirmed_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "When the transfer was confirmed on-chain (empty until a real receipt verified it)"
+    },
+    "evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side evidence trail \u2014 userOp submission, CDP settlement status, independent Base Mainnet receipt \u2014 from real responses only"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real failure reason when a transfer did not confirm \u2014 kept verbatim, never overwritten silently"
+    }
+  },
+  "required": [
+    "transfer_key",
+    "from_user_id",
+    "to_address",
+    "amount_raw",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.from_user_id": "{{user.id}}"
+        },
+        {
+          "data.to_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

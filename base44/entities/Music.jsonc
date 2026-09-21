@@ -1,0 +1,70 @@
+{
+  "name": "Music",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "artist": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string",
+      "enum": [
+        "Afrobeats",
+        "Pop",
+        "Hip-Hop",
+        "Gospel",
+        "R&B",
+        "Dancehall",
+        "Highlife",
+        "Jazz",
+        "Reggae",
+        "Electronic"
+      ],
+      "default": "Afrobeats"
+    },
+    "audio_url": {
+      "type": "string"
+    },
+    "cover_url": {
+      "type": "string"
+    },
+    "duration_seconds": {
+      "type": "number"
+    },
+    "price": {
+      "type": "number",
+      "default": 0.49
+    },
+    "is_free": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_ad_supported": {
+      "type": "boolean",
+      "default": true
+    },
+    "plays": {
+      "type": "number",
+      "default": 0
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "published",
+        "rejected"
+      ],
+      "default": "published"
+    }
+  },
+  "required": [
+    "title",
+    "artist"
+  ]
+}

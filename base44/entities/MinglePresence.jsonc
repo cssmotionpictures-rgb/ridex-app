@@ -1,0 +1,71 @@
+{
+  "name": "MinglePresence",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Owning app user \u2014 RLS allows a user to write ONLY their own presence row; nobody can forge another person's presence"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "AVAILABLE",
+        "DISCOVERABLE",
+        "BUSY",
+        "IN_CALL",
+        "PAUSED",
+        "OFFLINE"
+      ],
+      "default": "DISCOVERABLE",
+      "description": "Temporary availability. Only AVAILABLE/DISCOVERABLE users are ever shown in Nearby"
+    },
+    "zone_lat": {
+      "type": "number",
+      "description": "COARSE ZONE ONLY \u2014 the user's position snapped to a ~2km grid with a deterministic per-user jitter BEFORE it is ever stored. Exact GPS never persists here"
+    },
+    "zone_lng": {
+      "type": "number",
+      "description": "Coarse zone longitude \u2014 same privacy treatment as zone_lat. This zone is only ever rendered as aggregate activity areas, never as an individual marker"
+    },
+    "area_label": {
+      "type": "string",
+      "default": "",
+      "description": "Broad area text (e.g. 'Victoria Island')"
+    },
+    "last_seen_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Presence self-expires (~15 min). No permanent location broadcast, no movement history"
+    }
+  },
+  "required": [
+    "user_id",
+    "status",
+    "expires_at"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

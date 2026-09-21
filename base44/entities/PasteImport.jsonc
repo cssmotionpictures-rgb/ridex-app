@@ -1,0 +1,109 @@
+{
+  "name": "PasteImport",
+  "type": "object",
+  "properties": {
+    "import_hash": {
+      "type": "string",
+      "description": "Normalized-text hash (shared hasher with the result imports) \u2014 the same paste text resolves to the same hash; a repeated paste is flagged duplicate, never double-counted"
+    },
+    "raw_text": {
+      "type": "string",
+      "default": "",
+      "description": "The exact text the user pasted into the PASTE BETTING GAMES box \u2014 the paste audit trail"
+    },
+    "source": {
+      "type": "string",
+      "default": "monster-paste",
+      "description": "The paste pipeline that processed the batch \u2014 monster-paste"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "imported",
+        "duplicate",
+        "empty"
+      ],
+      "default": "imported",
+      "description": "Import outcome \u2014 imported = analyzed \u00b7 duplicate = identical text analyzed before (analysis is idempotent, nothing is double-created) \u00b7 empty = no game detected"
+    },
+    "games_detected": {
+      "type": "number",
+      "default": 0,
+      "description": "Unique structured games the parser confidently extracted after dedup"
+    },
+    "markets_detected": {
+      "type": "number",
+      "default": 0,
+      "description": "Individual market/odds prices parsed from the paste (1X2, over/under, BTTS\u2026)"
+    },
+    "duplicates_removed": {
+      "type": "number",
+      "default": 0,
+      "description": "Duplicated game lines removed by the parser \u2014 the same fixture is never analyzed twice"
+    },
+    "games_matched": {
+      "type": "number",
+      "default": 0,
+      "description": "Parsed games matched to exactly one fixture in the verified RIDE X fixture pool"
+    },
+    "games_review": {
+      "type": "number",
+      "default": 0,
+      "description": "Parsed games whose team names matched more than one verified fixture \u2014 kept for review, never guessed"
+    },
+    "games_not_found": {
+      "type": "number",
+      "default": 0,
+      "description": "Parsed games with no match in the verified pool \u2014 honestly rejected (INSUFFICIENT DATA), never analyzed from invented data"
+    },
+    "picks_qualified": {
+      "type": "number",
+      "default": 0,
+      "description": "Matched-game selections that passed the MONSTER qualification gate (ELITE/STRONG)"
+    },
+    "picks_watch": {
+      "type": "number",
+      "default": 0,
+      "description": "Matched-game selections below the full MONSTER standard \u2014 shown as WATCH, never on a ticket"
+    },
+    "picks_rejected": {
+      "type": "number",
+      "default": 0,
+      "description": "Matched-game candidates rejected by the MONSTER gate (data quality, red flags, below standard)"
+    },
+    "picks_recorded": {
+      "type": "number",
+      "default": 0,
+      "description": "Qualified paste selections permanently recorded on the MONSTER pick ledger \u2014 idempotent per fixture+market, settled automatically from the verified result"
+    },
+    "unparseable_lines": {
+      "type": "number",
+      "default": 0,
+      "description": "Lines the parser could not confidently classify \u2014 kept visible to the user, never silently dropped"
+    },
+    "summary_json": {
+      "type": "string",
+      "default": "",
+      "description": "Full paste detail \u2014 per-game match outcomes, per-pick gate decisions, arrangement overview"
+    },
+    "imported_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this paste batch was processed"
+    }
+  },
+  "required": [
+    "import_hash",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

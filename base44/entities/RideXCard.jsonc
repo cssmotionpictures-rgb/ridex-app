@@ -1,0 +1,67 @@
+{
+  "name": "RideXCard",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Authenticated owner's user id \u2014 the PRIMARY wallet ownership key. A wallet can only ever be charged by this user or for cards created by this user."
+    },
+    "cardholder_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "card_number": {
+      "type": "string"
+    },
+    "card_last4": {
+      "type": "string"
+    },
+    "expiry_month": {
+      "type": "number"
+    },
+    "expiry_year": {
+      "type": "number"
+    },
+    "cvv": {
+      "type": "string"
+    },
+    "balance": {
+      "type": "number",
+      "default": 0
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "NGN",
+        "USD"
+      ],
+      "default": "NGN"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "frozen",
+        "blocked"
+      ],
+      "default": "active"
+    },
+    "total_loaded": {
+      "type": "number",
+      "default": 0
+    },
+    "total_spent": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "cardholder_name",
+    "email"
+  ]
+}

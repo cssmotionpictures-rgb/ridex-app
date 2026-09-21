@@ -1,0 +1,44 @@
+{
+  "name": "MatchPrediction",
+  "type": "object",
+  "properties": {
+    "match_id": {
+      "type": "string"
+    },
+    "match_label": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "club_id": {
+      "type": "string"
+    },
+    "club_name": {
+      "type": "string"
+    },
+    "predicted_score_a": {
+      "type": "number",
+      "default": 0
+    },
+    "predicted_score_b": {
+      "type": "number",
+      "default": 0
+    },
+    "points": {
+      "type": "number",
+      "default": 0
+    },
+    "graded": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "match_id",
+    "user_id"
+  ]
+}

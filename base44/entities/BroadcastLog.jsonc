@@ -1,0 +1,72 @@
+{
+  "name": "BroadcastLog",
+  "type": "object",
+  "properties": {
+    "week_key": {
+      "type": "string",
+      "description": "Dispatch date (YYYY-MM-DD, Lagos) of the weekly Monday broadcast \u2014 one log row per dispatch, upserted by broadcast-roster."
+    },
+    "promoter_sent": {
+      "type": "number",
+      "default": 0,
+      "description": "Promoter / media emails successfully delivered"
+    },
+    "promoter_failed": {
+      "type": "number",
+      "default": 0
+    },
+    "individuals_sent": {
+      "type": "number",
+      "default": 0,
+      "description": "Individual services-email recipients successfully delivered"
+    },
+    "individuals_failed": {
+      "type": "number",
+      "default": 0
+    },
+    "individuals_discovered": {
+      "type": "number",
+      "default": 0,
+      "description": "New individual emails found by live web search that week"
+    },
+    "recipients": {
+      "type": "number",
+      "default": 0,
+      "description": "Total recipient list size that week"
+    },
+    "total_sent": {
+      "type": "number",
+      "default": 0
+    },
+    "scheduled": {
+      "type": "boolean",
+      "default": true,
+      "description": "True for the automatic Monday cron run, false for a manual dispatch"
+    }
+  },
+  "required": [
+    "week_key"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

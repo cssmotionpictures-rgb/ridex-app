@@ -1,0 +1,89 @@
+{
+  "name": "Ride",
+  "type": "object",
+  "properties": {
+    "pickup_address": {
+      "type": "string"
+    },
+    "pickup_lat": {
+      "type": "number"
+    },
+    "pickup_lng": {
+      "type": "number"
+    },
+    "dest_address": {
+      "type": "string"
+    },
+    "dest_lat": {
+      "type": "number"
+    },
+    "dest_lng": {
+      "type": "number"
+    },
+    "ride_type": {
+      "type": "string",
+      "enum": [
+        "economy",
+        "comfort",
+        "xl",
+        "bike"
+      ],
+      "default": "economy"
+    },
+    "offer_amount": {
+      "type": "number"
+    },
+    "accepted_amount": {
+      "type": "number"
+    },
+    "driver_id": {
+      "type": "string"
+    },
+    "driver_name": {
+      "type": "string"
+    },
+    "driver_vehicle": {
+      "type": "string"
+    },
+    "customer_phone": {
+      "type": "string"
+    },
+    "cancellation_reason": {
+      "type": "string"
+    },
+    "distance_km": {
+      "type": "number"
+    },
+    "eta_minutes": {
+      "type": "number"
+    },
+    "ride_pin": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "searching",
+        "driver_assigned",
+        "arriving",
+        "in_progress",
+        "completed",
+        "cancelled"
+      ],
+      "default": "searching"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "unpaid",
+        "paid",
+        "refunded"
+      ],
+      "default": "unpaid"
+    }
+  },
+  "required": [
+    "pickup_address",
+    "dest_address"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "ApiFootballCache",
+  "type": "object",
+  "properties": {
+    "cache_key": {
+      "type": "string",
+      "description": "endpoint?params \u2014 unique cache lookup key"
+    },
+    "endpoint": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "string",
+      "description": "JSON-stringified API-Football response"
+    }
+  },
+  "required": [
+    "cache_key",
+    "endpoint",
+    "payload"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

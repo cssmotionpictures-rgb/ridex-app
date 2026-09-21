@@ -1,0 +1,181 @@
+{
+  "name": "CrxsSepoliaTransfer",
+  "type": "object",
+  "properties": {
+    "transfer_key": {
+      "type": "string",
+      "description": "Client-supplied idempotency key \u2014 the SAME key NEVER sends twice: a retry returns the original transfer record instead of creating another UserOperation or moving CRXS again"
+    },
+    "from_user_id": {
+      "type": "string",
+      "description": "Sending user \u2014 must own the sending Sepolia smart account; a caller can only send from their own account (admins excepted for controlled tests)"
+    },
+    "to_user_id": {
+      "type": "string",
+      "default": "",
+      "description": "Receiving app user id when the recipient is a CRIXCOIN user (empty for external addresses)"
+    },
+    "to_address": {
+      "type": "string",
+      "description": "REAL recipient smart-account address on Base Sepolia \u2014 validated, never a placeholder"
+    },
+    "amount_raw": {
+      "type": "string",
+      "description": "Raw CRXS units at 18 decimals as a bigint string \u2014 the exact amount the recipient receives, never floating point"
+    },
+    "fee_raw": {
+      "type": "string",
+      "default": "0",
+      "description": "Platform fee in raw CRXS units (0.2% of the amount, sent to the platform fee wallet in the SAME atomic operation \u2014 the customer never sees or pays it separately)"
+    },
+    "fee_wallet": {
+      "type": "string",
+      "default": "",
+      "description": "The platform fee collection address the fee was actually sent to in this operation"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "CREATED",
+        "QUOTED",
+        "AUTHORIZED",
+        "SUBMITTED",
+        "PENDING",
+        "CONFIRMED",
+        "FAILED",
+        "UNKNOWN"
+      ],
+      "default": "CREATED",
+      "description": "Honest state machine \u2014 CREATED \u2192 QUOTED \u2192 AUTHORIZED \u2192 SUBMITTED \u2192 PENDING \u2192 CONFIRMED, or FAILED | UNKNOWN. Never skipped directly from CREATED to CONFIRMED. UNKNOWN is resolved on chain before any action, never blindly resent"
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "alchemy",
+        "pimlico",
+        "cdp"
+      ],
+      "default": "",
+      "description": "Which gas provider actually sponsored this operation \u2014 selected automatically by failover; the customer never knows"
+    },
+    "gas_mode": {
+      "type": "string",
+      "enum": [
+        "PLATFORM_SPONSORED",
+        "CRXS_ERC20",
+        "PROMO"
+      ],
+      "default": "PLATFORM_SPONSORED",
+      "description": "How gas was actually paid: PLATFORM_SPONSORED = paymaster fronted the gas and the platform records it as an expense; CRXS_ERC20 = gas was paid in CRIXCOIN (only once a provider genuinely supports CRXS); PROMO = provider sponsorship credits"
+    },
+    "gas_cost_raw_wei": {
+      "type": "string",
+      "default": "0",
+      "description": "REAL gas cost of the operation from the actual receipt (gasUsed \u00d7 effectiveGasPrice) in wei \u2014 admin/auditor accounting, never shown to the customer as a fee"
+    },
+    "gas_cost_native": {
+      "type": "number",
+      "default": 0,
+      "description": "The same gas cost in ETH for accounting reports"
+    },
+    "gas_cost_crxs": {
+      "type": "string",
+      "default": "0",
+      "description": "Gas cost valued in CRXS where a real valuation exists \u2014 never a fabricated price"
+    },
+    "user_op_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL ERC-4337 UserOperation hash from the live provider submission \u2014 empty until actually submitted"
+    },
+    "tx_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL Base Sepolia transaction hash \u2014 empty until the chain actually answered"
+    },
+    "block_number": {
+      "type": "number",
+      "default": 0,
+      "description": "Real confirmation block from the independently verified Sepolia receipt"
+    },
+    "confirmed_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": ""
+    },
+    "transfer_event_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "True ONLY after the actual CRXS Transfer event was read from the receipt logs and matched the intended sender, recipient and amount \u2014 a provider 'success' response alone is never enough"
+    },
+    "event_match_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "The decoded Transfer event evidence (from, to, amount per leg) compared against the intended transaction"
+    },
+    "discrepancy_flag": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when reconciliation found a mismatch between the intended transaction and the real chain state \u2014 flagged for review, financial records never silently overwritten"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real failure reason \u2014 kept verbatim, never overwritten silently"
+    },
+    "evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Immutable audit trail \u2014 provider selection probes, submission, receipt, Transfer event, gas accounting \u2014 from real responses only"
+    },
+    "reconciliation_json": {
+      "type": "string",
+      "default": "",
+      "description": "The reconciliation worker's findings for UNKNOWN/pending transfers \u2014 chain queries, decisions, timestamps"
+    },
+    "reconciled_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": ""
+    }
+  },
+  "required": [
+    "transfer_key",
+    "from_user_id",
+    "to_address",
+    "amount_raw",
+    "state"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.from_user_id": "{{user.id}}"
+        },
+        {
+          "data.to_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

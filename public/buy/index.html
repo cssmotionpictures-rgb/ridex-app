@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Buy CRIXCOIN — Live on Base</title>
+<meta name="description" content="Buy or sell CRIXCOIN (CRXS) directly with the official bonding curve on Base Mainnet. Self-custodial, live prices, no middleman.">
+<style>
+  :root { --bg:#0b0c10; --card:#13141b; --border:#2a2b35; --gold:#f7c948; --text:#f2f0ea; --muted:#8f91a3; --danger:#ef4444; --ok:#34d399; }
+  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  body { background:var(--bg); color:var(--text); font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; max-width:100%; overflow-x:hidden; }
+  .wrap { max-width:430px; margin:0 auto; padding:22px 16px calc(28px + env(safe-area-inset-bottom)); }
+  a { color:var(--gold); text-decoration:none; word-break:break-all; }
+  .brand { font-size:24px; font-weight:800; letter-spacing:-0.02em; }
+  .brand span { color:var(--gold); }
+  .pill { display:inline-flex; align-items:center; gap:7px; border:1px solid rgba(247,201,72,.35); background:rgba(247,201,72,.1); border-radius:99px; padding:4px 12px; margin-top:8px; font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); }
+  .dot { width:6px; height:6px; border-radius:50%; background:#34d399; box-shadow:0 0 8px #34d399; }
+  .banner { margin-top:14px; border:1px solid var(--border); background:linear-gradient(180deg,rgba(247,201,72,.12),rgba(247,201,72,.04)); border-radius:12px; padding:10px 12px; font-size:11.5px; color:var(--text); }
+  h1 { font-size:22px; font-weight:800; margin-top:16px; line-height:1.25; }
+  .sub { color:var(--muted); font-size:13px; margin-top:8px; }
+  .stats { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:16px; }
+  .stat { border:1px solid var(--border); background:rgba(19,20,27,.6); border-radius:12px; padding:10px 12px; }
+  .stat .lbl { font-size:9px; text-transform:uppercase; letter-spacing:.16em; color:var(--muted); }
+  .stat .val { font-size:13px; font-weight:800; margin-top:3px; }
+  .wide { grid-column:1 / -1; }
+  .bar { height:6px; border-radius:99px; background:#1e1f29; margin-top:8px; overflow:hidden; }
+  .bar > div { height:100%; border-radius:99px; background:var(--gold); transition:width .4s; }
+  .tabs { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:18px; border:1px solid var(--border); background:rgba(30,31,41,.4); border-radius:12px; padding:6px; }
+  .tabs button { border:0; border-radius:9px; padding:9px 0; font-size:13.5px; font-weight:800; color:var(--muted); background:transparent; cursor:pointer; }
+  .tabs button.active { background:var(--gold); color:#17120a; }
+  .card { border:1px solid var(--border); background:rgba(19,20,27,.7); border-radius:16px; padding:16px; margin-top:10px; }
+  .card h2 { font-size:14px; font-weight:700; }
+  .bal { font-size:11px; color:var(--muted); margin-top:2px; }
+  .field { display:flex; align-items:center; gap:8px; border:1px solid var(--border); background:rgba(30,31,41,.5); border-radius:12px; padding:12px 14px; margin-top:10px; }
+  .field:focus-within { border-color:rgba(247,201,72,.6); }
+  .field input { flex:1; min-width:0; background:transparent; border:0; outline:0; color:var(--text); font-size:18px; font-weight:800; }
+  .field .unit { font-size:13px; font-weight:700; color:var(--muted); }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .chips button { border:1px solid var(--border); background:transparent; color:var(--muted); border-radius:99px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; }
+  .chips button.active { border-color:var(--gold); color:var(--gold); background:rgba(247,201,72,.1); }
+  .quote { margin-top:12px; border:1px solid rgba(247,201,72,.25); background:rgba(247,201,72,.1); border-radius:12px; padding:12px; }
+  .quote .lbl { font-size:9px; text-transform:uppercase; letter-spacing:.16em; color:var(--muted); }
+  .quote .val { font-size:21px; font-weight:900; color:var(--gold); margin-top:2px; }
+  .quote .note { font-size:11px; color:var(--muted); margin-top:5px; }
+  .hint { font-size:11px; color:var(--muted); margin-top:12px; }
+  .notice { font-size:12px; color:#facc15; margin-top:12px; border:1px solid rgba(250,204,21,.3); background:rgba(250,204,21,.1); border-radius:10px; padding:10px; }
+  button.cta { width:100%; margin-top:12px; border:0; border-radius:12px; padding:13px 0; font-size:14px; font-weight:800; cursor:pointer; }
+  .cta.gold { background:var(--gold); color:#17120a; box-shadow:0 8px 24px -10px rgba(247,201,72,.7); }
+  .cta.ghost { background:rgba(30,31,41,.7); color:var(--text); border:1px solid var(--border); }
+  .cta:disabled { opacity:.45; cursor:default; }
+  .connected { font-size:10px; color:var(--muted); text-align:center; margin-top:8px; }
+  .msg { font-size:12px; margin-top:10px; border-radius:10px; padding:10px 12px; }
+  .msg.err { color:var(--danger); border:1px solid rgba(239,68,68,.3); background:rgba(239,68,68,.1); }
+  .msg.ok { color:var(--ok); border:1px solid rgba(52,211,153,.3); background:rgba(52,211,153,.1); }
+  .tx { margin-top:10px; border:1px solid var(--border); background:rgba(30,31,41,.5); border-radius:10px; padding:10px 12px; font-size:11px; word-break:break-all; }
+  .foot { font-size:11px; color:var(--muted); margin-top:16px; line-height:1.6; }
+  .disc { font-size:10px; color:rgba(143,145,163,.7); margin-top:10px; line-height:1.6; }
+  .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,.25); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; vertical-align:-2px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="brand"><span>CRIX</span>COIN</p>
+  <div class="pill"><span class="dot"></span>Live · Base Mainnet</div>
+  <div class="banner">🚀 CRIXCOIN is now live on Base Mainnet. Contract: <a href="https://basescan.org/token/0xb7a10024941f5286d9686b0bb8ebf6cb88c7453f" target="_blank" rel="noopener">0xb7a10024941f5286d9686b0bb8ebf6cb88c7453f</a></div>
+  <h1>Buy CRIXCOIN from the official bonding curve</h1>
+  <p class="sub">The price you see is read live from the curve contract on Base. You trade directly with the contract — self-custodial, no middleman, your CRXS lands straight in your wallet.</p>
+
+  <div class="stats">
+    <div class="stat"><p class="lbl">Live curve price</p><p class="val" id="sPrice">—</p></div>
+    <div class="stat"><p class="lbl">ETH reserve (backs all sells)</p><p class="val" id="sEth">—</p></div>
+    <div class="stat"><p class="lbl">CRXS still on the curve</p><p class="val" id="sTokens">—</p></div>
+    <div class="stat wide"><p class="lbl">Graduation progress</p><p class="val" id="sGrad">—</p><div class="bar"><div id="sBar" style="width:0%"></div></div></div>
+  </div>
+
+  <div class="tabs">
+    <button id="tabBuy" class="active" onclick="setTab('buy')">📈 Buy</button>
+    <button id="tabSell" onclick="setTab('sell')">🪙 Sell</button>
+  </div>
+
+  <!-- BUY -->
+  <div class="card" id="panelBuy">
+    <h2>Amount of ETH to spend</h2>
+    <div class="field"><input id="ethAmount" inputmode="decimal" placeholder="0.0003" value="0.0003"><span class="unit">ETH</span></div>
+    <div class="chips" id="buyChips"></div>
+    <div id="buyQuote"></div>
+    <button class="cta gold" id="buyBtn" onclick="doBuy()">Buy CRXS</button>
+    <div id="buyMsg"></div>
+  </div>
+
+  <!-- SELL -->
+  <div class="card" id="panelSell" style="display:none">
+    <h2>Amount of CRXS to sell</h2>
+    <p class="bal" id="sellBalance"></p>
+    <div class="field"><input id="crxsAmount" inputmode="decimal" placeholder="1000"><span class="unit">CRXS</span></div>
+    <div id="sellQuote"></div>
+    <button class="cta gold" id="sellBtn" onclick="doSell()">Sell CRXS</button>
+    <div id="sellMsg"></div>
+  </div>
+
+  <p class="foot">
+    Bonding curve <a href="https://basescan.org/address/0x593efbd536124de06ddfc129166df45021df9faa" target="_blank" rel="noopener">0x593e…f9faa</a>
+    · CRXS token <a href="https://basescan.org/token/0xb7a10024941f5286d9686b0bb8ebf6cb88c7453f" target="_blank" rel="noopener">0xb7a1…453f</a>
+    · <a href="https://dexscreener.com/base/0xb7a10024941f5286d9686b0bb8ebf6cb88c7453f" target="_blank" rel="noopener">DexScreener</a>
+  </p>
+  <p class="disc">Quotes come live from the curve contract on Base Mainnet and include the 1% trading fee. Every trade is protected by a 2% minimum-out check, so a front-run can never overcharge you. CRIXCOIN is a utility token of the RIDE X platform — not an investment; do your own research and only spend what you can afford to lose.</p>
+</div>
+
+<script>
+"use strict";
+// ——— Real contract constants ———
+var CURVE = "0x593efbd536124de06ddfc129166df45021df9faa";
+var CRXS = "0xb7a10024941f5286d9686b0bb8ebf6cb88c7453f";
+var CHAIN_ID = "0x2105"; // Base Mainnet 8453
+var RPCS = ["https://mainnet.base.org", "https://base-rpc.publicnode.com", "https://base.meowrpc.com"];
+// Selectors from the compiled CrixLaunchCurve artifact (solc 0.8.37)
+var SEL = {
+  tokenReserve: "0xcbcb3171", ethReserve: "0xd62ccb3f", graduationThresholdEth: "0x57febfed",
+  graduated: "0xe7c2b772", pricePerToken: "0x7b1b1de6",
+  quoteBuy: "0x4beb394c", buy: "0xd96a094a",          // buy(uint256 minTokensOut) payable
+  quoteSell: "0xa64190c4", sell: "0xd79875eb",        // sell(uint256 tokenAmount, uint256 minEthOut)
+  approve: "0x095ea7b3", allowance: "0xdd62ed3e", balanceOf: "0x70a08231"
+};
+
+// ——— helpers ———
+function pad32(n) { return BigInt(n).toString(16).padStart(64, "0"); }
+function padAddress(a) { var h = a.toLowerCase().replace(/^0x/, ""); return "0".repeat(24) + h; }
+function ethToWei(s) {
+  var m = String(s || "").trim();
+  if (!/^\d*\.?\d*$/.test(m) || m === "" || m === ".") return null;
+  var p = m.split(".");
+  return BigInt(p[0] || "0") * 10n ** 18n + BigInt((p[1] || "").slice(0, 18).padEnd(18, "0"));
+}
+function crxsToRaw(s) {
+  var m = String(s || "").trim();
+  if (!/^\d*\.?\d*$/.test(m) || m === "" || m === ".") return null;
+  var p = m.split(".");
+  return BigInt(p[0] || "0") * 10n ** 18n + BigInt((p[1] || "").slice(0, 18).padEnd(18, "0"));
+}
+function fmtCrxs(raw) {
+  var n = Number(raw) / 1e18;
+  if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + "M";
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+  return n.toFixed(2) + " CRXS";
+}
+function fmtEth(wei) {
+  var n = Number(wei) / 1e18;
+  if (n === 0) return "0";
+  if (Math.abs(n) < 0.0001) return n.toExponential(3);
+  return String(Number(n.toFixed(8)));
+}
+async function rpc(method, params) {
+  var lastErr = null;
+  for (var i = 0; i < RPCS.length; i++) {
+    try {
+      var res = await fetch(RPCS[i], { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: Date.now(), method: method, params: params }) });
+      var b = await res.json();
+      if (b.error) throw new Error(b.error.message || "RPC error");
+      return b.result;
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr || new Error("Could not reach Base Mainnet");
+}
+function call(to, selector, argHex) { return rpc("eth_call", [{ to: to, data: selector + (argHex || "") }, "latest"]); }
+async function waitReceipt(hash) {
+  for (var i = 0; i < 24; i++) {
+    await new Promise(function (r) { setTimeout(r, 5000); });
+    var receipt = await rpc("eth_getTransactionReceipt", [hash]);
+    if (receipt) return receipt;
+  }
+  return null;
+}
+function msg(id, text, cls) {
+  var el = document.getElementById(id);
+  el.innerHTML = text ? '<div class="msg ' + cls + '">' + text + "</div>" : "";
+  if (text && cls === "err") el.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+function txBox(hash) {
+  return 'Transaction: <span style="font-family:monospace">' + hash.slice(0, 18) + "…" + hash.slice(-8) + '</span> <a href="https://basescan.org/tx/' + hash + '" target="_blank" rel="noopener">BaseScan</a>';
+}
+
+// ——— live state ———
+var stats = null;
+async function loadStats() {
+  try {
+    var s = await Promise.all([
+      call(CURVE, SEL.tokenReserve), call(CURVE, SEL.ethReserve),
+      call(CURVE, SEL.graduationThresholdEth), call(CURVE, SEL.graduated), call(CURVE, SEL.pricePerToken)
+    ]);
+    stats = { tokens: BigInt(s[0]), eth: BigInt(s[1]), threshold: BigInt(s[2]), graduated: BigInt(s[3]) !== 0n, price: BigInt(s[4]) };
+    document.getElementById("sPrice").textContent = stats.price > 0n ? "1 ETH ≈ " + fmtCrxs(10n ** 36n / stats.price) : "—";
+    document.getElementById("sEth").textContent = (Number(stats.eth) / 1e18).toFixed(4) + " ETH";
+    document.getElementById("sTokens").textContent = (Number(stats.tokens) / 1e27).toFixed(0) + "B";
+    var pct = stats.threshold > 0n ? Math.min(100, Number(stats.eth) / Number(stats.threshold) * 100) : 0;
+    document.getElementById("sGrad").textContent = pct.toFixed(1) + "% to DEX graduation";
+    document.getElementById("sBar").style.width = pct + "%";
+    refreshPanels();
+  } catch (e) {
+    msg("buyMsg", "Could not read the live curve state from Base Mainnet — " + (e.message || e), "err");
+  }
+}
+
+// ——— wallet ———
+var account = "", onBase = false;
+async function connect() {
+  if (!window.ethereum) {
+    msg("buyMsg", "No crypto wallet found. Open this page inside MetaMask (its in-app browser on your phone) or install the MetaMask extension, then reload.", "err");
+    return false;
+  }
+  msg("buyMsg", ""); msg("sellMsg", "");
+  try {
+    var accs = await window.ethereum.request({ method: "eth_requestAccounts" });
+    account = (accs && accs[0]) || "";
+  } catch (e) { msg("buyMsg", "Wallet connection was cancelled.", "err"); return false; }
+  try {
+    await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN_ID }] });
+    onBase = true;
+  } catch (err) {
+    if (err && (err.code === 4902 || String(err.message || "").indexOf("Unrecognized chain") >= 0)) {
+      try {
+        await window.ethereum.request({ method: "wallet_addEthereumChain", params: [{ chainId: CHAIN_ID, chainName: "Base", nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 }, rpcUrls: [RPCS[0]], blockExplorerUrls: ["https://basescan.org"] }] });
+        onBase = true;
+      } catch (e) { onBase = false; }
+    } else { onBase = false; }
+  }
+  refreshPanels();
+  if (!onBase) msg("buyMsg", "Your wallet is not on Base Mainnet — switch to Base and connect again.", "err");
+  return onBase;
+}
+if (window.ethereum) {
+  window.ethereum.on && window.ethereum.on("accountsChanged", function (a) { account = (a && a[0]) || ""; refreshPanels(); });
+  window.ethereum.on && window.ethereum.on("chainChanged", async function () {
+    try { var c = await window.ethereum.request({ method: "eth_chainId" }); onBase = String(c).toLowerCase() === CHAIN_ID; } catch (e) {}
+    refreshPanels();
+  });
+  (async function () {
+    try {
+      var accs = await window.ethereum.request({ method: "eth_accounts" });
+      if (accs && accs[0]) { account = accs[0]; var c = await window.ethereum.request({ method: "eth_chainId" }); onBase = String(c).toLowerCase() === CHAIN_ID; refreshPanels(); }
+    } catch (e) {}
+  })();
+}
+
+// ——— tabs ———
+var tab = "buy";
+function setTab(t) {
+  tab = t;
+  document.getElementById("tabBuy").className = t === "buy" ? "active" : "";
+  document.getElementById("tabSell").className = t === "sell" ? "active" : "";
+  document.getElementById("panelBuy").style.display = t === "buy" ? "" : "none";
+  document.getElementById("panelSell").style.display = t === "sell" ? "" : "none";
+  refreshPanels();
+}
+
+// ——— buy ———
+var buyQuote = null, buyBusy = false, buyTimer = null;
+document.getElementById("buyChips").innerHTML = ["0.0002", "0.0003", "0.0005", "0.001", "0.01"].map(function (c) {
+  return '<button data-c="' + c + '"' + (c === "0.0003" ? ' class="active"' : "") + ' onclick="pickChip(this)">' + c + " ETH</button>";
+}).join("");
+function pickChip(btn) {
+  document.getElementById("ethAmount").value = btn.getAttribute("data-c");
+  Array.prototype.forEach.call(document.querySelectorAll("#buyChips button"), function (b) { b.className = ""; });
+  btn.className = "active";
+  refreshBuyQuote();
+}
+document.getElementById("ethAmount").addEventListener("input", refreshBuyQuote);
+function refreshBuyQuote() {
+  if (tab !== "buy" || !stats || stats.graduated) return;
+  var wei = ethToWei(document.getElementById("ethAmount").value);
+  clearTimeout(buyTimer);
+  buyQuote = null; refreshButtons();
+  document.getElementById("buyQuote").innerHTML = '<p class="hint"><span class="spinner"></span> Reading live quote from the curve…</p>';
+  if (wei === null || wei <= 0n) { document.getElementById("buyQuote").innerHTML = '<p class="hint">Enter an ETH amount to see your live quote.</p>'; return; }
+  buyTimer = setTimeout(async function () {
+    try {
+      var res = await call(CURVE, SEL.quoteBuy, pad32(wei));
+      buyQuote = { tokensOut: BigInt("0x" + res.slice(2, 66)), fee: BigInt("0x" + res.slice(66, 130)), ethIn: wei };
+      var feePct = (Number(buyQuote.fee) / Number(buyQuote.ethIn) * 100).toFixed(2);
+      document.getElementById("buyQuote").innerHTML =
+        '<div class="quote"><p class="lbl">You receive ≈</p><p class="val">' + fmtCrxs(buyQuote.tokensOut) + "</p>" +
+        '<p class="note">Live quote from the curve · includes the ' + feePct + "% buy fee · protected against 2% slippage.</p></div>";
+      refreshButtons();
+    } catch (e) {
+      document.getElementById("buyQuote").innerHTML = "";
+      msg("buyMsg", e.message || String(e), "err");
+    }
+  }, 400);
+}
+async function doBuy() {
+  if (buyBusy) return;
+  msg("buyMsg", "");
+  if (!account || !onBase) { if (!(await connect())) return; }
+  var wei = ethToWei(document.getElementById("ethAmount").value);
+  if (wei === null || wei <= 0n) { msg("buyMsg", "Enter a valid ETH amount first.", "err"); return; }
+  buyBusy = true; refreshButtons();
+  try {
+    var res = await call(CURVE, SEL.quoteBuy, pad32(wei));
+    var tokensOut = BigInt("0x" + res.slice(2, 66));
+    if (tokensOut <= 0n) throw new Error("The curve could not quote this amount — it may be too small. Try a slightly larger amount.");
+    var minOut = tokensOut * 98n / 100n; // 2% slippage guard — the contract reverts below this
+    var hash = await window.ethereum.request({ method: "eth_sendTransaction", params: [{ from: account, to: CURVE, value: "0x" + wei.toString(16), data: SEL.buy + pad32(minOut), gas: "0x493e0" }] });
+    msg("buyMsg", "Confirming on Base Mainnet… <div class='tx'>" + txBox(hash) + "</div>", "ok");
+    var receipt = await waitReceipt(hash);
+    if (!receipt) { msg("buyMsg", "Still confirming — it can take a minute on Base. Track the transaction on BaseScan. <div class='tx'>" + txBox(hash) + "</div>", "ok"); }
+    else if (receipt.status === "0x1") { msg("buyMsg", "Confirmed — your CRXS is in your wallet. <div class='tx'>" + txBox(hash) + "</div>", "ok"); loadStats(); }
+    else { msg("buyMsg", "The transaction reverted on chain — nothing was spent except a small gas fee. The price may have moved past the slippage guard; try again. <div class='tx'>" + txBox(hash) + "</div>", "err"); }
+  } catch (e) {
+    msg("buyMsg", (e && e.code === 4001 ? "You cancelled the transaction in your wallet — nothing was sent." : (e.message || String(e))), "err");
+  } finally { buyBusy = false; refreshButtons(); }
+}
+
+// ——— sell ———
+var sellQuote = null, sellBusy = false, sellTimer = null;
+document.getElementById("crxsAmount").addEventListener("input", function () {
+  clearTimeout(sellTimer);
+  sellQuote = null; refreshButtons();
+  var raw = crxsToRaw(document.getElementById("crxsAmount").value);
+  if (raw === null || raw <= 0n) { document.getElementById("sellQuote").innerHTML = '<p class="hint">Enter a CRXS amount to see your live ETH quote.</p>'; return; }
+  if (!stats || stats.graduated) { document.getElementById("sellQuote").innerHTML = ""; return; }
+  if (stats.eth === 0n) { document.getElementById("sellQuote").innerHTML = ""; return; }
+  document.getElementById("sellQuote").innerHTML = '<p class="hint"><span class="spinner"></span> Reading live quote from the curve…</p>';
+  sellTimer = setTimeout(async function () {
+    try {
+      var res = await call(CURVE, SEL.quoteSell, pad32(raw));
+      sellQuote = { ethOut: BigInt("0x" + res.slice(2, 66)), fee: BigInt("0x" + res.slice(66, 130)), tokenIn: raw };
+      document.getElementById("sellQuote").innerHTML =
+        '<div class="quote"><p class="lbl">You receive ≈</p><p class="val">' + fmtEth(sellQuote.ethOut) + ' ETH</p>' +
+        '<p class="note">Live quote from the curve · includes the 1% sell fee · protected against 2% slippage.</p></div>';
+      refreshButtons();
+    } catch (e) {
+      document.getElementById("sellQuote").innerHTML = "";
+      msg("sellMsg", e.message || String(e), "err");
+    }
+  }, 400);
+});
+var lastBalance = 0n;
+async function loadBalance() {
+  var el = document.getElementById("sellBalance");
+  if (!account || !onBase) { el.textContent = ""; return; }
+  try {
+    var b = BigInt(await call(CRXS, SEL.balanceOf, padAddress(account)));
+    lastBalance = b;
+    el.innerHTML = 'Your balance: <a href="javascript:void(0)" onclick="useAll()" style="font-weight:700">' + fmtCrxs(b) + "</a>";
+  } catch (e) { el.textContent = ""; }
+}
+function useAll() {
+  document.getElementById("crxsAmount").value = String(Number(lastBalance) / 1e18);
+  document.getElementById("crxsAmount").dispatchEvent(new Event("input"));
+}
+async function doSell() {
+  if (sellBusy) return;
+  msg("sellMsg", "");
+  if (!account || !onBase) { if (!(await connect())) return; }
+  var raw = crxsToRaw(document.getElementById("crxsAmount").value);
+  if (raw === null || raw <= 0n) { msg("sellMsg", "Enter a valid CRXS amount first.", "err"); return; }
+  if (!stats || stats.eth === 0n) { msg("sellMsg", "Selling is not open yet — the ETH reserve that backs sells appears only after the first buy.", "err"); return; }
+  sellBusy = true; refreshButtons();
+  try {
+    var owned = BigInt(await call(CRXS, SEL.balanceOf, padAddress(account)));
+    if (owned < raw) throw new Error("Your wallet holds " + fmtCrxs(owned) + " — less than the amount you entered.");
+    var allowed = BigInt(await call(CRXS, SEL.allowance, padAddress(account) + padAddress(CURVE)));
+    var approveHash = "";
+    if (allowed < raw) {
+      msg("sellMsg", "Step 1 of 2 — approve the curve to receive your CRXS…", "ok");
+      approveHash = await window.ethereum.request({ method: "eth_sendTransaction", params: [{ from: account, to: CRXS, data: SEL.approve + padAddress(CURVE) + pad32(raw), gas: "0x493e0" }] });
+      msg("sellMsg", "Confirming the approval… <div class='tx'>" + txBox(approveHash) + "</div>", "ok");
+      var ar = await waitReceipt(approveHash);
+      if (!ar) { msg("sellMsg", "Still confirming the approval — check BaseScan, then tap Sell again. <div class='tx'>" + txBox(approveHash) + "</div>", "ok"); return; }
+      if (ar.status !== "0x1") throw new Error("The approval transaction reverted — nothing was sold. Try again.");
+    }
+    var res = await call(CURVE, SEL.quoteSell, pad32(raw));
+    var ethOut = BigInt("0x" + res.slice(2, 66));
+    if (ethOut <= 0n) throw new Error("The curve could not quote this sell — the reserve may have moved. Refresh and try again.");
+    var minEthOut = ethOut * 98n / 100n; // 2% slippage guard
+    msg("sellMsg", (approveHash ? "Step 2 of 2 — " : "") + "confirm the sell and receive your ETH…", "ok");
+    var hash = await window.ethereum.request({ method: "eth_sendTransaction", params: [{ from: account, to: CURVE, data: SEL.sell + pad32(raw) + pad32(minEthOut), gas: "0x493e0" }] });
+    msg("sellMsg", "Confirming on Base Mainnet… <div class='tx'>" + txBox(hash) + "</div>", "ok");
+    var receipt = await waitReceipt(hash);
+    if (!receipt) { msg("sellMsg", "Still confirming — it can take a minute on Base. Track the transaction on BaseScan. <div class='tx'>" + txBox(hash) + "</div>", "ok"); }
+    else if (receipt.status === "0x1") { msg("sellMsg", "Confirmed — " + fmtEth(ethOut) + " ETH is back in your wallet. <div class='tx'>" + txBox(hash) + "</div>", "ok"); loadStats(); loadBalance(); }
+    else { msg("sellMsg", "The sell reverted on chain — your CRXS and approval are safe (only a small gas fee was spent). The reserve may have moved; refresh and try again. <div class='tx'>" + txBox(hash) + "</div>", "err"); }
+  } catch (e) {
+    msg("sellMsg", (e && e.code === 4001 ? "You cancelled the transaction in your wallet — nothing was sent." : (e.message || String(e))), "err");
+  } finally { sellBusy = false; refreshButtons(); }
+}
+
+// ——— shared UI refresh ———
+function refreshButtons() {
+  var buyBtn = document.getElementById("buyBtn");
+  var sellBtn = document.getElementById("sellBtn");
+  var closed = !stats || stats.graduated;
+  buyBtn.disabled = buyBusy || closed;
+  buyBtn.innerHTML = buyBusy ? '<span class="spinner"></span> Confirm in your wallet…' : "Buy CRXS";
+  sellBtn.disabled = sellBusy || closed || !stats || stats.eth === 0n;
+  sellBtn.innerHTML = sellBusy ? '<span class="spinner"></span> Confirm in your wallet…' : "Sell CRXS";
+}
+function refreshPanels() {
+  if (!stats) return;
+  refreshButtons();
+  if (stats.graduated) {
+    document.getElementById("buyQuote").innerHTML = '<p class="notice">The curve has graduated — trading has moved to the DEX pool. Buying here is closed.</p>';
+    document.getElementById("sellQuote").innerHTML = '<p class="notice">The curve has graduated — trading has moved to the DEX pool. Selling here is closed.</p>';
+  } else if (stats.eth === 0n && tab === "sell") {
+    document.getElementById("sellQuote").innerHTML = '<p class="notice">Selling opens with the first buy — the ETH deposited by buyers is the reserve that backs every sell. Until then there is no ETH in the curve to pay out.</p>';
+  }
+  if (tab === "buy") refreshBuyQuote();
+  if (tab === "sell") {
+    loadBalance();
+    if (!stats.graduated && stats.eth === 0n) {
+      document.getElementById("sellQuote").innerHTML = '<p class="notice">Selling opens with the first buy — the ETH deposited by buyers is the reserve that backs every sell. Until then there is no ETH in the curve to pay out.</p>';
+    }
+  }
+}
+
+// ——— boot ———
+loadStats();
+</script>
+</body>
+</html>

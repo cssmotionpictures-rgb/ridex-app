@@ -1,0 +1,53 @@
+{
+  "name": "Blacklist",
+  "type": "object",
+  "properties": {
+    "driver_id": {
+      "type": "string"
+    },
+    "driver_name": {
+      "type": "string"
+    },
+    "passenger_id": {
+      "type": "string"
+    },
+    "passenger_name": {
+      "type": "string"
+    },
+    "passenger_email": {
+      "type": "string"
+    },
+    "ride_id": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "Warning",
+        "Block",
+        "Ban Request"
+      ],
+      "default": "Block"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Approved",
+        "Rejected"
+      ],
+      "default": "Pending"
+    },
+    "admin_note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "driver_id",
+    "passenger_id",
+    "reason"
+  ]
+}

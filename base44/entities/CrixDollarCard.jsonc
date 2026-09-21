@@ -1,0 +1,117 @@
+{
+  "name": "CrixDollarCard",
+  "type": "object",
+  "properties": {
+    "card_key": {
+      "type": "string",
+      "description": "Client-supplied idempotency key \u2014 the SAME key NEVER issues twice: a retry returns the original card record instead of debiting the wallet or calling the card network again"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Owning user \u2014 must own the Naira wallet that was debited"
+    },
+    "provider_card_id": {
+      "type": "string",
+      "default": "",
+      "description": "The card network's own card id from its live response \u2014 the server-side reference used for every later live query (details, funding, freeze)"
+    },
+    "masked_pan": {
+      "type": "string",
+      "default": "",
+      "description": "Masked card number for safe display. Full card details are NEVER stored here \u2014 they are fetched live from the card network only for the verified owner"
+    },
+    "cardholder_name": {
+      "type": "string",
+      "default": "",
+      "description": "Cardholder name the card network printed on the card"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "created",
+        "issued",
+        "active",
+        "frozen",
+        "failed",
+        "refunded",
+        "unknown"
+      ],
+      "default": "created",
+      "description": "Honest state machine \u2014 created = the purchase record exists before any money moves \u00b7 issued/active only after the card network's live success response; refunded after a definitive refusal with a full wallet refund; unknown = the network's answer was lost or still processing (resolved with the network, never blindly refunded or re-sent)"
+    },
+    "funding_usd": {
+      "type": "number",
+      "description": "Exact USD amount loaded onto the card at issuance"
+    },
+    "fx_rate": {
+      "type": "number",
+      "default": 0,
+      "description": "LIVE USD\u2192NGN rate used to price the card at purchase time \u2014 read from a live rates source, never typed or cached"
+    },
+    "ngn_cost": {
+      "type": "number",
+      "default": 0,
+      "description": "Exact Naira cost of the USD funding at the live rate at purchase time"
+    },
+    "olaform_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Olaform fee charged at execution \u2014 computed from the Naira cost, never hard-coded in a screen"
+    },
+    "total_debit_ngn": {
+      "type": "number",
+      "default": 0,
+      "description": "Total debited from the Naira wallet (Naira cost + Olaform fee)"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real refusal reason from the card network \u2014 kept verbatim, never overwritten silently"
+    },
+    "timeline_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Immutable step history \u2014 requested, quoted, reserved, issued/refunded \u2014 with timestamps"
+    },
+    "evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side evidence trail \u2014 live FX rate, card network response, wallet reservation \u2014 from real responses only"
+    }
+  },
+  "required": [
+    "card_key",
+    "user_id",
+    "funding_usd",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

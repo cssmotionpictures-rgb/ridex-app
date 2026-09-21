@@ -1,0 +1,47 @@
+{
+  "name": "FanClub",
+  "type": "object",
+  "properties": {
+    "artist_name": {
+      "type": "string"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "Fan Club",
+        "Premium",
+        "VIP"
+      ],
+      "default": "Fan Club"
+    },
+    "price": {
+      "type": "number",
+      "default": 2500
+    },
+    "benefits": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "members": {
+      "type": "number",
+      "default": 0
+    },
+    "creator_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "closed"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "artist_name",
+    "tier"
+  ]
+}

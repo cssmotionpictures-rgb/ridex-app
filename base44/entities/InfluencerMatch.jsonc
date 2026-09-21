@@ -1,0 +1,78 @@
+{
+  "name": "InfluencerMatch",
+  "type": "object",
+  "properties": {
+    "submission_id": {
+      "type": "string"
+    },
+    "submission_title": {
+      "type": "string"
+    },
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "influencer_id": {
+      "type": "string"
+    },
+    "influencer_name": {
+      "type": "string"
+    },
+    "match_score": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "rejected",
+        "expired"
+      ],
+      "default": "pending"
+    },
+    "feedback": {
+      "type": "string"
+    },
+    "responded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "auto_notified": {
+      "type": "boolean",
+      "default": false
+    },
+    "delivery_status": {
+      "type": "string",
+      "enum": [
+        "not_sent",
+        "sent",
+        "failed"
+      ],
+      "default": "not_sent",
+      "description": "Whether the submission email actually reached the influencer's inbox"
+    },
+    "delivery_email": {
+      "type": "string",
+      "default": "",
+      "description": "Influencer email the submission was delivered to"
+    },
+    "delivery_error": {
+      "type": "string",
+      "default": "",
+      "description": "Why the delivery failed, when it failed"
+    },
+    "delivered_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the submission email was delivered"
+    }
+  },
+  "required": [
+    "submission_id",
+    "influencer_id"
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "name": "Driver",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "vehicle_type": {
+      "type": "string",
+      "enum": [
+        "economy",
+        "comfort",
+        "xl",
+        "bike",
+        "van",
+        "truck"
+      ],
+      "default": "economy"
+    },
+    "license_plate": {
+      "type": "string"
+    },
+    "vehicle_color": {
+      "type": "string"
+    },
+    "driver_license": {
+      "type": "string"
+    },
+    "profile_photo_url": {
+      "type": "string"
+    },
+    "driver_license_url": {
+      "type": "string"
+    },
+    "vehicle_registration_url": {
+      "type": "string"
+    },
+    "insurance_url": {
+      "type": "string"
+    },
+    "inspection_url": {
+      "type": "string"
+    },
+    "id_document_url": {
+      "type": "string"
+    },
+    "bank_name": {
+      "type": "string"
+    },
+    "bank_account_name": {
+      "type": "string"
+    },
+    "bank_account_number": {
+      "type": "string"
+    },
+    "commission_rate": {
+      "type": "number",
+      "default": 0.15
+    },
+    "fleet_id": {
+      "type": "string"
+    },
+    "is_promoted": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_approved": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_online": {
+      "type": "boolean",
+      "default": false
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lng": {
+      "type": "number"
+    },
+    "rating": {
+      "type": "number",
+      "default": 5
+    },
+    "total_earnings": {
+      "type": "number",
+      "default": 0
+    },
+    "background_check_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "passed",
+        "failed",
+        "expired"
+      ],
+      "default": "not_started"
+    },
+    "background_check_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "background_check_next_due": {
+      "type": "string",
+      "format": "date"
+    },
+    "insurance_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "verified",
+        "expired",
+        "invalid"
+      ],
+      "default": "pending"
+    },
+    "insurance_expiry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "terms_accepted": {
+      "type": "boolean",
+      "default": false
+    },
+    "terms_accepted_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "full_name"
+  ]
+}

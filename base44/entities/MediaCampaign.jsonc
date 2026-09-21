@@ -1,0 +1,51 @@
+{
+  "name": "MediaCampaign",
+  "type": "object",
+  "properties": {
+    "package_type": {
+      "type": "string",
+      "enum": [
+        "movie_sync",
+        "digital_influencer",
+        "playlist_curator"
+      ]
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "brand": {
+      "type": "string"
+    },
+    "brief": {
+      "type": "string"
+    },
+    "artist_pref": {
+      "type": "string",
+      "description": "Requested roster artist for the campaign/sync"
+    },
+    "gross_fee": {
+      "type": "number",
+      "default": 0
+    },
+    "net_fee": {
+      "type": "number",
+      "default": 0
+    },
+    "agency_commission": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "completed"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "package_type"
+  ]
+}

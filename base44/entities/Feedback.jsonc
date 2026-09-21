@@ -1,0 +1,71 @@
+{
+  "name": "Feedback",
+  "type": "object",
+  "properties": {
+    "rating": {
+      "type": "number",
+      "description": "How the user rates their Ride X experience \u2014 whole number 1 (worst) to 5 (best)"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "ride",
+        "logistics",
+        "crix",
+        "movies",
+        "music",
+        "carwash",
+        "equipment",
+        "other"
+      ],
+      "description": "Which part of Ride X the feedback is about"
+    },
+    "message": {
+      "type": "string",
+      "description": "The user's own words \u2014 what to improve, what they love, what is broken. Stored verbatim (bounded at submission)"
+    },
+    "contact_email": {
+      "type": "string",
+      "default": "",
+      "description": "Email the user says they can be reached on (prefilled with their account email)"
+    },
+    "user_id": {
+      "type": "string",
+      "default": "",
+      "description": "Submitting user's id \u2014 set server-side from the authenticated session, never trusted from the client"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "reviewed",
+        "actioned"
+      ],
+      "default": "new",
+      "description": "Internal triage state for the owner"
+    }
+  },
+  "required": [
+    "rating",
+    "category",
+    "message"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

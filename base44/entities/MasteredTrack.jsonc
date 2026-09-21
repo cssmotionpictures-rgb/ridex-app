@@ -1,0 +1,102 @@
+{
+  "name": "MasteredTrack",
+  "type": "object",
+  "properties": {
+    "project_title": {
+      "type": "string",
+      "description": "Project the master belongs to (also the RIDE X Masters Drive folder name)"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "WAV file name including the mastering preset"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "Public storage URL of the mastered WAV \u2014 filled in once the master is downloaded/saved"
+    },
+    "preset": {
+      "type": "string",
+      "description": "Mastering personality the engine selected (signature, punchy, heavy, louder, amapiano, afrobeats)"
+    },
+    "rhythm": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the rhythmic baseline sweetener was enabled on this master"
+    },
+    "family": {
+      "type": "string",
+      "description": "Confidence-weighted genre family the engine detected \u2014 a clue, never a verdict"
+    },
+    "conditions": {
+      "type": "string",
+      "description": "Source condition labels diagnosed before mastering, semicolon-separated"
+    },
+    "master_lufs": {
+      "type": "number",
+      "description": "Integrated LUFS of the finished master"
+    },
+    "master_true_peak": {
+      "type": "number",
+      "description": "True-peak estimate (dBTP) of the finished master"
+    },
+    "master_lra": {
+      "type": "number",
+      "description": "Loudness range (LU) of the finished master"
+    },
+    "master_crest": {
+      "type": "number",
+      "description": "Crest factor (dB) of the finished master"
+    },
+    "correlation": {
+      "type": "number",
+      "description": "Stereo correlation of the finished master (1 for mono)"
+    },
+    "quality_score": {
+      "type": "number",
+      "description": "Measured master quality score 0-100, derived from actual measurements only"
+    },
+    "passes": {
+      "type": "number",
+      "description": "Mastering passes the engine performed (1 = no correction was needed)"
+    },
+    "corrections": {
+      "type": "string",
+      "description": "Self-corrections applied (or the rollback note), semicolon-separated"
+    },
+    "before_json": {
+      "type": "string",
+      "description": "JSON snapshot of the source measurements (before mastering)"
+    },
+    "after_json": {
+      "type": "string",
+      "description": "JSON snapshot of the master measurements (after mastering)"
+    }
+  },
+  "required": [
+    "project_title",
+    "file_name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

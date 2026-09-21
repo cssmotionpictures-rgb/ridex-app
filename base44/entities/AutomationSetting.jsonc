@@ -1,0 +1,120 @@
+{
+  "name": "AutomationSetting",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "default": "global",
+      "description": "Singleton config key \u2014 always 'global'"
+    },
+    "auto_invoice": {
+      "type": "boolean",
+      "default": true,
+      "description": "Auto-generate an invoice/receipt on every successful payment"
+    },
+    "auto_email_receipt": {
+      "type": "boolean",
+      "default": true,
+      "description": "Email the receipt to the customer's email after Paystack success"
+    },
+    "auto_release_escrow": {
+      "type": "boolean",
+      "default": false,
+      "description": "Auto-release escrow to provider on service completion (off = manual admin release)"
+    },
+    "auto_approve_events": {
+      "type": "boolean",
+      "default": true
+    },
+    "auto_approve_curators": {
+      "type": "boolean",
+      "default": true
+    },
+    "auto_approve_influencers": {
+      "type": "boolean",
+      "default": true
+    },
+    "auto_approve_sponsors": {
+      "type": "boolean",
+      "default": true
+    },
+    "auto_approve_talent": {
+      "type": "boolean",
+      "default": true
+    },
+    "auto_broadcast_roster": {
+      "type": "boolean",
+      "default": true,
+      "description": "Weekly roster broadcast to agency network"
+    },
+    "broadcast_recipients": {
+      "type": "string",
+      "default": "",
+      "description": "Default recipient list for the weekly roster broadcast \u2014 comma or newline separated promoter / media-director emails."
+    },
+    "daily_email_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of emails successfully sent today (across all senders). Reset to 0 each new day."
+    },
+    "daily_email_date": {
+      "type": "string",
+      "default": "",
+      "description": "The date (YYYY-MM-DD, Lagos) that daily_email_count applies to. When it no longer equals today, the counter resets."
+    },
+    "daily_email_cap": {
+      "type": "number",
+      "default": 290,
+      "description": "Hard stop: no more emails are sent once daily_email_count reaches this for the day. Kept below the Brevo 300/day limit for safety."
+    },
+    "last_weekly_send_date": {
+      "type": "string",
+      "default": "",
+      "description": "Date (YYYY-MM-DD, Lagos) the weekly newsletter + B2B blast last actually ran. Idempotency guard for the weekly send."
+    },
+    "last_crxs_digest_date": {
+      "type": "string",
+      "default": "",
+      "description": "Date (YYYY-MM-DD, Lagos) the weekly CRXS digest last actually sent. Idempotency guard for crxs-weekly-digest (at most one real send per 7 days)."
+    },
+    "last_crxs_alert_at": {
+      "type": "string",
+      "default": "",
+      "description": "ISO timestamp of the last successful crxs-tx-alert check window. Only advances after a successful send or a clean zero-alert check, so failed sends retry."
+    },
+    "lender_email_cache": {
+      "type": "string",
+      "default": "{}",
+      "description": "JSON map of funding source name \u2192 { email, website } found by the automatic lender-email search. Cached so each source is searched once."
+    },
+    "contact_email_cache": {
+      "type": "string",
+      "default": "{}",
+      "description": "JSON map of cache key \u2192 { email, website } found by the automatic official-email web search. Shared by lender, influencer, talent and curator delivery so each recipient is searched once, ever."
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "name": "EnginePick",
+  "type": "object",
+  "properties": {
+    "fixture_id": {
+      "type": "string",
+      "description": "Provider fixture id \u2014 at most one stored engine pick per fixture"
+    },
+    "league_code": {
+      "type": "string"
+    },
+    "league_name": {
+      "type": "string"
+    },
+    "home_team": {
+      "type": "string"
+    },
+    "away_team": {
+      "type": "string"
+    },
+    "home_logo": {
+      "type": "string",
+      "default": ""
+    },
+    "away_logo": {
+      "type": "string",
+      "default": ""
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "date_key": {
+      "type": "string",
+      "description": "Local board date (YYYY-MM-DD) in the configured timezone"
+    },
+    "session": {
+      "type": "string",
+      "enum": [
+        "morning",
+        "evening"
+      ]
+    },
+    "local_time": {
+      "type": "string",
+      "default": ""
+    },
+    "market_key": {
+      "type": "string",
+      "description": "Engine market key (1, X, 2, 1X, X2, 12, O0.5..O3.5, U1.5..U3.5, BTTS_Y, BTTS_N, DNB_H, DNB_A)"
+    },
+    "market_label": {
+      "type": "string"
+    },
+    "probability": {
+      "type": "number",
+      "description": "Calibrated model probability for the selected market (0-1)"
+    },
+    "predicted_home_goals": {
+      "type": "number",
+      "default": 0
+    },
+    "predicted_away_goals": {
+      "type": "number",
+      "default": 0
+    },
+    "quality_score": {
+      "type": "number",
+      "description": "MATCH QUALITY SCORE 0-100"
+    },
+    "model_agreement": {
+      "type": "string",
+      "description": "Human-readable agreement, e.g. '4/5 models agree'"
+    },
+    "agreement_ratio": {
+      "type": "number"
+    },
+    "data_quality": {
+      "type": "string",
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ]
+    },
+    "uncertainty": {
+      "type": "number",
+      "description": "Model uncertainty 0-1"
+    },
+    "fair_odds": {
+      "type": "number",
+      "description": "1 / model probability"
+    },
+    "market_odds": {
+      "type": "number",
+      "description": "Bookmaker decimal odds when available, else null"
+    },
+    "value_edge": {
+      "type": "number",
+      "description": "Model probability minus market implied probability, when odds exist"
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "LOW RISK",
+        "MEDIUM RISK",
+        "HIGH RISK"
+      ]
+    },
+    "reasons": {
+      "type": "string",
+      "description": "JSON array of short analysis strings"
+    },
+    "models": {
+      "type": "string",
+      "description": "JSON array of per-model votes {name, pick, prob}"
+    },
+    "flags": {
+      "type": "string",
+      "description": "JSON array of data-availability / red-flag strings"
+    },
+    "sources": {
+      "type": "string",
+      "description": "JSON array of the data providers actually used for this pick (openfootball, API-Football, Sportmonks)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "locked",
+        "win",
+        "loss",
+        "void",
+        "postponed"
+      ],
+      "default": "open",
+      "description": "Locked at kickoff \u2014 never changed after the match starts"
+    },
+    "actual_home_goals": {
+      "type": "number"
+    },
+    "actual_away_goals": {
+      "type": "number"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "brier": {
+      "type": "number",
+      "description": "Brier score of the settled prediction"
+    },
+    "log_loss": {
+      "type": "number",
+      "description": "Log loss of the settled prediction (null when void)"
+    },
+    "model_version": {
+      "type": "string",
+      "default": "v3"
+    }
+  },
+  "required": [
+    "fixture_id",
+    "market_key",
+    "probability"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

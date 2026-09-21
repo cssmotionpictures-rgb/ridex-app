@@ -1,0 +1,42 @@
+{
+  "name": "ReferralCommission",
+  "type": "object",
+  "properties": {
+    "referrer_id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "customer",
+        "driver",
+        "subscription",
+        "bonus"
+      ],
+      "default": "customer"
+    },
+    "reference_id": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid"
+      ],
+      "default": "pending"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "referrer_id",
+    "type",
+    "amount"
+  ]
+}

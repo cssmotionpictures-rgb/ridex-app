@@ -1,0 +1,197 @@
+{
+  "name": "CrxsDexMarketRecord",
+  "type": "object",
+  "properties": {
+    "registry_key": {
+      "type": "string",
+      "description": "Registry identity \u2014 'crxs-dex-market'. Single row holding the REAL owner-signed Aerodrome market launch record for the EXISTING canonical CRXS token. Pool address, transaction hashes and indexing states are only written after the owner personally signed each transaction in MetaMask and Base Mainnet confirmed it \u2014 never typed in, never fabricated. Once pool_address is set, a second pool is never created."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PREPARATION",
+        "POOL_CREATED",
+        "LIQUIDITY_ADDED",
+        "MARKET_ACTIVE",
+        "DEXSCREENER_INDEXED",
+        "GECKOTERMINAL_INDEXED",
+        "FAILED"
+      ],
+      "default": "PREPARATION",
+      "description": "Honest separate states \u2014 PREPARATION = preflight only \u00b7 POOL_CREATED = the liquidity transaction that created the pool is confirmed on Base \u00b7 LIQUIDITY_ADDED = reserves verified on-chain \u00b7 MARKET_ACTIVE = one genuine micro-swap confirmed \u00b7 DEXSCREENER_INDEXED / GECKOTERMINAL_INDEXED = the respective independent indexer actually reports the pool in its API (never claimed from a timeout)"
+    },
+    "token_address": {
+      "type": "string",
+      "default": "0xb7a10024941f5286d9686b0bb8ebf6cb88c7453f",
+      "description": "The EXISTING canonical CRXS token on Base Mainnet \u2014 never a new token, never a copy on another chain"
+    },
+    "quote_address": {
+      "type": "string",
+      "default": "",
+      "description": "REAL quote token (Base WETH) resolved live from the Aerodrome router and code-verified \u2014 empty until verified on-chain"
+    },
+    "pool_address": {
+      "type": "string",
+      "default": "",
+      "description": "REAL Aerodrome volatile pool address from the confirmed liquidity transaction / factory getPool \u2014 empty until the chain says it exists. Once set, a second pool is NEVER created without manual authorization"
+    },
+    "router_address": {
+      "type": "string",
+      "default": "",
+      "description": "Aerodrome router resolved and code-verified live on Base Mainnet before any signing"
+    },
+    "factory_address": {
+      "type": "string",
+      "default": "",
+      "description": "Aerodrome pool factory resolved live from the router's factory() \u2014 code-verified before any signing, never hard-coded from an old tutorial"
+    },
+    "pool_stable": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pool kind \u2014 CRXS is volatile, so always a VOLATILE pool, never a stable pool"
+    },
+    "launch_idempotency_key": {
+      "type": "string",
+      "default": "CRXS_POOL_CREATE_BASE_8453",
+      "description": "Idempotency key for the pool/liquidity operation \u2014 a retry returns the existing pool, never creates another"
+    },
+    "swap_idempotency_key": {
+      "type": "string",
+      "default": "CRXS_FIRST_MARKET_SWAP_BASE_8453",
+      "description": "Idempotency key for the first genuine market swap \u2014 one real transaction, never repeated automatically"
+    },
+    "approve_tx": {
+      "type": "string",
+      "default": "",
+      "description": "REAL transaction hash of the owner-signed CRXS approval to the Aerodrome router \u2014 empty until confirmed"
+    },
+    "liquidity_tx": {
+      "type": "string",
+      "default": "",
+      "description": "REAL transaction hash of the owner-signed add-liquidity transaction that created the pool \u2014 empty until confirmed"
+    },
+    "first_swap_tx": {
+      "type": "string",
+      "default": "",
+      "description": "REAL transaction hash of the ONE genuine micro-swap \u2014 empty until confirmed"
+    },
+    "pool_block_number": {
+      "type": "number",
+      "default": 0,
+      "description": "Real confirmation block of the pool-creating transaction \u2014 0 until confirmed"
+    },
+    "first_swap_block_number": {
+      "type": "number",
+      "default": 0,
+      "description": "Real confirmation block of the first swap \u2014 0 until confirmed"
+    },
+    "launched_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": ""
+    },
+    "liquidity_eth_wei": {
+      "type": "string",
+      "default": "",
+      "description": "Exact ETH (WETH-equivalent) side of the initial liquidity, in wei \u2014 integer units only"
+    },
+    "liquidity_crxs_raw": {
+      "type": "string",
+      "default": "",
+      "description": "Exact CRXS side of the initial liquidity, raw 18-decimal units"
+    },
+    "swap_crxs_raw": {
+      "type": "string",
+      "default": "",
+      "description": "Exact CRXS amount of the one genuine micro-swap, raw units"
+    },
+    "swap_out_raw": {
+      "type": "string",
+      "default": "",
+      "description": "Exact WETH received by the micro-swap, from the verified receipt/reserves \u2014 never fabricated"
+    },
+    "eth_spent_committed_wei": {
+      "type": "string",
+      "default": "0",
+      "description": "Cumulative real ETH spent (value + gas from VERIFIED receipts) across the whole launch operation \u2014 every new projection must keep the wallet at or above the protected reserve"
+    },
+    "max_operation_budget_wei": {
+      "type": "string",
+      "default": "110000000000000",
+      "description": "HARD ceiling: total permitted operational spend (0.000110 ETH). Any projected total above this ABORTS before signing \u2014 never overridable from the UI"
+    },
+    "eth_reserve_guard_wei": {
+      "type": "string",
+      "default": "200000000000000",
+      "description": "PROTECTED reserve (0.000200 ETH) that must remain in the wallet after every projected spend \u2014 never used for liquidity, swaps, approvals, wrapping, gas or retries"
+    },
+    "dexscreener_indexed": {
+      "type": "boolean",
+      "default": false,
+      "description": "True only after DEX Screener's API actually returns the pool \u2014 an honest indexer flag, never assumed"
+    },
+    "geckoterminal_indexed": {
+      "type": "boolean",
+      "default": false,
+      "description": "True only after GeckoTerminal's API actually returns the pool \u2014 an honest indexer flag, never assumed"
+    },
+    "dexscreener_url": {
+      "type": "string",
+      "default": "",
+      "description": "Real DEX Screener pair URL once the indexer reports the pool"
+    },
+    "geckoterminal_url": {
+      "type": "string",
+      "default": "",
+      "description": "Real GeckoTerminal pool URL once the indexer reports the pool"
+    },
+    "aerodrome_url": {
+      "type": "string",
+      "default": "",
+      "description": "Aerodrome trade link once the pool is live"
+    },
+    "last_verified_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "When the launch state was last verified against the real Base Mainnet chain"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real reason a stage aborted (budget guard, gas too high, reverted transaction, indexer not yet reporting) \u2014 kept verbatim, never overwritten silently"
+    },
+    "evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Evidence trail \u2014 preflight checks, live gas estimates, budget guard decisions, receipts, reserves, indexer API responses \u2014 from real responses only, never secrets"
+    },
+    "notes": {
+      "type": "string",
+      "default": "",
+      "description": "Honest explanation of the current market state and the next real action"
+    }
+  },
+  "required": [
+    "registry_key",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

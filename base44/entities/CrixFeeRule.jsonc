@@ -1,0 +1,75 @@
+{
+  "name": "CrixFeeRule",
+  "type": "object",
+  "properties": {
+    "rule_key": {
+      "type": "string",
+      "description": "Deterministic rule identity \u2014 <type>|<currency>|v<N>. One ACTIVE rule per type+currency is the fee source of truth; every applicable transaction quotes from it"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "crix_to_crix",
+        "wallet_funding",
+        "withdrawal",
+        "fx_conversion",
+        "bill_payment",
+        "merchant_payment"
+      ],
+      "description": "Money flow the fee applies to"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency the rule prices \u2014 a currency whose flow has no active rule is honestly shown as not yet enabled, never priced from thin air"
+    },
+    "percent_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Percentage fee (0.5 = 0.5%)"
+    },
+    "min_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Minimum fee for this flow"
+    },
+    "max_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Maximum fee cap (0 = no cap)"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Only the active rule quotes; admin edits are versioned by creating a new rule version \u2014 fee history is preserved"
+    },
+    "description": {
+      "type": "string",
+      "default": "",
+      "description": "Human-readable fee statement shown to the customer, e.g. '0.5% (min \u20a650, max \u20a61,000)'"
+    }
+  },
+  "required": [
+    "rule_key",
+    "type",
+    "currency",
+    "active"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

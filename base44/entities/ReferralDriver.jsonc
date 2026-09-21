@@ -1,0 +1,46 @@
+{
+  "name": "ReferralDriver",
+  "type": "object",
+  "properties": {
+    "referrer_id": {
+      "type": "string"
+    },
+    "driver_id": {
+      "type": "string"
+    },
+    "driver_name": {
+      "type": "string"
+    },
+    "driver_phone": {
+      "type": "string"
+    },
+    "referral_code": {
+      "type": "string"
+    },
+    "commission_earned": {
+      "type": "number",
+      "default": 0
+    },
+    "rides_completed": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "paid"
+      ],
+      "default": "active"
+    },
+    "first_month_end": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "referrer_id",
+    "driver_id"
+  ]
+}

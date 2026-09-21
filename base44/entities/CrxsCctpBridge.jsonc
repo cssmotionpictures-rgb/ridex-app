@@ -1,0 +1,126 @@
+{
+  "name": "CrxsCctpBridge",
+  "type": "object",
+  "properties": {
+    "bridge_key": {
+      "type": "string",
+      "description": "Idempotency identity \u2014 the SAME key NEVER burns twice: a retry returns the original bridge record. The mint receive step is retried independently of the burn, never resubmitting it"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "polygon_to_base",
+        "base_to_polygon"
+      ],
+      "description": "Which way the USDC moved"
+    },
+    "amount_raw": {
+      "type": "string",
+      "description": "Raw USDC units (6 decimals) burned on the source chain \u2014 1:1 minted on the destination chain"
+    },
+    "source_domain": {
+      "type": "number",
+      "description": "Circle domain of the source chain (Polygon PoS = 7, Base = 6)"
+    },
+    "destination_domain": {
+      "type": "number",
+      "description": "Circle domain of the destination chain"
+    },
+    "wallet_address": {
+      "type": "string",
+      "default": "",
+      "description": "The platform bridge smart account address \u2014 the same address exists on both chains, burns from itself and mints to itself"
+    },
+    "burn_tx_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL source-chain transaction hash of the burn \u2014 empty until the source chain confirmed it"
+    },
+    "burn_user_op_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL UserOperation hash of the burn submission \u2014 empty until actually submitted"
+    },
+    "attestation_status": {
+      "type": "string",
+      "enum": [
+        "NOT_REQUESTED",
+        "PENDING",
+        "COMPLETE"
+      ],
+      "default": "NOT_REQUESTED",
+      "description": "Circle Iris API attestation state for the burn message \u2014 COMPLETE only when Circle returned a real signed attestation, never assumed"
+    },
+    "message_hash": {
+      "type": "string",
+      "default": "",
+      "description": "The burn message hash from the Iris API response \u2014 the receive step is keyed to it"
+    },
+    "receive_tx_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL destination-chain transaction hash of the mint \u2014 empty until the destination chain confirmed it"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "created",
+        "burn_submitted",
+        "burn_confirmed",
+        "attestation_pending",
+        "receive_submitted",
+        "confirmed",
+        "failed",
+        "unknown"
+      ],
+      "default": "created",
+      "description": "Honest state machine \u2014 the burn happens exactly once per bridge_key; attestation and mint complete idempotently. unknown is a real state, resolved on chain before any action"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real failure reason \u2014 kept verbatim, never overwritten silently"
+    },
+    "evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side evidence trail \u2014 burn receipt, Iris attestation, mint receipt, balance reads \u2014 from real responses only"
+    },
+    "confirmed_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "When the mint was confirmed on the destination chain"
+    }
+  },
+  "required": [
+    "bridge_key",
+    "direction",
+    "amount_raw",
+    "source_domain",
+    "destination_domain",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "name": "LedgerIntegrityReport",
+  "type": "object",
+  "properties": {
+    "report_key": {
+      "type": "string",
+      "description": "Deterministic report identity \u2014 one immutable summary report per authorized cleanup run (e.g. archive-v2-20260910)"
+    },
+    "run_id": {
+      "type": "string",
+      "description": "The cleanup run this report summarizes (must match the LedgerCleanupAudit run_id)"
+    },
+    "run_date": {
+      "type": "string",
+      "description": "When the cleanup run was executed (display)"
+    },
+    "archived_total": {
+      "type": "number",
+      "description": "Total exact-duplicate rows archived by the run \u2014 verified against the audit trail"
+    },
+    "archived_prediction": {
+      "type": "number",
+      "description": "Prediction-ledger rows archived by the run"
+    },
+    "archived_prediction_settled": {
+      "type": "number",
+      "description": "Settled prediction duplicates archived"
+    },
+    "archived_prediction_open": {
+      "type": "number",
+      "description": "Open re-ingestion duplicates archived"
+    },
+    "archived_outcome": {
+      "type": "number",
+      "description": "Outcome-ledger duplicate rows archived by the run"
+    },
+    "audit_records": {
+      "type": "number",
+      "description": "LedgerCleanupAudit records written by the run \u2014 every removal was audited BEFORE the row was archived"
+    },
+    "review_rows_retained": {
+      "type": "number",
+      "description": "Ambiguous rows retained for manual review (never auto-removed)"
+    },
+    "pred_rows_before": {
+      "type": "number",
+      "description": "GlobalPredictionLedger row count before the run"
+    },
+    "pred_rows_after": {
+      "type": "number",
+      "description": "GlobalPredictionLedger row count after the run (live recount)"
+    },
+    "outcome_rows_before": {
+      "type": "number",
+      "description": "GlobalOutcomeLedger row count before the run"
+    },
+    "outcome_rows_after": {
+      "type": "number",
+      "description": "GlobalOutcomeLedger row count after the run (live recount)"
+    },
+    "counted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the live after-counts were last recounted"
+    },
+    "pred_created_marker": {
+      "type": "string",
+      "default": "",
+      "description": "CHANGE MARKER \u2014 newest prediction row identity ('created_date|id') at the last recount. Compared on every Intelligence open: unchanged \u2192 stored totals shown instantly, changed \u2192 automatic batched recount"
+    },
+    "pred_updated_marker": {
+      "type": "string",
+      "default": "",
+      "description": "CHANGE MARKER \u2014 most recently updated prediction row identity ('updated_date|id') at the last recount"
+    },
+    "outcome_created_marker": {
+      "type": "string",
+      "default": "",
+      "description": "CHANGE MARKER \u2014 newest outcome row identity ('created_date|id') at the last recount"
+    },
+    "outcome_updated_marker": {
+      "type": "string",
+      "default": "",
+      "description": "CHANGE MARKER \u2014 most recently updated outcome row identity ('updated_date|id') at the last recount"
+    },
+    "drive_folder_id": {
+      "type": "string",
+      "default": "",
+      "description": "Google Drive folder id of the organized export folder (RIDE X Ledger Integrity Reports) \u2014 created on first export, reused on every export"
+    },
+    "integrity_flags_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "JSON array of integrity checks flagged at report generation (each: label, open, detail)"
+    },
+    "notes": {
+      "type": "string",
+      "default": "",
+      "description": "Report notes \u2014 identity rules, reversibility, exclusions"
+    }
+  },
+  "required": [
+    "report_key",
+    "run_id",
+    "archived_total"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

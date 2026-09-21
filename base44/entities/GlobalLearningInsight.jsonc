@@ -1,0 +1,139 @@
+{
+  "name": "GlobalLearningInsight",
+  "type": "object",
+  "properties": {
+    "insight_key": {
+      "type": "string",
+      "description": "Deterministic dedup identity \u2014 scope | subject (e.g. MARKET|calib:odds_3.00-4.00|away_win). The same pattern discovered again updates the sample, never duplicates the insight"
+    },
+    "insight": {
+      "type": "string",
+      "description": "Human-readable finding, e.g. 'Away Win selections at 3.00\u20134.00 odds were overconfident (predicted 71%, observed 61%)'"
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "GLOBAL",
+        "SECTION",
+        "MARKET",
+        "COMPETITION",
+        "MODEL"
+      ],
+      "description": "Where the pattern was found \u2014 GLOBAL insights may affect multiple sections; SECTION insights never leak into other sections"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Machine subject of the finding (dimension:value) \u2014 stable across re-scans"
+    },
+    "source_sections": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-joined sections the evidence came from"
+    },
+    "market": {
+      "type": "string",
+      "default": "",
+      "description": "Market the finding concerns (empty = cross-market)"
+    },
+    "competition": {
+      "type": "string",
+      "default": "",
+      "description": "Competition the finding concerns (empty = cross-competition)"
+    },
+    "odds_range": {
+      "type": "string",
+      "default": "",
+      "description": "Odds range the finding concerns (empty = all odds)"
+    },
+    "sample_size": {
+      "type": "number",
+      "default": 0,
+      "description": "Settled observations behind the finding \u2014 evidence is never claimed from a tiny sample"
+    },
+    "expected_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Predicted win rate in the segment (%)"
+    },
+    "actual_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Observed win rate in the segment (%)"
+    },
+    "effect_pp": {
+      "type": "number",
+      "default": 0,
+      "description": "Calibration gap (actual \u2212 expected) in percentage points"
+    },
+    "evidence_level": {
+      "type": "number",
+      "default": 0,
+      "description": "0 no evidence \u00b7 1 backtest \u00b7 2 early forward \u00b7 3 meaningful forward (100+) \u00b7 4 strong OOS \u00b7 5 mature validated \u2014 only high evidence can affect production behavior"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NEW",
+        "UNDER_TEST",
+        "SUPPORTED",
+        "REJECTED",
+        "VALIDATED",
+        "IMPLEMENTED",
+        "ROLLED_BACK"
+      ],
+      "default": "NEW",
+      "description": "Learning-queue status \u2014 one result NEVER promotes anything; validation runs the full hypothesis \u2192 backtest \u2192 walk-forward \u2192 challenger \u2192 OOS chain"
+    },
+    "hypothesis": {
+      "type": "string",
+      "default": "",
+      "description": "The candidate model change this insight suggests (e.g. 'reduce confidence in this segment') \u2014 a hypothesis, never a fait accompli"
+    },
+    "recommended_action": {
+      "type": "string",
+      "default": "",
+      "description": "Recommended next step in the learning pipeline (backtest \u2192 walk-forward \u2192 challenger)"
+    },
+    "validation_status": {
+      "type": "string",
+      "default": "not_tested",
+      "description": "not_tested | backtesting | walk_forward | forward_test | passed | failed \u2014 where the hypothesis sits in the validation chain"
+    },
+    "affected_models": {
+      "type": "string",
+      "default": "",
+      "description": "Models/sections the hypothesis would affect if validated"
+    },
+    "model_version": {
+      "type": "string",
+      "default": "RX-GLOBAL-1.0",
+      "description": "Global learning version this insight belongs to"
+    },
+    "first_seen_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the pattern was first discovered"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the evidence was last refreshed"
+    }
+  },
+  "required": [
+    "insight_key",
+    "insight",
+    "scope",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

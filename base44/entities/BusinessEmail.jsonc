@@ -1,0 +1,55 @@
+{
+  "name": "BusinessEmail",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Business contact email (stored lowercase)"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country/region tag for B2B targeting"
+    },
+    "source": {
+      "type": "string",
+      "default": "manual-import",
+      "description": "Where the business email came from"
+    },
+    "opted_out": {
+      "type": "boolean",
+      "default": false,
+      "description": "True once the business contact opts out \u2014 skipped by all B2B sends"
+    },
+    "last_sent_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Last Monday this contact was emailed (YYYY-MM-DD). Used to rotate sends so the same contact isn't repeated week after week."
+    }
+  },
+  "required": [
+    "email",
+    "country"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

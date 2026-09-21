@@ -1,0 +1,80 @@
+{
+  "name": "MarketplaceListing",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "USD",
+        "NGN"
+      ],
+      "default": "NGN"
+    },
+    "condition": {
+      "type": "string",
+      "enum": [
+        "new",
+        "used"
+      ],
+      "default": "new"
+    },
+    "category": {
+      "type": "string",
+      "default": "General"
+    },
+    "subcategory": {
+      "type": "string"
+    },
+    "photo_url": {
+      "type": "string"
+    },
+    "video_url": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "seller_id": {
+      "type": "string"
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "boost_until": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "reserved",
+        "sold",
+        "removed"
+      ],
+      "default": "active"
+    },
+    "seller_name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "price"
+  ]
+}

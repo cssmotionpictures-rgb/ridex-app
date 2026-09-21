@@ -1,0 +1,63 @@
+{
+  "name": "MingleBlock",
+  "type": "object",
+  "properties": {
+    "blocker_id": {
+      "type": "string",
+      "description": "The user who blocked \u2014 RLS enforces this is the creator's own id"
+    },
+    "blocked_id": {
+      "type": "string",
+      "description": "The blocked user. Blocked users disappear from each other's discovery, cannot message, and cannot call \u2014 immediately, in both directions"
+    },
+    "reason": {
+      "type": "string",
+      "default": ""
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "blocker_id",
+    "blocked_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.blocked_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "data.blocker_id": "{{user.id}}"
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

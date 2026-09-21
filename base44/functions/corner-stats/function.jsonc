@@ -1,0 +1,13 @@
+{
+  "name": "corner-stats",
+  "entry": "entry.ts",
+  "automations": [
+    {
+      "type": "scheduled",
+      "name": "nightly_corner_feed",
+      "schedule_mode": "recurring",
+      "schedule_type": "cron",
+      "cron_expression": "30 23 * * ?"
+    }
+  ]
+}

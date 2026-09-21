@@ -1,0 +1,114 @@
+{
+  "name": "SportyBetTicket",
+  "type": "object",
+  "properties": {
+    "ticket_key": {
+      "type": "string",
+      "description": "Deterministic ticket identity \u2014 sportybet|<ticket id>. One record per genuine ticket; a duplicated paste of the same ticket never creates a second record"
+    },
+    "source": {
+      "type": "string",
+      "default": "sportybet"
+    },
+    "ticket_id": {
+      "type": "string",
+      "default": "",
+      "description": "Ticket id exactly as printed (empty when the paste carried none)"
+    },
+    "ticket_date": {
+      "type": "string",
+      "default": "",
+      "description": "Ticket date/time as printed \u2014 provenance for the accumulator record"
+    },
+    "stake": {
+      "type": "number",
+      "default": 0,
+      "description": "Stake as printed (display only \u2014 RIDE X never places bets)"
+    },
+    "total_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Combined odds as printed on the ticket"
+    },
+    "bets_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of bets as printed on the ticket"
+    },
+    "legs_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Individual selections parsed from this ticket \u2014 each leg is analyzed independently of the ticket result"
+    },
+    "settled_wins": {
+      "type": "number",
+      "default": 0
+    },
+    "settled_losses": {
+      "type": "number",
+      "default": 0
+    },
+    "pushes": {
+      "type": "number",
+      "default": 0
+    },
+    "pending_legs": {
+      "type": "number",
+      "default": 0
+    },
+    "unresolved_legs": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "won",
+        "lost",
+        "pending",
+        "mixed"
+      ],
+      "default": "pending",
+      "description": "TICKET-LEVEL result only \u2014 a ticket losing because of one or two legs never marks the other winning legs as bad. Individual leg quality is analyzed separately in the leg observations"
+    },
+    "result_note": {
+      "type": "string",
+      "default": "",
+      "description": "Human summary, e.g. '39 of 41 settled legs won \u2014 ticket-level structure risk analyzed separately from individual leg quality'"
+    },
+    "legs_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Permanent compact snapshot of every leg (teams, market, pick, odds, score, supplied outcome, computed settlement) \u2014 never rewritten"
+    },
+    "market_concentration": {
+      "type": "string",
+      "default": "",
+      "description": "Top market families on the ticket \u2014 accumulator correlation research input"
+    },
+    "odds_distribution": {
+      "type": "string",
+      "default": "",
+      "description": "Odds range spread of the legs \u2014 accumulator structure research input"
+    },
+    "imported_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this ticket record was created"
+    }
+  },
+  "required": [
+    "ticket_key",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

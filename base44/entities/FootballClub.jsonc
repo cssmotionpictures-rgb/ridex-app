@@ -1,0 +1,30 @@
+{
+  "name": "FootballClub",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "short_name": {
+      "type": "string"
+    },
+    "league": {
+      "type": "string"
+    },
+    "color": {
+      "type": "string",
+      "default": "#1e6f5c"
+    },
+    "emoji": {
+      "type": "string",
+      "default": "\u26bd"
+    },
+    "fans_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

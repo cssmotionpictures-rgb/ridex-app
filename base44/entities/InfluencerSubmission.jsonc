@@ -1,0 +1,98 @@
+{
+  "name": "InfluencerSubmission",
+  "type": "object",
+  "properties": {
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "song",
+        "video",
+        "product",
+        "album"
+      ],
+      "default": "song"
+    },
+    "description": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string"
+    },
+    "mood": {
+      "type": "string"
+    },
+    "tempo": {
+      "type": "string"
+    },
+    "audio_url": {
+      "type": "string"
+    },
+    "video_url": {
+      "type": "string"
+    },
+    "cover_url": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "default": 5000
+    },
+    "target_tier": {
+      "type": "string",
+      "enum": [
+        "any",
+        "nano",
+        "micro",
+        "mid",
+        "macro",
+        "mega"
+      ],
+      "default": "any"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "matched",
+        "accepted",
+        "rejected",
+        "live",
+        "completed"
+      ],
+      "default": "pending"
+    },
+    "viral_score": {
+      "type": "number",
+      "default": 0
+    },
+    "views": {
+      "type": "number",
+      "default": 0
+    },
+    "likes": {
+      "type": "number",
+      "default": 0
+    },
+    "shares": {
+      "type": "number",
+      "default": 0
+    },
+    "comments": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "title",
+    "type"
+  ]
+}

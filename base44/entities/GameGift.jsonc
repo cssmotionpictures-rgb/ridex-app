@@ -1,0 +1,88 @@
+{
+  "name": "GameGift",
+  "type": "object",
+  "properties": {
+    "sender_id": {
+      "type": "string"
+    },
+    "sender_name": {
+      "type": "string"
+    },
+    "recipient_id": {
+      "type": "string"
+    },
+    "recipient_name": {
+      "type": "string"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "bronze",
+        "silver",
+        "gold",
+        "diamond",
+        "legendary"
+      ],
+      "default": "gold"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "commission": {
+      "type": "number",
+      "default": 0,
+      "description": "Ride X 20% agency commission captured on the gift."
+    },
+    "message": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "delivered"
+      ],
+      "default": "delivered"
+    },
+    "paystack_reference": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "recipient_id",
+    "recipient_name",
+    "tier",
+    "amount"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.recipient_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

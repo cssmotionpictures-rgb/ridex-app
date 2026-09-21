@@ -1,0 +1,67 @@
+{
+  "name": "IncidentReport",
+  "type": "object",
+  "properties": {
+    "driver_id": {
+      "type": "string"
+    },
+    "driver_name": {
+      "type": "string"
+    },
+    "passenger_id": {
+      "type": "string"
+    },
+    "passenger_name": {
+      "type": "string"
+    },
+    "ride_id": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Violence",
+        "Theft",
+        "Verbal Abuse",
+        "No-show",
+        "Fraud",
+        "Dangerous Behaviour",
+        "Other"
+      ],
+      "default": "Other"
+    },
+    "description": {
+      "type": "string"
+    },
+    "evidence_photos": {
+      "type": "string"
+    },
+    "evidence_audio": {
+      "type": "string"
+    },
+    "evidence_video": {
+      "type": "string"
+    },
+    "anonymous": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Investigating",
+        "Resolved",
+        "Dismissed"
+      ],
+      "default": "Pending"
+    },
+    "admin_note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "driver_id",
+    "description"
+  ]
+}

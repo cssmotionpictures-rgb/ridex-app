@@ -1,0 +1,27 @@
+{
+  "name": "LicensingAgency",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Linked admin/approver user who receives song-license approval requests"
+    },
+    "agency_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "agency_name"
+  ]
+}

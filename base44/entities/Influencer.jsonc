@@ -1,0 +1,81 @@
+{
+  "name": "Influencer",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Linked app user who controls this influencer profile (empty = catalog-only influencer)"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "username": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "TikTok",
+        "Instagram",
+        "YouTube",
+        "X",
+        "Facebook"
+      ],
+      "default": "TikTok"
+    },
+    "follower_count": {
+      "type": "number",
+      "default": 0
+    },
+    "engagement_rate": {
+      "type": "number",
+      "default": 0,
+      "description": "Average engagement rate as a percentage (e.g. 6.5)"
+    },
+    "genres": {
+      "type": "string",
+      "description": "Comma-separated preferred genres"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "profile_image": {
+      "type": "string"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "nano",
+        "micro",
+        "mid",
+        "macro",
+        "mega"
+      ],
+      "default": "nano"
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "auto_accept_limit": {
+      "type": "number",
+      "default": 5,
+      "description": "Max auto-accepts per week for this influencer"
+    },
+    "total_earnings": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "username"
+  ]
+}

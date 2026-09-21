@@ -1,0 +1,262 @@
+{
+  "name": "MonsterPick",
+  "type": "object",
+  "properties": {
+    "monster_id": {
+      "type": "string",
+      "description": "Deterministic MONSTER identity \u2014 monster|fixture_id|market_key|vN. Idempotent: the same fixture+market never enters a daily board twice; a material pre-kickoff change creates a NEW immutable version and supersedes nothing silently"
+    },
+    "observation_key": {
+      "type": "string",
+      "default": "",
+      "description": "Link to the shared immutable engine observation row this selection is built from \u2014 the authoritative settlement record"
+    },
+    "global_prediction_id": {
+      "type": "string",
+      "default": "",
+      "description": "The global-ledger row id this selection already learns through \u2014 MONSTER never duplicates global ingestion"
+    },
+    "model_version": {
+      "type": "string",
+      "default": "RX-2.0",
+      "description": "Forecasting engine version that produced the underlying candidate"
+    },
+    "monster_version": {
+      "type": "string",
+      "default": "MONSTER-1.0",
+      "description": "MONSTER selector version \u2014 the gate/ranking logic that chose this selection for the daily board"
+    },
+    "source_section": {
+      "type": "string",
+      "default": "monster",
+      "description": "The RIDE X prediction surface this selection was published on \u2014 MONSTER"
+    },
+    "fixture_id": {
+      "type": "string",
+      "description": "Stable fixture key from the verified feed"
+    },
+    "home": {
+      "type": "string"
+    },
+    "away": {
+      "type": "string"
+    },
+    "league": {
+      "type": "string",
+      "description": "Competition label shown to the user"
+    },
+    "league_code": {
+      "type": "string",
+      "default": "",
+      "description": "Verified-feed league key"
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Real provider kickoff (UTC) \u2014 stored UTC, displayed Africa/Lagos"
+    },
+    "lagos_date_key": {
+      "type": "string",
+      "description": "Kickoff date in Africa/Lagos (YYYY-MM-DD) \u2014 the daily board's own day key"
+    },
+    "session": {
+      "type": "string",
+      "enum": [
+        "morning",
+        "evening"
+      ],
+      "description": "Lagos kickoff 00:00\u201316:59 = morning, 17:00\u201323:59 = evening"
+    },
+    "market_key": {
+      "type": "string",
+      "description": "Normalized engine market key used for settlement \u2014 1, X, 2, 1X, X2, 12, O<line>, U<line>, BTTS_Y, BTTS_N, DNB1, DNB2"
+    },
+    "market_label": {
+      "type": "string",
+      "description": "Human-readable selection label"
+    },
+    "canonical_market": {
+      "type": "string",
+      "default": "",
+      "description": "Canonical internal market ID this selection maps to"
+    },
+    "settlement_rule": {
+      "type": "string",
+      "default": "",
+      "description": "The market-specific settlement definition this selection is graded under"
+    },
+    "rank": {
+      "type": "number",
+      "default": 0,
+      "description": "Position on its board day (1\u201313, 0 = legacy)"
+    },
+    "tier": {
+      "type": "string",
+      "default": "",
+      "description": "Customer-facing tier band \u2014 MONSTER ELITE | MONSTER STRONG"
+    },
+    "monster_score": {
+      "type": "number",
+      "default": 0,
+      "description": "Engine master score 0\u2013100 recorded at selection time \u2014 never inflated to fill the board"
+    },
+    "architecture_similarity": {
+      "type": "number",
+      "default": 0,
+      "description": "INTERNAL research input \u2014 how closely this candidate resembles the historical 13-winner research sample (0\u20131). One ranked input, never an override of current evidence. Never shown to customers"
+    },
+    "probability": {
+      "type": "number",
+      "default": 0,
+      "description": "Calibrated engine probability at record time (0\u20131) \u2014 an estimate, never a guarantee"
+    },
+    "confidence": {
+      "type": "number",
+      "default": 0,
+      "description": "Confidence shown to the user (0\u2013100)"
+    },
+    "market_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "REAL bookmaker decimal price at record time (T0) \u2014 0 = no real price, never a substitute"
+    },
+    "bookmaker": {
+      "type": "string",
+      "default": "",
+      "description": "The bookmaker that actually quoted the T0 price"
+    },
+    "market_probability": {
+      "type": "number",
+      "default": 0,
+      "description": "Bookmaker-implied probability 1/odds at T0 (0 = no real price)"
+    },
+    "fair_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Engine fair odds at record time \u2014 an estimate, never a bookmaker price"
+    },
+    "edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Edge vs the appropriate benchmark at T0, percentage points (0 = no real price)"
+    },
+    "adjusted_edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Uncertainty-adjusted edge at T0 (0 = no real price)"
+    },
+    "ev_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Expected value of the real price vs the engine at T0, percentage points"
+    },
+    "odds_status": {
+      "type": "string",
+      "default": "",
+      "description": "priced | model_only \u2014 whether a real T0 price existed"
+    },
+    "agreement": {
+      "type": "number",
+      "default": 1,
+      "description": "Analysis consensus at record time (0\u20131)"
+    },
+    "uncertainty": {
+      "type": "number",
+      "default": 0,
+      "description": "Independent uncertainty estimate at record time (0\u20131)"
+    },
+    "data_quality": {
+      "type": "string",
+      "default": "",
+      "description": "Data quality recorded at selection time \u2014 HIGH | MEDIUM | LOW"
+    },
+    "why_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "WHY MONSTER SELECTED IT \u2014 factual, customer-safe reasons supported by the recorded data only"
+    },
+    "risk_flags_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Risk flags recorded with the selection \u2014 disclosed, never hidden"
+    },
+    "correlation_risk": {
+      "type": "string",
+      "default": "LOW",
+      "description": "Correlation risk vs the rest of the board \u2014 LOW | MEDIUM | HIGH"
+    },
+    "prediction_version": {
+      "type": "number",
+      "default": 1,
+      "description": "Immutable versioning \u2014 a material pre-kickoff change creates Version 2; Version 1 always stays on record"
+    },
+    "supersedes_monster_id": {
+      "type": "string",
+      "default": "",
+      "description": "MONSTER id of the version this row replaced before kickoff (kept on both records)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "won",
+        "lost",
+        "void",
+        "superseded"
+      ],
+      "default": "open",
+      "description": "Mirrored from the linked observation's authoritative verified settlement \u2014 MONSTER never settles independently"
+    },
+    "actual_home": {
+      "type": "number",
+      "description": "Real final home goals once the linked observation settled"
+    },
+    "actual_away": {
+      "type": "number",
+      "description": "Real final away goals once the linked observation settled"
+    },
+    "result_source": {
+      "type": "string",
+      "default": "",
+      "description": "Verified feed the linked settlement was graded from"
+    },
+    "clv_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Closing-line value mirrored from the linked observation (0 = not computable)"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the selection was permanently recorded \u2014 before kickoff, no data leakage"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the mirrored settlement was recorded"
+    }
+  },
+  "required": [
+    "monster_id",
+    "fixture_id",
+    "home",
+    "away",
+    "league",
+    "kickoff",
+    "lagos_date_key",
+    "session",
+    "market_key",
+    "market_label",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

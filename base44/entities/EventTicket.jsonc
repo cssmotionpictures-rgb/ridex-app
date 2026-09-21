@@ -1,0 +1,74 @@
+{
+  "name": "EventTicket",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "ticket_type": {
+      "type": "string",
+      "enum": [
+        "regular",
+        "vip",
+        "early_bird",
+        "group",
+        "streaming"
+      ],
+      "default": "regular"
+    },
+    "price": {
+      "type": "number"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "qr_code": {
+      "type": "string",
+      "description": "Unique scannable ticket reference"
+    },
+    "payment_reference": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "used",
+        "cancelled",
+        "refunded"
+      ],
+      "default": "pending"
+    },
+    "checked_in": {
+      "type": "boolean",
+      "default": false
+    },
+    "checkin_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "emailed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the ticket was emailed to the buyer (dedupe guard for automatic ticket delivery)."
+    }
+  },
+  "required": [
+    "event_id",
+    "user_id"
+  ]
+}

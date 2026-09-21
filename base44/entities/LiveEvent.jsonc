@@ -1,0 +1,135 @@
+{
+  "name": "LiveEvent",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "concert",
+        "festival",
+        "live_stream",
+        "meet_greet",
+        "album_launch"
+      ],
+      "default": "concert"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "venue": {
+      "type": "string"
+    },
+    "venue_address": {
+      "type": "string"
+    },
+    "venue_type": {
+      "type": "string",
+      "enum": [
+        "indoor",
+        "outdoor",
+        "virtual"
+      ],
+      "default": "indoor"
+    },
+    "banner_url": {
+      "type": "string"
+    },
+    "artist_lineup": {
+      "type": "string",
+      "description": "Comma-separated artist names"
+    },
+    "genres": {
+      "type": "string",
+      "description": "Comma-separated: Afrobeats, Gospel, Hip-Hop, R&B, Highlife, Amapiano"
+    },
+    "ticket_regular_price": {
+      "type": "number",
+      "default": 35000
+    },
+    "ticket_vip_price": {
+      "type": "number",
+      "default": 250000
+    },
+    "ticket_early_bird_price": {
+      "type": "number",
+      "default": 20000
+    },
+    "ticket_group_price": {
+      "type": "number",
+      "default": 150000
+    },
+    "ticket_streaming_price": {
+      "type": "number",
+      "default": 3000
+    },
+    "early_bird_limit": {
+      "type": "number",
+      "default": 100
+    },
+    "early_bird_sold": {
+      "type": "number",
+      "default": 0
+    },
+    "tickets_sold": {
+      "type": "number",
+      "default": 0
+    },
+    "capacity": {
+      "type": "number",
+      "default": 1000
+    },
+    "live_stream_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "on_sale",
+        "live",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "artist_schedule",
+        "venue_calendar",
+        "social_media",
+        "user_submission",
+        "promoter",
+        "admin",
+        "auto_find"
+      ],
+      "default": "admin"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "auto_verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "city": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

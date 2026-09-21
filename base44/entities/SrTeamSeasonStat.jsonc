@@ -1,0 +1,101 @@
+{
+  "name": "SrTeamSeasonStat",
+  "type": "object",
+  "properties": {
+    "team_id": {
+      "type": "string",
+      "description": "sr:competitor id \u2014 primary key together with season_id"
+    },
+    "team_name": {
+      "type": "string"
+    },
+    "season_id": {
+      "type": "string"
+    },
+    "season_name": {
+      "type": "string"
+    },
+    "competition_name": {
+      "type": "string"
+    },
+    "played": {
+      "type": "number",
+      "default": 0,
+      "description": "Stored real results this row aggregates \u2014 DERIVED from SrMatchResult, never a provider feed"
+    },
+    "wins": {
+      "type": "number",
+      "default": 0
+    },
+    "draws": {
+      "type": "number",
+      "default": 0
+    },
+    "losses": {
+      "type": "number",
+      "default": 0
+    },
+    "points": {
+      "type": "number",
+      "default": 0,
+      "description": "Computed W*3 + D from stored results"
+    },
+    "goals_for": {
+      "type": "number",
+      "default": 0
+    },
+    "goals_against": {
+      "type": "number",
+      "default": 0
+    },
+    "home_played": {
+      "type": "number",
+      "default": 0
+    },
+    "home_wins": {
+      "type": "number",
+      "default": 0
+    },
+    "away_played": {
+      "type": "number",
+      "default": 0
+    },
+    "away_wins": {
+      "type": "number",
+      "default": 0
+    },
+    "form": {
+      "type": "string",
+      "default": "",
+      "description": "Last 5 results, most recent first (e.g. WWDLW) \u2014 empty with fewer stored matches"
+    },
+    "data_as_of": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this aggregate was recomputed from stored results"
+    }
+  },
+  "required": [
+    "team_id",
+    "season_id",
+    "played"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

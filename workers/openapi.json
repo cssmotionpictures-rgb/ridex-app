@@ -1,0 +1,61 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "CRIXCOIN Engine",
+    "version": "1.0.0",
+    "description": "Safe CRIXCOIN engine fallback. Read-only chain queries, provider health probes, and idempotent CRIXCOIN address creation. There are NO fund-movement endpoints by design — external transfers stay PAUSED on the platform side. (This file is also served live at GET /openapi.json by the Worker itself.)"
+  },
+  "servers": [{ "url": "https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev", "description": "Your deployed CRIXCOIN engine Worker" }],
+  "paths": {
+    "/openapi.json": {
+      "get": { "summary": "This OpenAPI specification", "responses": { "200": { "description": "The spec JSON" } } }
+    },
+    "/aa-health": {
+      "post": {
+        "summary": "Provider health probes (read-only, live responses only)",
+        "requestBody": { "required": false, "content": { "application/json": { "schema": { "type": "object" } } } },
+        "responses": { "200": { "description": "Per-provider honest states with evidence" } }
+      }
+    },
+    "/chain-read": {
+      "post": {
+        "summary": "Whitelisted read-only RPC query on Base Sepolia or Base Mainnet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["method"],
+                "properties": {
+                  "chain": { "type": "string", "enum": ["sepolia", "mainnet"] },
+                  "method": { "type": "string", "description": "One of: eth_chainId, eth_blockNumber, eth_getBalance, eth_getCode, eth_getTransactionCount, eth_getTransactionReceipt, eth_getTransactionByHash, eth_call, eth_estimateGas" },
+                  "params": { "type": "array" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Live RPC result with evidence" }, "403": { "description": "Method not whitelisted" } }
+      }
+    },
+    "/smart-account": {
+      "post": {
+        "summary": "Idempotent CRIXCOIN address creation/recovery (no funds can move)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["user_id"],
+                "properties": { "user_id": { "type": "string" } }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Permanent CRIXCOIN address with evidence" }, "409": { "description": "CDP credentials not configured" } }
+      }
+    }
+  }
+}

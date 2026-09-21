@@ -1,0 +1,145 @@
+{
+  "name": "SampleClearanceRequest",
+  "type": "object",
+  "properties": {
+    "original_artist": {
+      "type": "string"
+    },
+    "original_song": {
+      "type": "string"
+    },
+    "original_label": {
+      "type": "string"
+    },
+    "original_publisher": {
+      "type": "string"
+    },
+    "public_domain": {
+      "type": "boolean",
+      "default": false
+    },
+    "new_artist": {
+      "type": "string",
+      "description": "Sampling artist / licensee"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Label / investor funding the escrow"
+    },
+    "client_email": {
+      "type": "string"
+    },
+    "new_song_title": {
+      "type": "string"
+    },
+    "sample_type": {
+      "type": "string",
+      "enum": [
+        "master_loop",
+        "vocal_interpolation",
+        "instrumental_lift"
+      ],
+      "default": "master_loop"
+    },
+    "sample_start": {
+      "type": "string"
+    },
+    "sample_end": {
+      "type": "string"
+    },
+    "net_fee": {
+      "type": "number",
+      "default": 0
+    },
+    "agency_commission": {
+      "type": "number",
+      "default": 0
+    },
+    "total": {
+      "type": "number",
+      "default": 0,
+      "description": "Total escrow funding required"
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "USD",
+        "NGN"
+      ],
+      "default": "USD"
+    },
+    "escrow_status": {
+      "type": "string",
+      "enum": [
+        "held",
+        "released",
+        "refunded"
+      ],
+      "default": "held"
+    },
+    "escrow_released_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "split_sheet_signed": {
+      "type": "boolean",
+      "default": false
+    },
+    "mcsn_registered": {
+      "type": "boolean",
+      "default": false
+    },
+    "clearance_certificate_issued": {
+      "type": "boolean",
+      "default": false
+    },
+    "fee_bypassed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Admin waived the 20% agency commission"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "cleared",
+        "cancelled"
+      ],
+      "default": "confirmed"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "original_artist",
+    "new_artist",
+    "new_song_title",
+    "total"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

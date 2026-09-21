@@ -1,0 +1,108 @@
+{
+  "name": "SymbioticReward",
+  "type": "object",
+  "properties": {
+    "reward_key": {
+      "type": "string",
+      "description": "Deterministic idempotency identity \u2014 'symbio|<user_id>|<YYYY-MM>'. One row per user per calendar month, forever: the same month NEVER grants twice; a retry returns the original reward row instead of crediting the wallet again"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Owning user \u2014 the bonus is credited to their NGN wallet"
+    },
+    "period": {
+      "type": "string",
+      "description": "The Lagos calendar month the activity was earned in \u2014 'YYYY-MM'. Rewards settle the month AFTER it closes"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "none",
+        "root",
+        "branch",
+        "canopy",
+        "symbiosis"
+      ],
+      "description": "Loyalty tier reached that month, derived only from the user's REAL recorded activity \u2014 Root (\u20a610k+), Branch (\u20a6100k+), Canopy (\u20a6500k+), Symbiosis (\u20a62m+). 'none' = below the first threshold, no bonus"
+    },
+    "volume_ngn": {
+      "type": "number",
+      "default": 0,
+      "description": "Total REAL money activity in the period \u2014 bill payments, betting top-ups, dollar cards and crix-to-crix sends, from settled records only"
+    },
+    "activity_days": {
+      "type": "number",
+      "default": 0,
+      "description": "Distinct days the user was active in the period \u2014 platform-activity measure"
+    },
+    "tx_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of qualifying transactions in the period"
+    },
+    "bonus_ngn": {
+      "type": "number",
+      "default": 0,
+      "description": "Naira loyalty bonus granted \u2014 funded from platform fee revenue through the double-entry ledger. NO tokens are ever minted for rewards"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "granted",
+        "failed"
+      ],
+      "description": "granted = the wallet credit and its ledger pair both settled. failed keeps the real failure reason \u2014 never retried blindly (the idempotency key decides)"
+    },
+    "ledger_pair": {
+      "type": "string",
+      "default": "",
+      "description": "Double-entry pair key in CrixLedgerEntry this bonus balanced through \u2014 platform rewards account debited, user wallet credited"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real failure reason when a grant failed \u2014 kept verbatim, never overwritten silently"
+    },
+    "evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side evidence trail \u2014 period, volume sources, tier math \u2014 from real records only"
+    }
+  },
+  "required": [
+    "reward_key",
+    "user_id",
+    "period",
+    "bonus_ngn",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "name": "GameMatch",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "App user who fought the match (denormalized for admin queries)"
+    },
+    "character_id": {
+      "type": "number",
+      "default": 1
+    },
+    "episode_id": {
+      "type": "number"
+    },
+    "level": {
+      "type": "number"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "win",
+        "lose"
+      ],
+      "default": "win"
+    },
+    "combo": {
+      "type": "number",
+      "default": 0
+    },
+    "duration_ms": {
+      "type": "number",
+      "default": 0,
+      "description": "Combat-only duration (excludes intro cutscene) \u2014 used for anti-farm sanity checks"
+    },
+    "xp_awarded": {
+      "type": "number",
+      "default": 0
+    },
+    "sp_awarded": {
+      "type": "number",
+      "default": 0
+    },
+    "level_completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this win newly completed the level (first clear)"
+    },
+    "booster_used": {
+      "type": "boolean",
+      "default": false
+    },
+    "validated": {
+      "type": "boolean",
+      "default": true,
+      "description": "False when the server accepted the match but rejected the reward (unreachable level, etc.)"
+    },
+    "rejection_reason": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "required": [
+    "episode_id",
+    "level",
+    "result"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

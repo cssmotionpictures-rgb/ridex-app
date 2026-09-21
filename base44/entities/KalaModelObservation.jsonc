@@ -1,0 +1,348 @@
+{
+  "name": "KalaModelObservation",
+  "type": "object",
+  "properties": {
+    "observation_key": {
+      "type": "string",
+      "description": "Deterministic observation identity \u2014 fixture_id + market key + model-version suffix. RX-2.0 champion rows: fixture|market. RX-2.1 challenger rows: fixture|market|RX-2.1; a pre-kickoff lineup confirmation creates fixture|market|RX-2.1:v2 \u2014 BOTH versions stay on record, immutable, never rewritten"
+    },
+    "prediction_key": {
+      "type": "string",
+      "default": "",
+      "description": "Link to the EnginePrediction ledger row when this candidate ALSO passed the betting qualification gate (empty on research-only observations)"
+    },
+    "qualified": {
+      "type": "boolean",
+      "default": false,
+      "description": "True ONLY when the candidate met KALA's full betting qualification gate under its own model version. An observation is a RESEARCH RECORD, never a bet or a recommendation"
+    },
+    "reject_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Exact reason the candidate failed the qualification gate (empty on qualified picks)"
+    },
+    "fixture_id": {
+      "type": "string",
+      "description": "Stable fixture key from the verified feed \u2014 the unique fixture identity"
+    },
+    "home": {
+      "type": "string"
+    },
+    "away": {
+      "type": "string"
+    },
+    "league": {
+      "type": "string",
+      "description": "Competition label shown to the user"
+    },
+    "league_code": {
+      "type": "string",
+      "default": "",
+      "description": "Verified-feed league key (e.g. en.1) \u2014 used to fetch the real final score at settlement"
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Real provider kickoff (UTC) \u2014 stored UTC, displayed Africa/Lagos"
+    },
+    "lagos_date_key": {
+      "type": "string",
+      "description": "Kickoff date in Africa/Lagos (YYYY-MM-DD)"
+    },
+    "session": {
+      "type": "string",
+      "enum": [
+        "morning",
+        "evening"
+      ],
+      "description": "Lagos kickoff 00:00\u201316:59 = morning, 17:00\u201323:59 = evening"
+    },
+    "market_key": {
+      "type": "string",
+      "description": "Engine market key used for settlement \u2014 1, X, 2, 1X, X2, 12, O<line>, U<line>, BTTS_Y, BTTS_N, DNB1, DNB2"
+    },
+    "market_label": {
+      "type": "string",
+      "description": "Human-readable selection label"
+    },
+    "canonical_market": {
+      "type": "string",
+      "default": "",
+      "description": "Canonical market ID (MATCH_WIN_HOME, OVER_2_5, BTTS_YES\u2026) \u2014 provider naming conventions map to this single internal ID and are never compared across incompatible markets"
+    },
+    "settlement_rule": {
+      "type": "string",
+      "default": "",
+      "description": "The market-specific settlement definition this observation is graded under (e.g. 'FULL_TIME_90 \u2014 90-minute result, no extra time')"
+    },
+    "models_json": {
+      "type": "string",
+      "description": "JSON snapshot of EVERY voting model's independent probability for this market \u2014 the raw material for per-model Brier / log loss / accuracy research. RX-2.1 rows also embed the ablation variants (A champion / B injuries / D full challenger)"
+    },
+    "models_used": {
+      "type": "string",
+      "default": "0",
+      "description": "Number of independent models that voted on this market"
+    },
+    "models_unavailable": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated model keys that could not vote \u2014 honest availability, never padded"
+    },
+    "ensemble_probability": {
+      "type": "number",
+      "description": "Weighted ensemble estimate before calibration (0\u20131) \u2014 an estimate, never a guarantee"
+    },
+    "calibrated_probability": {
+      "type": "number",
+      "description": "Calibrated probability after historical reliability correction (0\u20131)"
+    },
+    "confidence": {
+      "type": "number",
+      "description": "Capped confidence shown to the user (0\u2013100) \u2014 capped by pricing status, uncertainty and agreement"
+    },
+    "kala_score": {
+      "type": "number",
+      "description": "RIDE X MASTER SCORE 0\u2013100 recorded at observation time"
+    },
+    "grade": {
+      "type": "string",
+      "default": "",
+      "description": "Five-level classification recorded at observation time (downgraded grades stay downgraded)"
+    },
+    "agreement": {
+      "type": "number",
+      "description": "Model consensus 0\u20131 at observation time \u2014 research input for disagreement studies"
+    },
+    "uncertainty": {
+      "type": "number",
+      "description": "Independent uncertainty estimate 0\u20131 at observation time"
+    },
+    "data_quality": {
+      "type": "string",
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ],
+      "description": "Data quality recorded at observation time"
+    },
+    "pick_quality": {
+      "type": "string",
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ],
+      "default": "MEDIUM",
+      "description": "PREDICTION QUALITY of the process \u2014 separate from the estimated probability"
+    },
+    "evidence": {
+      "type": "string",
+      "default": "",
+      "description": "Evidence summary, e.g. 'Form 6+5 \u00b7 H2H 4 meetings \u00b7 11 models'"
+    },
+    "market_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "REAL bookmaker decimal price at observation time (T0) \u2014 0 = no real price, never a substitute"
+    },
+    "bookmaker": {
+      "type": "string",
+      "default": "",
+      "description": "The bookmaker that actually quoted the T0 price"
+    },
+    "market_probability": {
+      "type": "number",
+      "default": 0,
+      "description": "RAW bookmaker-implied probability 1/odds at T0 (0 = no real price)"
+    },
+    "margin_probability": {
+      "type": "number",
+      "default": 0,
+      "description": "Margin-adjusted market probability at T0 where the overround was known (0 = unknown)"
+    },
+    "raw_edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Raw edge vs RAW implied probability at T0, in percentage points (0 = no real price)"
+    },
+    "edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Edge vs the margin-adjusted benchmark where known (0 = no real price)"
+    },
+    "adjusted_edge_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Uncertainty-adjusted edge at T0 (0 = no real price)"
+    },
+    "min_adj_edge": {
+      "type": "number",
+      "default": 0,
+      "description": "The odds-scaled minimum adjusted edge this price required to qualify"
+    },
+    "ev_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Expected value of the real price vs the calibrated model at T0, in percentage points"
+    },
+    "fair_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Model fair odds 1 / calibrated probability at T0 \u2014 an estimate, never a bookmaker price"
+    },
+    "odds_status": {
+      "type": "string",
+      "default": "",
+      "description": "priced | model_only \u2014 whether a real T0 price existed"
+    },
+    "weights_basis": {
+      "type": "string",
+      "enum": [
+        "baseline",
+        "learned"
+      ],
+      "default": "baseline",
+      "description": "Whether ensemble weights were learned (learned) or transparent defaults (baseline)"
+    },
+    "calibration_sample": {
+      "type": "number",
+      "default": 0,
+      "description": "Settled sample the calibration was built from at observation time"
+    },
+    "flags_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Red flags (WARN/BLOCK) recorded at observation time \u2014 research input for failure attribution"
+    },
+    "provenance_json": {
+      "type": "string",
+      "default": "",
+      "description": "Data provenance \u2014 source, timestamp, freshness and quality of every input at observation time"
+    },
+    "snapshot_json": {
+      "type": "string",
+      "default": "",
+      "description": "Immutable observation snapshot \u2014 model outputs, weights, calibration state, injury/lineup enrichment and ablation variants at T0. Never rewritten"
+    },
+    "model_version": {
+      "type": "string",
+      "default": "RX-2.0",
+      "description": "Engine version that produced this observation \u2014 RX-2.0 (champion) or RX-2.1 (challenger with injury + lineup intelligence). Champion and challenger rows are recorded in parallel on identical candidates and compared only on out-of-sample settled evidence"
+    },
+    "injury_status": {
+      "type": "string",
+      "default": "",
+      "description": "RX-2.1 enrichment status at record time \u2014 matched | unmatched | unavailable. Empty = not evaluated (RX-2.0 champion rows). Missing injury data is UNKNOWN and is never treated as zero absences"
+    },
+    "injury_absences_home": {
+      "type": "number",
+      "default": 0,
+      "description": "Confirmed unavailable/doubtful players for the home side on this fixture's day (RX-2.1). Meaningful ONLY when injury_status = matched \u2014 an unmatched or unavailable side is unknown, not zero"
+    },
+    "injury_absences_away": {
+      "type": "number",
+      "default": 0,
+      "description": "Confirmed unavailable/doubtful players for the away side on this fixture's day (RX-2.1). Meaningful ONLY when injury_status = matched \u2014 an unmatched or unavailable side is unknown, not zero"
+    },
+    "lineup_status": {
+      "type": "string",
+      "default": "",
+      "description": "RX-2.1 lineup state at record time \u2014 confirmed | no_lineup | unmatched | unavailable. Empty = not checked. An estimated lineup is NEVER called confirmed; a pre-kickoff confirmation creates a new :v2 snapshot rather than rewriting this one"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the observation was permanently recorded \u2014 before kickoff, no data leakage"
+    },
+    "closing_odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Latest verified price captured BEFORE kickoff within the closing window (0 = NOT AVAILABLE \u2014 never a post-kickoff price)"
+    },
+    "closing_bookmaker": {
+      "type": "string",
+      "default": "",
+      "description": "The bookmaker that quoted the closing price"
+    },
+    "closing_captured_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the closing snapshot was captured (always pre-kickoff)"
+    },
+    "closing_snapshots_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Append-only log of every pre-kickoff price snapshot captured (T-60/T-30/T-15/closest) \u2014 the closing price is the last entry"
+    },
+    "capture_status": {
+      "type": "string",
+      "default": "pending",
+      "description": "ok | pending | failed:<reason> | no_provider_coverage | market_not_offered \u2014 scheduled capture failures are recorded, missing prices are NEVER fabricated"
+    },
+    "clv_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Closing-line value: (closing odds \u00f7 T0 odds \u2212 1) \u00d7 100 \u2014 computed ONLY when both a real T0 price and a verified pre-kickoff closing price exist (0 = not computable)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "won",
+        "lost",
+        "void"
+      ],
+      "default": "open",
+      "description": "Graded from the real final score under the market's settlement rule; void = no result within 7 days, counts toward nothing"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the observation was graded against the real result"
+    },
+    "actual_home": {
+      "type": "number",
+      "description": "Real final home goals once settled"
+    },
+    "actual_away": {
+      "type": "number",
+      "description": "Real final away goals once settled"
+    },
+    "result_source": {
+      "type": "string",
+      "default": "",
+      "description": "Verified feed the score was graded from (e.g. 'openfootball verified result')"
+    },
+    "loss_class": {
+      "type": "string",
+      "default": "",
+      "description": "Error classification for a lost observation (A bad data, G model disagreement, H odds mispricing, \u2026) \u2014 UNCLASSIFIED when attribution is impossible without lineup/xG data. Never a silent plain 'wrong'"
+    }
+  },
+  "required": [
+    "observation_key",
+    "fixture_id",
+    "home",
+    "away",
+    "league",
+    "kickoff",
+    "lagos_date_key",
+    "session",
+    "market_key",
+    "market_label",
+    "model_version",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

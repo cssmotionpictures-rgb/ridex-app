@@ -1,0 +1,116 @@
+{
+  "name": "Referrer",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "social_handles": {
+      "type": "string"
+    },
+    "referral_code": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "suspended",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "bank",
+        "opay",
+        "paystack"
+      ],
+      "default": "bank"
+    },
+    "bank_name": {
+      "type": "string"
+    },
+    "bank_account_name": {
+      "type": "string"
+    },
+    "bank_account_number": {
+      "type": "string"
+    },
+    "opay_number": {
+      "type": "string"
+    },
+    "custom_rates": {
+      "type": "boolean",
+      "default": false
+    },
+    "commission_customer": {
+      "type": "number",
+      "default": 0.1
+    },
+    "commission_driver": {
+      "type": "number",
+      "default": 0.15
+    },
+    "commission_subscription": {
+      "type": "number",
+      "default": 0.05
+    },
+    "total_customers": {
+      "type": "number",
+      "default": 0
+    },
+    "total_drivers": {
+      "type": "number",
+      "default": 0
+    },
+    "total_earnings": {
+      "type": "number",
+      "default": 0
+    },
+    "pending_payout": {
+      "type": "number",
+      "default": 0
+    },
+    "paid_out": {
+      "type": "number",
+      "default": 0
+    },
+    "bonus_tier": {
+      "type": "string",
+      "enum": [
+        "none",
+        "Bronze",
+        "Silver",
+        "Gold",
+        "Platinum"
+      ],
+      "default": "none"
+    },
+    "payout_cycle_months": {
+      "type": "number",
+      "default": 2
+    },
+    "terms_accepted": {
+      "type": "boolean",
+      "default": false
+    },
+    "notify_email": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "full_name",
+    "email",
+    "referral_code"
+  ]
+}

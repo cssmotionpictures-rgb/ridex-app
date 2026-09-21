@@ -1,0 +1,79 @@
+{
+  "name": "CrixWallet",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Owning user \u2014 one wallet row per user per currency. Balances are ONLY ever moved by the server-side Crix engine (crix-wallet function) \u2014 a user can never create, edit or delete a wallet row directly"
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "NGN",
+        "USD",
+        "GBP",
+        "EUR",
+        "CAD",
+        "AUD",
+        "CHF",
+        "JPY",
+        "ZAR",
+        "GHS",
+        "KES",
+        "KWD",
+        "CRX",
+        "CRXS"
+      ],
+      "description": "Real fiat currency held, CRX \u2014 the native Crix Network asset (chain not live yet, display-only until then), or CRXS \u2014 the Quick Coin internal CrixCoin balance. CRXS here is an application-ledger balance, honestly distinct from on-chain CRXS until the external settlement rail exists"
+    },
+    "available": {
+      "type": "number",
+      "default": 0,
+      "description": "Spendable balance. A currency is only 'available' to a user when it is actually funded through a live rail \u2014 the app never fabricates a balance"
+    },
+    "reserved": {
+      "type": "number",
+      "default": 0,
+      "description": "Funds locked in in-flight transactions \u2014 money is reserved BEFORE any provider/ledger movement, never debited on click alone"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "frozen"
+      ],
+      "default": "active",
+      "description": "frozen = the customer (or support) froze this currency wallet \u2014 sends are refused until unfrozen"
+    },
+    "frozen_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Why the wallet was frozen (customer emergency freeze, review, support action)"
+    }
+  },
+  "required": [
+    "user_id",
+    "currency",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "data.user_id": "{{user.id}}"
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

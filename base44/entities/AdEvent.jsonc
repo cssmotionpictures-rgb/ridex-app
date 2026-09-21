@@ -1,0 +1,44 @@
+{
+  "name": "AdEvent",
+  "type": "object",
+  "properties": {
+    "ad_type": {
+      "type": "string",
+      "enum": [
+        "rewarded",
+        "native",
+        "pause",
+        "banner",
+        "interstitial"
+      ],
+      "default": "rewarded"
+    },
+    "event": {
+      "type": "string",
+      "enum": [
+        "impression",
+        "click",
+        "complete"
+      ],
+      "default": "impression"
+    },
+    "movie_title": {
+      "type": "string"
+    },
+    "revenue": {
+      "type": "number",
+      "default": 0
+    },
+    "settled_to_opay": {
+      "type": "boolean",
+      "default": true
+    },
+    "opay_account": {
+      "type": "string",
+      "default": "8061197339"
+    }
+  },
+  "required": [
+    "ad_type"
+  ]
+}

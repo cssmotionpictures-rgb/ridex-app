@@ -1,0 +1,96 @@
+{
+  "name": "CrixEmergencyPause",
+  "type": "object",
+  "properties": {
+    "registry_key": {
+      "type": "string",
+      "description": "Registry identity \u2014 'crix-emergency-pause'. Single row holding the global emergency pause switches. Checked server-side BEFORE any money movement; the frontend can never disable a pause, and every change is audited"
+    },
+    "pause_all": {
+      "type": "boolean",
+      "default": false,
+      "description": "PAUSE_ALL \u2014 halts every money-moving operation across all rails and the internal ledger"
+    },
+    "pause_base": {
+      "type": "boolean",
+      "default": true,
+      "description": "PAUSE_BASE \u2014 halts Base on-chain settlement"
+    },
+    "pause_solana": {
+      "type": "boolean",
+      "default": true,
+      "description": "PAUSE_SOLANA \u2014 halts Solana settlement (the Solana rail is not implemented \u2014 paused is the honest state)"
+    },
+    "pause_deposits": {
+      "type": "boolean",
+      "default": false,
+      "description": "PAUSE_DEPOSITS \u2014 halts new deposits"
+    },
+    "pause_withdrawals": {
+      "type": "boolean",
+      "default": true,
+      "description": "PAUSE_WITHDRAWALS \u2014 halts withdrawals (no withdrawal rail is live \u2014 paused is the honest state)"
+    },
+    "pause_transfers": {
+      "type": "boolean",
+      "default": true,
+      "description": "PAUSE_TRANSFERS \u2014 halts on-chain transfers (the external transfer gate is PAUSED \u2014 honest)"
+    },
+    "pause_conversions": {
+      "type": "boolean",
+      "default": true,
+      "description": "PAUSE_CONVERSIONS \u2014 halts rail/FX conversions (no conversion liquidity exists yet \u2014 honest)"
+    },
+    "pause_bills": {
+      "type": "boolean",
+      "default": true,
+      "description": "PAUSE_BILLS \u2014 halts bill payments (requires on-chain CRXS settlement which is not live \u2014 honest)"
+    },
+    "paused_by": {
+      "type": "string",
+      "default": "",
+      "description": "Who last changed any pause switch (admin identity) \u2014 audit"
+    },
+    "reason": {
+      "type": "string",
+      "default": "",
+      "description": "Why the pause state was changed \u2014 audit"
+    },
+    "changed_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "When the pause state last changed \u2014 audit"
+    },
+    "notes": {
+      "type": "string",
+      "default": "",
+      "description": "Honest explanation of the enforced state. Server-side enforcement in every money-movement function is the authority; this row is the audited control surface"
+    }
+  },
+  "required": [
+    "registry_key"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

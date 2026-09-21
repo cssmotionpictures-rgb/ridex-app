@@ -1,0 +1,131 @@
+{
+  "name": "ConflictResolutionRecord",
+  "type": "object",
+  "properties": {
+    "resolution_id": {
+      "type": "string",
+      "description": "Deterministic resolution identity \u2014 resolution|<fixtureId>|<conflictGroupId>. Exactly ONE record per conflict group, created BEFORE any ledger mutation: a retry never creates a second resolution and never duplicates audit records"
+    },
+    "conflict_group_id": {
+      "type": "string",
+      "description": "The conflict group (global prediction identity) this resolution reconciles"
+    },
+    "fixture_id": {
+      "type": "string",
+      "description": "Fixture identity of the dispute (e.g. espn-401816866)"
+    },
+    "fixture": {
+      "type": "string",
+      "default": "",
+      "description": "Display label of the disputed fixture (e.g. Athletics vs Toronto Blue Jays)"
+    },
+    "previous_status": {
+      "type": "string",
+      "default": "REVIEW",
+      "description": "Conflict status before the resolution was executed"
+    },
+    "resolution_type": {
+      "type": "string",
+      "enum": [
+        "CONFIRM_PROVIDER_RESULT",
+        "CONFIRM_USER_RESULT",
+        "VOID_RESULT"
+      ],
+      "description": "Which evidence the admin confirmed \u2014 the engine never guesses this"
+    },
+    "confirmed_home_score": {
+      "type": "number",
+      "description": "Confirmed home score (null on VOID \u2014 no reliable result)"
+    },
+    "confirmed_away_score": {
+      "type": "number",
+      "description": "Confirmed away score (null on VOID \u2014 no reliable result)"
+    },
+    "confirmed_by": {
+      "type": "string",
+      "default": "",
+      "description": "Admin who confirmed the resolution"
+    },
+    "confirmed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the resolution was confirmed (set only on CONFIRMED)"
+    },
+    "reason": {
+      "type": "string",
+      "default": "",
+      "description": "Why this evidence was confirmed \u2014 provenance of the decision"
+    },
+    "source_evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "IMMUTABLE EVIDENCE SNAPSHOT \u2014 every conflicting evidence record (score, verification, source, timestamp, provenance) preserved verbatim with its label (USER_SUPPLIED_CONFLICTING_EVIDENCE / PROVIDER_CONFLICTING_EVIDENCE / CONFIRMED_EVIDENCE). Never overwritten \u2014 historical evidence is never erased"
+    },
+    "affected_prediction_ids": {
+      "type": "string",
+      "default": "",
+      "description": "Id of the canonical prediction row the resolution settled"
+    },
+    "affected_outcome_ids": {
+      "type": "string",
+      "default": "",
+      "description": "Id of the canonical outcome row the resolution regraded"
+    },
+    "archived_duplicate_ids": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-joined ids of ONLY the verified duplicate copies archived by this resolution \u2014 never the canonical row, never unrelated rows, never conflicting evidence records (those live in source_evidence_json)"
+    },
+    "resolution_version": {
+      "type": "number",
+      "default": 1,
+      "description": "Immutable versioning of the resolution record"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "CONFIRMED",
+        "CANCELLED",
+        "FAILED"
+      ],
+      "default": "PENDING",
+      "description": "PENDING = created (audit-first), mutations in progress or interrupted \u2014 a retry resumes idempotently \u00b7 CONFIRMED = fully executed and verified \u00b7 CANCELLED = disarmed by the admin, zero mutations \u00b7 FAILED = a mutation failed mid-chain \u2014 retry is safe and resumes"
+    },
+    "verification_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Post-resolution verification checks (label, pass, detail) \u2014 one canonical row, correct score, engine-calculated settlement, preserved evidence, complete audit trail"
+    },
+    "execution_note": {
+      "type": "string",
+      "default": "",
+      "description": "Execution diagnostics \u2014 which chain step failed and why, or the completion note"
+    }
+  },
+  "required": [
+    "resolution_id",
+    "conflict_group_id",
+    "fixture_id",
+    "resolution_type",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

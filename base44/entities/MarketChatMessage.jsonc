@@ -1,0 +1,30 @@
+{
+  "name": "MarketChatMessage",
+  "type": "object",
+  "properties": {
+    "order_id": {
+      "type": "string"
+    },
+    "listing_id": {
+      "type": "string"
+    },
+    "sender_id": {
+      "type": "string"
+    },
+    "sender_role": {
+      "type": "string",
+      "enum": [
+        "buyer",
+        "seller"
+      ],
+      "default": "buyer"
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "order_id",
+    "text"
+  ]
+}

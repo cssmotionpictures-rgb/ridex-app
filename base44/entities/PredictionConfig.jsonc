@@ -1,0 +1,99 @@
+{
+  "name": "PredictionConfig",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "default": "global",
+      "description": "Singleton config key \u2014 always 'global'"
+    },
+    "timezone": {
+      "type": "string",
+      "default": "Africa/Lagos",
+      "description": "Timezone used for morning/evening classification and the 7-day board"
+    },
+    "min_probability": {
+      "type": "number",
+      "default": 0.72,
+      "description": "Minimum calibrated probability for a pick to qualify"
+    },
+    "preferred_probability": {
+      "type": "number",
+      "default": 0.75
+    },
+    "min_quality_score": {
+      "type": "number",
+      "default": 70,
+      "description": "Minimum MATCH QUALITY SCORE (0-100)"
+    },
+    "max_uncertainty": {
+      "type": "number",
+      "default": 0.25,
+      "description": "Maximum model uncertainty (0-1)"
+    },
+    "min_agreement": {
+      "type": "number",
+      "default": 0.6,
+      "description": "Minimum model agreement ratio (0-1)"
+    },
+    "max_morning": {
+      "type": "number",
+      "default": 4,
+      "description": "Maximum morning selections per day"
+    },
+    "max_evening": {
+      "type": "number",
+      "default": 4,
+      "description": "Maximum evening selections per day"
+    },
+    "morning_start": {
+      "type": "number",
+      "default": 5,
+      "description": "Local hour the morning session starts"
+    },
+    "evening_start": {
+      "type": "number",
+      "default": 15,
+      "description": "Local hour the evening session starts"
+    },
+    "max_per_league": {
+      "type": "number",
+      "default": 2,
+      "description": "Diversification \u2014 max picks per league per session"
+    },
+    "min_games": {
+      "type": "number",
+      "default": 4,
+      "description": "Minimum league games played before a team's data qualifies"
+    },
+    "leagues": {
+      "type": "string",
+      "description": "JSON array of {code, name, country, tier, offset, enabled} \u2014 competitions scanned, dynamically populated from the providers"
+    },
+    "provider_registry": {
+      "type": "string",
+      "description": "JSON per-provider toggles: {apiFootball:{enabled}, sportmonks:{enabled}, sportradar:{enabled}, openfootball:{enabled}}"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

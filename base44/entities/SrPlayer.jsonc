@@ -1,0 +1,58 @@
+{
+  "name": "SrPlayer",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Sportradar sr:player id \u2014 primary key, one row per player"
+    },
+    "name": {
+      "type": "string"
+    },
+    "team_id": {
+      "type": "string",
+      "description": "sr:competitor id of the team the player was last seen playing for \u2014 IDs are keys, names display only"
+    },
+    "team_name": {
+      "type": "string"
+    },
+    "position": {
+      "type": "string",
+      "description": "Last seen match position from the provider lineup \u2014 empty when the provider did not supply it"
+    },
+    "jersey_number": {
+      "type": "number"
+    },
+    "player_type": {
+      "type": "string",
+      "description": "starter / bench / missing from the provider lineup payload"
+    },
+    "last_seen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this player was last observed in a real provider lineup"
+    }
+  },
+  "required": [
+    "player_id",
+    "name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

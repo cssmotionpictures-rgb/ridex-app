@@ -1,0 +1,224 @@
+{
+  "name": "GameCharacterAsset",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Character display name"
+    },
+    "character_id": {
+      "type": "number",
+      "default": 0,
+      "description": "Master sheet character id (0 for non-sheet characters)."
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "player",
+        "enemy"
+      ],
+      "default": "player"
+    },
+    "reference_portrait_url": {
+      "type": "string",
+      "default": "",
+      "description": "Public reference portrait URL used for 3D generation. Identity reference only \u2014 NOT a playable asset."
+    },
+    "is_official_sheet_character": {
+      "type": "boolean",
+      "default": false
+    },
+    "full_body_png_url": {
+      "type": "string",
+      "default": "",
+      "description": "Full-body transparent PNG (2.5D sprite). May be Base44 storage OR any public URL."
+    },
+    "model_3d_url": {
+      "type": "string",
+      "default": "",
+      "description": "PERMANENT playable GLB URL. Authoritative playable asset \u2014 the arena spawns and fights this. Empty until a real GLB exists."
+    },
+    "generated_model_url": {
+      "type": "string",
+      "description": "TEMPORARY provider GLB URL \u2014 expires ~5 min. Used for immediate TEST/DOWNLOAD only; never used for spawn."
+    },
+    "temp_model_expires_at": {
+      "type": "string",
+      "description": "ISO timestamp when generated_model_url expires."
+    },
+    "processed_model_url": {
+      "type": "string",
+      "default": "",
+      "description": "Final combat-ready GLB URL produced by the Blender rig worker (set on COMBAT_READY)."
+    },
+    "rig_job_id": {
+      "type": "string",
+      "default": "",
+      "description": "Job id returned by the Blender rig worker (POST /rig). Empty until a rig job is queued."
+    },
+    "pipeline_stages": {
+      "type": "string",
+      "description": "JSON of the 7-stage pipeline statuses written by the rig worker: {model,rig,skin,animation,hitbox,glb,validation} each PENDING|PROCESSING|PASSED|FAILED."
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "none",
+        "png",
+        "glb"
+      ],
+      "default": "none"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "missing",
+        "ready",
+        "queued",
+        "generating",
+        "generated",
+        "error"
+      ],
+      "default": "missing",
+      "description": "missing=none, generating=pipeline in flight, generated=temp GLB valid but not permanently stored, ready=permanent GLB stored, error=failed."
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "meshy",
+        "tripo",
+        "trellis",
+        "hunyuan",
+        "stable_fast_3d",
+        "instantmesh",
+        "triposr",
+        "wonder3d",
+        "openlrm",
+        "crm",
+        "step1x",
+        "unique3d"
+      ],
+      "description": "trellis/hunyuan/etc = free Hugging Face image-to-3D Spaces (primary, credit-free), meshy/tripo = optional paid cloud providers."
+    },
+    "generation_task_id": {
+      "type": "string"
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "valid",
+        "invalid"
+      ],
+      "default": "pending",
+      "description": "Server-side GLB magic/size check + browser deep-inspection result."
+    },
+    "validation_details": {
+      "type": "string",
+      "description": "JSON of per-check PASS/FAIL written live by the Three.js arena: mesh/tri/material/texture/skeleton/skinned/bone/animation/bbox/foundAnims/missingAnims/combatStatus/checkedBy."
+    },
+    "rig_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "ready"
+      ],
+      "default": "pending"
+    },
+    "skeleton_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "detected",
+        "missing",
+        "invalid"
+      ],
+      "default": "pending",
+      "description": "Browser-validated humanoid skeleton presence (detected/missing/invalid)."
+    },
+    "skin_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "skinned",
+        "missing"
+      ],
+      "default": "pending",
+      "description": "Whether the GLB contains a skinned mesh (skin weights bound to bones)."
+    },
+    "animation_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "partial",
+        "ready"
+      ],
+      "default": "pending",
+      "description": "ready = all required combat animations present; partial = some; pending = none."
+    },
+    "hitbox_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "attached",
+        "missing"
+      ],
+      "default": "pending",
+      "description": "Whether bone-attached combat hit volumes were created at runtime."
+    },
+    "combat_status": {
+      "type": "string",
+      "enum": [
+        "none",
+        "MODEL_GENERATED",
+        "MODEL_CLEAN",
+        "RIGGING",
+        "RIGGED",
+        "SKINNING",
+        "SKINNED",
+        "ANIMATING",
+        "ANIMATED",
+        "COMBAT_SETUP",
+        "COMBAT_READY",
+        "PLAYABLE",
+        "ERROR"
+      ],
+      "default": "none",
+      "description": "Authoritative playable-fighter production stage. Only COMBAT_READY/PLAYABLE allow arena combat. A GLB existing alone is never PLAYABLE."
+    },
+    "error_message": {
+      "type": "string",
+      "default": ""
+    },
+    "notes": {
+      "type": "string",
+      "default": ""
+    },
+    "sort_order": {
+      "type": "number",
+      "default": 100
+    }
+  },
+  "required": [
+    "name",
+    "role"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

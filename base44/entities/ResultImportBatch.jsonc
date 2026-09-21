@@ -1,0 +1,156 @@
+{
+  "name": "ResultImportBatch",
+  "type": "object",
+  "properties": {
+    "import_hash": {
+      "type": "string",
+      "description": "Normalized-text hash \u2014 pasting the same results twice is detected and refused, never double-counted"
+    },
+    "raw_text": {
+      "type": "string",
+      "description": "The exact text the user pasted (import audit trail)"
+    },
+    "source": {
+      "type": "string",
+      "default": "",
+      "description": "Import pipeline that processed the batch \u2014 sportybet | generic"
+    },
+    "source_guess": {
+      "type": "string",
+      "default": "",
+      "description": "Section the pasted text appeared to come from (win-raba, kala, big-hammer, sportybet\u2026) \u2014 empty when unrecognized"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "imported",
+        "duplicate",
+        "empty"
+      ],
+      "default": "imported",
+      "description": "Import outcome \u2014 duplicate = identical text was already imported"
+    },
+    "parsed_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Unique structured records the parser confidently produced (SportyBet: unique historical leg observations after dedup)"
+    },
+    "unresolved_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Genuine recognized records that could NOT be independently settled \u2014 shown to the user, never guessed. Raw UI fragments are never counted here"
+    },
+    "exact_matches": {
+      "type": "number",
+      "default": 0,
+      "description": "Records matched to exactly one ledger fixture (forward team order)"
+    },
+    "high_matches": {
+      "type": "number",
+      "default": 0,
+      "description": "Records matched with reversed team order (score normalized deterministically)"
+    },
+    "possible_matches": {
+      "type": "number",
+      "default": 0,
+      "description": "Records matching multiple fixtures \u2014 flagged for review, never auto-settled"
+    },
+    "unmatched": {
+      "type": "number",
+      "default": 0,
+      "description": "Records matching no prediction on record (SportyBet: external historical results retained for research)"
+    },
+    "verified_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Settlements confirmed by the verified results provider"
+    },
+    "user_supplied_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Settlements from user-supplied scores with no verified provider result"
+    },
+    "conflicts": {
+      "type": "number",
+      "default": 0,
+      "description": "Results that DISAGREE with the verified provider or with canonical settlement \u2014 never settled, flagged for review"
+    },
+    "wins": {
+      "type": "number",
+      "default": 0
+    },
+    "losses": {
+      "type": "number",
+      "default": 0
+    },
+    "voids": {
+      "type": "number",
+      "default": 0,
+      "description": "Void + push settlements (count toward nothing)"
+    },
+    "already_settled": {
+      "type": "number",
+      "default": 0,
+      "description": "Matched predictions that were already settled from an earlier import or the verified feed"
+    },
+    "insights_created": {
+      "type": "number",
+      "default": 0,
+      "description": "Learning insights created or refreshed by this batch (evidence-gated \u2014 never an immediate model change)"
+    },
+    "tickets_detected": {
+      "type": "number",
+      "default": 0,
+      "description": "SportyBet import: ticket blocks detected in the paste (including duplicated copies)"
+    },
+    "unique_tickets": {
+      "type": "number",
+      "default": 0,
+      "description": "SportyBet import: genuine unique tickets after dedup \u2014 one record each"
+    },
+    "pending_count": {
+      "type": "number",
+      "default": 0,
+      "description": "SportyBet import: legs with no final score yet \u2014 preserved, settled only when a verified result exists"
+    },
+    "supplied_only_count": {
+      "type": "number",
+      "default": 0,
+      "description": "SportyBet import: legs kept on the ticket's supplied outcome that cannot be independently verified from the score"
+    },
+    "external_count": {
+      "type": "number",
+      "default": 0,
+      "description": "SportyBet import: legs retained as EXTERNAL HISTORICAL RESULTS \u2014 research evidence, never attributed to a RIDE X prediction"
+    },
+    "duplicates_rejected": {
+      "type": "number",
+      "default": 0,
+      "description": "Duplicated tickets, duplicated legs and already-imported legs refused \u2014 never double-counted"
+    },
+    "summary_json": {
+      "type": "string",
+      "default": "",
+      "description": "Full import detail \u2014 per-ticket summaries, per-record match/settlement outcomes, market and odds-band aggregates"
+    },
+    "imported_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this batch was processed"
+    }
+  },
+  "required": [
+    "import_hash",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

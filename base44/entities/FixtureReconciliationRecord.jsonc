@@ -1,0 +1,122 @@
+{
+  "name": "FixtureReconciliationRecord",
+  "type": "object",
+  "properties": {
+    "reconciliation_id": {
+      "type": "string",
+      "description": "Deterministic reconciliation identity \u2014 reconciliation|<fixtureA>|<fixtureB>. Exactly ONE record per fixture pair, created BEFORE any ledger mutation: a retry never creates a second reconciliation and never duplicates audit history"
+    },
+    "original_conflict_group_id": {
+      "type": "string",
+      "description": "The conflict group (global prediction identity) that held the FALSE conflict before reclassification"
+    },
+    "reason": {
+      "type": "string",
+      "default": "FIXTURE_ID_MISMATCH",
+      "description": "Why the reconciliation ran \u2014 a fixture-ID collision (two different games treated as one conflict), never a score dispute"
+    },
+    "statement": {
+      "type": "string",
+      "default": "",
+      "description": "The verified finding, recorded explicitly \u2014 e.g. '6\u20135 and 2\u20130 are both valid results for separate Athletics vs Toronto Blue Jays fixtures.'"
+    },
+    "old_fixture_association": {
+      "type": "string",
+      "default": "",
+      "description": "The incorrect association before repair (immutable) \u2014 e.g. '6\u20135 settled under espn-401816866 (user result import \u2014 belongs to espn-401816851)'"
+    },
+    "new_fixture_association": {
+      "type": "string",
+      "default": "",
+      "description": "The corrected association after repair \u2014 each result under its own verified fixture"
+    },
+    "corrections_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "IMMUTABLE per-row correction trail \u2014 for every affected row: entity, row id, old association, new association, applied patch. The original incorrect association is preserved here verbatim and never overwritten"
+    },
+    "affected_prediction_ids": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-joined prediction row ids whose wrong fixture association was corrected"
+    },
+    "affected_outcome_ids": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-joined outcome row ids whose wrong fixture association was corrected"
+    },
+    "evidence_sources": {
+      "type": "string",
+      "default": "",
+      "description": "The independent sources that verified each fixture's result (MLB official video, MLB official game story, Reuters\u2026)"
+    },
+    "verified_scores_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "The verified fixture facts \u2014 per fixture: provider event id, game date, kickoff, verified score, evidence source"
+    },
+    "provider_event_ids": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-joined provider event ids of the colliding fixtures (highest-priority identity)"
+    },
+    "performed_by": {
+      "type": "string",
+      "default": "",
+      "description": "Admin who performed the reconciliation"
+    },
+    "performed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the reconciliation was confirmed"
+    },
+    "resolution_version": {
+      "type": "number",
+      "default": 1,
+      "description": "Immutable versioning of the reconciliation record"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "CONFIRMED",
+        "FAILED"
+      ],
+      "default": "PENDING",
+      "description": "PENDING = audit record created, corrections in progress or interrupted \u2014 a retry resumes idempotently \u00b7 CONFIRMED = fully executed and verified \u00b7 FAILED = a correction failed mid-chain \u2014 retry is safe"
+    },
+    "verification_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Post-reconciliation verification checks (label, pass, detail) \u2014 per-fixture scores correct, engine-graded settlements, evidence preserved, no unrelated rows changed"
+    },
+    "execution_note": {
+      "type": "string",
+      "default": "",
+      "description": "Execution diagnostics \u2014 which chain step failed and why, or the completion note"
+    }
+  },
+  "required": [
+    "reconciliation_id",
+    "original_conflict_group_id",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "name": "PromoCode",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Promo code (stored uppercase)"
+    },
+    "description": {
+      "type": "string"
+    },
+    "discount_type": {
+      "type": "string",
+      "enum": [
+        "percent",
+        "fixed"
+      ],
+      "default": "percent"
+    },
+    "value": {
+      "type": "number",
+      "default": 0,
+      "description": "Percent off (0-100) or fixed NGN amount off"
+    },
+    "min_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Minimum spend (NGN) for the code to apply. 0 = no minimum."
+    },
+    "max_uses": {
+      "type": "number",
+      "default": 0,
+      "description": "Maximum total redemptions. 0 = unlimited."
+    },
+    "used_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Successful redemptions (incremented by the Paystack webhook)."
+    },
+    "applicable_services": {
+      "type": "string",
+      "default": "all",
+      "description": "Comma-separated service keys (ride, carwash, marketplace, ...) or 'all'."
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "discount_type",
+    "value"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

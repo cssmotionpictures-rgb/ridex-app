@@ -1,0 +1,77 @@
+{
+  "name": "SponsorAd",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "sponsor": {
+      "type": "string"
+    },
+    "industry": {
+      "type": "string",
+      "description": "Sponsor industry used by auto-approval rules (e.g. food, fashion, tech)"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "Direct MP4/HLS video URL of the sponsor creative"
+    },
+    "thumbnail_url": {
+      "type": "string"
+    },
+    "target_url": {
+      "type": "string",
+      "description": "Optional click-through URL"
+    },
+    "price_per_play": {
+      "type": "number",
+      "default": 50,
+      "description": "Revenue earned per completed play (\u20a6)"
+    },
+    "budget": {
+      "type": "number",
+      "default": 10000
+    },
+    "remaining_budget": {
+      "type": "number",
+      "default": 10000
+    },
+    "plays": {
+      "type": "number",
+      "default": 0
+    },
+    "revenue": {
+      "type": "number",
+      "default": 0
+    },
+    "placement": {
+      "type": "string",
+      "enum": [
+        "any",
+        "arcade",
+        "movies",
+        "music"
+      ],
+      "default": "any"
+    },
+    "auto_approved": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "paused",
+        "rejected",
+        "expired"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "name",
+    "video_url"
+  ]
+}

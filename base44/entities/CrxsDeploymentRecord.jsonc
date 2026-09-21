@@ -1,0 +1,147 @@
+{
+  "name": "CrxsDeploymentRecord",
+  "type": "object",
+  "properties": {
+    "registry_key": {
+      "type": "string",
+      "description": "Registry identity \u2014 'crxs-deployment'. Single row holding the REAL Base Sepolia deployment record. Every value is written ONLY by the server-side crxs-deployment-verify function after it independently verifies the facts against the actual chain \u2014 never typed in manually, never fabricated."
+    },
+    "deployment_status": {
+      "type": "string",
+      "enum": [
+        "NOT_DEPLOYED",
+        "DEPLOYED",
+        "FAILED"
+      ],
+      "default": "NOT_DEPLOYED",
+      "description": "NOT_DEPLOYED = no blockchain contract exists \u00b7 DEPLOYED = a real owner-signed transaction was confirmed on-chain and the contract state was verified server-side \u00b7 FAILED = a signed transaction reverted \u2014 the real failure reason is kept"
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "NOT_VERIFIED",
+        "ONCHAIN_VERIFIED",
+        "SOURCE_VERIFIED"
+      ],
+      "default": "NOT_VERIFIED",
+      "description": "ONCHAIN_VERIFIED = name/symbol/decimals/totalSupply/deployer balance were read directly from the contract by the server \u00b7 SOURCE_VERIFIED = the contract source is additionally verified on BaseScan"
+    },
+    "chain": {
+      "type": "string",
+      "default": "BASE_SEPOLIA",
+      "description": "Explicit asset layer: this record is ON-CHAIN (Base Sepolia). It is completely separate from the RIDE X internal Crix ledger and never mixed with it"
+    },
+    "chain_id": {
+      "type": "number",
+      "default": 84532
+    },
+    "network": {
+      "type": "string",
+      "default": "Base Sepolia"
+    },
+    "token_name": {
+      "type": "string",
+      "default": "CrixCoin"
+    },
+    "symbol": {
+      "type": "string",
+      "default": "CRXS"
+    },
+    "decimals": {
+      "type": "number",
+      "default": 18
+    },
+    "total_supply_raw": {
+      "type": "string",
+      "default": "500000000000000000000000000000",
+      "description": "Raw units (5 \u00d7 10^29) read from the REAL contract \u2014 exactly 500,000,000,000 CRXS at 18 decimals. This value is only stored after the server read totalSupply() from the chain"
+    },
+    "human_total_supply": {
+      "type": "string",
+      "default": "500000000000 CRXS"
+    },
+    "deployer": {
+      "type": "string",
+      "default": "0xA6647b69af892b0F2894fC24FB58b2aDCbedaDE1",
+      "description": "Approved deployment wallet (public address only \u2014 the private key never touches this app)"
+    },
+    "contract_address": {
+      "type": "string",
+      "default": "",
+      "description": "ACTUAL address from the on-chain receipt \u2014 empty until a real deployment exists"
+    },
+    "deployment_tx_hash": {
+      "type": "string",
+      "default": "",
+      "description": "ACTUAL transaction hash of the owner-signed deployment \u2014 empty until real"
+    },
+    "block_number": {
+      "type": "number",
+      "default": 0,
+      "description": "Actual confirmation block from the receipt"
+    },
+    "deployment_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "Actual block timestamp read from the chain"
+    },
+    "gas_used": {
+      "type": "number",
+      "default": 0,
+      "description": "Actual gas used by the deployment transaction, from the receipt"
+    },
+    "explorer_url": {
+      "type": "string",
+      "default": "",
+      "description": "Derived only from the actual contract address (https://sepolia.basescan.org/address/\u2026) \u2014 never generated from a placeholder"
+    },
+    "compiler_version": {
+      "type": "string",
+      "default": "",
+      "description": "Solidity compiler used for the deployed bytecode (integrity record for source verification)"
+    },
+    "optimizer": {
+      "type": "string",
+      "default": "",
+      "description": "Optimizer settings used for the deployed bytecode (integrity record)"
+    },
+    "bytecode_sha256": {
+      "type": "string",
+      "default": "",
+      "description": "SHA-256 of the exact creation bytecode deployed \u2014 integrity record"
+    },
+    "verification_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side on-chain verification evidence \u2014 each check with pass/value, from real RPC responses only"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real failure reason when a signed deployment reverted \u2014 kept for diagnosis, never overwritten silently"
+    }
+  },
+  "required": [
+    "registry_key",
+    "deployment_status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

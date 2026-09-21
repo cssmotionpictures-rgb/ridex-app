@@ -1,0 +1,96 @@
+{
+  "name": "TalentBooking",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "promoter_company": {
+      "type": "string",
+      "description": "Event owner / promoter legal company name (from the LOI Offer Sheet)"
+    },
+    "rider_committed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Promoter signed off on funding 100% of the logistics riders (flights, 5-star lodging, VVIP security, technical production). Breach = contract void + deposit forfeited."
+    },
+    "artist_id": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "talent_type": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "concert",
+        "wedding",
+        "corporate",
+        "birthday",
+        "film",
+        "appearance",
+        "club",
+        "other"
+      ],
+      "default": "concert"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "event_time": {
+      "type": "string"
+    },
+    "duration_hours": {
+      "type": "number",
+      "default": 1
+    },
+    "project_details": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "platform_commission": {
+      "type": "number",
+      "default": 0
+    },
+    "artist_earnings": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "completed",
+        "cancelled",
+        "disputed"
+      ],
+      "default": "pending"
+    },
+    "escrow_status": {
+      "type": "string",
+      "enum": [
+        "held",
+        "released",
+        "refunded"
+      ],
+      "default": "held"
+    }
+  },
+  "required": [
+    "artist_id",
+    "artist_name",
+    "event_date",
+    "price"
+  ]
+}

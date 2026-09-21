@@ -1,0 +1,44 @@
+{
+  "name": "Audiobook",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "author_name": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "audio_url": {
+      "type": "string"
+    },
+    "cover_url": {
+      "type": "string"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "default": 0
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "published",
+        "rejected"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

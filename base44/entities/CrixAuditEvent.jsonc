@@ -1,0 +1,125 @@
+{
+  "name": "CrixAuditEvent",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Deterministic audit event identity \u2014 <operation>|<transaction_id>|<sequence>. Append-only: financial audit events are never rewritten; corrections are compensating entries, never edits"
+    },
+    "user_id": {
+      "type": "string",
+      "default": "",
+      "description": "The user the event concerns"
+    },
+    "transaction_id": {
+      "type": "string",
+      "default": "",
+      "description": "The financial transaction this event belongs to"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "default": "",
+      "description": "The immutable idempotency key of the operation \u2014 one key, one money movement, forever"
+    },
+    "operation": {
+      "type": "string",
+      "description": "Sensitive operation performed \u2014 send, withdraw, deposit, bill_payment, conversion, pause_change, rail_selection, reconciliation_finding\u2026"
+    },
+    "old_state": {
+      "type": "string",
+      "default": "",
+      "description": "Transaction state before this event"
+    },
+    "new_state": {
+      "type": "string",
+      "default": "",
+      "description": "Transaction state after this event"
+    },
+    "selected_rail": {
+      "type": "string",
+      "default": "",
+      "description": "Rail the operation settled on \u2014 BASE or SOLANA (empty for internal-only)"
+    },
+    "chain": {
+      "type": "string",
+      "default": "",
+      "description": "Chain the settlement occurred on"
+    },
+    "asset": {
+      "type": "string",
+      "default": "",
+      "description": "Asset moved \u2014 CRXS, CRIX_SOL, NGN\u2026"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Amount concerned"
+    },
+    "fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Fee charged/recorded with the event"
+    },
+    "provider": {
+      "type": "string",
+      "default": "",
+      "description": "External provider involved (payment/gas/settlement)"
+    },
+    "wallet": {
+      "type": "string",
+      "default": "",
+      "description": "Wallet address concerned (public address only)"
+    },
+    "blockchain_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL blockchain transaction/signature hash when settlement occurred \u2014 never a placeholder"
+    },
+    "actor": {
+      "type": "string",
+      "default": "",
+      "description": "Who/what performed the operation \u2014 user id, admin id, or server function name"
+    },
+    "reason": {
+      "type": "string",
+      "default": "",
+      "description": "Why the operation/decision happened"
+    },
+    "risk_result": {
+      "type": "string",
+      "default": "",
+      "description": "Risk engine verdict for the operation \u2014 LOW | MEDIUM | HIGH | BLOCKED"
+    },
+    "payload_json": {
+      "type": "string",
+      "default": "",
+      "description": "Additional non-sensitive event detail. NEVER contains secrets, private keys or credential values"
+    }
+  },
+  "required": [
+    "event_id",
+    "operation"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

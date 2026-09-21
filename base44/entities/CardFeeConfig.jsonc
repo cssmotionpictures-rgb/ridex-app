@@ -1,0 +1,146 @@
+{
+  "name": "CardFeeConfig",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "default": "global",
+      "description": "Singleton config key \u2014 always 'global'"
+    },
+    "updated_by": {
+      "type": "string",
+      "default": "",
+      "description": "Email of the admin who last saved these fees"
+    },
+    "maintenance_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Master switch for recurring monthly card maintenance charges"
+    },
+    "use_live_fx_rate": {
+      "type": "boolean",
+      "default": true,
+      "description": "Fetch the live USD\u2192NGN rate from the card provider; off = use usd_ngn_rate"
+    },
+    "usd_ngn_rate": {
+      "type": "number",
+      "default": 1600,
+      "description": "Fallback NGN per USD used to convert dollar-card fees to the naira wallet when the live rate is unavailable"
+    },
+    "ngn_issuance_fee": {
+      "type": "number",
+      "default": 1000,
+      "description": "One-time naira card issuance platform fee (\u20a6). 0 = disabled"
+    },
+    "ngn_activation_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Naira card activation platform fee (\u20a6). 0 = disabled"
+    },
+    "ngn_maintenance_fee": {
+      "type": "number",
+      "default": 200,
+      "description": "Monthly naira card maintenance platform fee (\u20a6). 0 = disabled"
+    },
+    "ngn_replacement_fee": {
+      "type": "number",
+      "default": 500,
+      "description": "Naira card replacement platform fee (\u20a6). 0 = disabled"
+    },
+    "ngn_transaction_percentage": {
+      "type": "number",
+      "default": 1,
+      "description": "Naira card platform transaction fee (% of purchase). 0 = disabled"
+    },
+    "ngn_min_transaction_fee": {
+      "type": "number",
+      "default": 50,
+      "description": "Minimum naira card platform transaction fee (\u20a6) \u2014 charged when it exceeds the percentage"
+    },
+    "ngn_funding_percentage": {
+      "type": "number",
+      "default": 1,
+      "description": "Naira card funding platform fee (% of top-up). 0 = disabled"
+    },
+    "ngn_closure_fee": {
+      "type": "number",
+      "default": 200,
+      "description": "Naira card closure/withdrawal platform fee (\u20a6). 0 = disabled"
+    },
+    "usd_issuance_fee": {
+      "type": "number",
+      "default": 3,
+      "description": "One-time dollar card issuance platform fee ($). 0 = disabled"
+    },
+    "usd_activation_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Dollar card activation platform fee ($). 0 = disabled"
+    },
+    "usd_maintenance_fee": {
+      "type": "number",
+      "default": 1,
+      "description": "Monthly dollar card maintenance platform fee ($). 0 = disabled"
+    },
+    "usd_replacement_fee": {
+      "type": "number",
+      "default": 2,
+      "description": "Dollar card replacement platform fee ($). 0 = disabled"
+    },
+    "usd_transaction_percentage": {
+      "type": "number",
+      "default": 1.5,
+      "description": "Dollar card platform transaction fee (% of purchase). 0 = disabled"
+    },
+    "usd_min_transaction_fee": {
+      "type": "number",
+      "default": 0.3,
+      "description": "Minimum dollar card platform transaction fee ($) \u2014 charged when it exceeds the percentage"
+    },
+    "usd_funding_percentage": {
+      "type": "number",
+      "default": 1.5,
+      "description": "Dollar card funding platform fee (% of top-up). 0 = disabled"
+    },
+    "usd_fx_markup_percentage": {
+      "type": "number",
+      "default": 1.5,
+      "description": "Platform FX markup (%) \u2014 applied ONLY when an actual currency conversion occurs"
+    },
+    "usd_cross_border_markup_percentage": {
+      "type": "number",
+      "default": 0.5,
+      "description": "Platform cross-border markup (%) \u2014 applied ONLY when the card program classifies the transaction as cross-border"
+    },
+    "usd_closure_fee": {
+      "type": "number",
+      "default": 1,
+      "description": "Dollar card closure/withdrawal platform fee ($). 0 = disabled"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

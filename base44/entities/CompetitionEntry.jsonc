@@ -1,0 +1,64 @@
+{
+  "name": "CompetitionEntry",
+  "type": "object",
+  "properties": {
+    "competition_id": {
+      "type": "string"
+    },
+    "competition_title": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "entry_type": {
+      "type": "string",
+      "enum": [
+        "prediction",
+        "video",
+        "image",
+        "text"
+      ],
+      "default": "prediction"
+    },
+    "content_url": {
+      "type": "string",
+      "description": "Video/image URL for fan contests"
+    },
+    "caption": {
+      "type": "string"
+    },
+    "prediction_data": {
+      "type": "string",
+      "description": "JSON string of predictions for predict_win"
+    },
+    "score": {
+      "type": "number",
+      "default": 0
+    },
+    "votes": {
+      "type": "number",
+      "default": 0
+    },
+    "rank": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "winner"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "competition_id",
+    "user_id"
+  ]
+}

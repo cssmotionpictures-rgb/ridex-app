@@ -1,0 +1,165 @@
+{
+  "name": "ExternalHistoricalResult",
+  "type": "object",
+  "properties": {
+    "external_id": {
+      "type": "string",
+      "description": "Deterministic historical-result identity \u2014 source|ticket|game|teams|pick|odds. Idempotent: the same leg from any paste (today or months later) resolves to the same id and is never double-counted"
+    },
+    "source": {
+      "type": "string",
+      "default": "sportybet",
+      "description": "Where the historical result came from (bookmaker ticket paste, manual historical record\u2026)"
+    },
+    "ticket_ids": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-joined ticket ids this leg appeared on \u2014 the same original selection repeated across tickets is ONE observation, linked, never duplicated"
+    },
+    "game_id": {
+      "type": "string",
+      "default": "",
+      "description": "Provider game id exactly as printed on the ticket (empty when absent \u2014 never guessed)"
+    },
+    "home": {
+      "type": "string",
+      "description": "Home team as pasted"
+    },
+    "away": {
+      "type": "string",
+      "description": "Away team as pasted"
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Kickoff when a date/time could be parsed from the ticket \u2014 empty when the paste carried none (never a guessed time)"
+    },
+    "kickoff_date_key": {
+      "type": "string",
+      "default": "",
+      "description": "Kickoff date (YYYY-MM-DD) when parseable"
+    },
+    "market_raw": {
+      "type": "string",
+      "default": "",
+      "description": "Original market name exactly as pasted \u2014 never rewritten"
+    },
+    "pick_raw": {
+      "type": "string",
+      "default": "",
+      "description": "Original selection text exactly as pasted \u2014 never rewritten"
+    },
+    "market_key": {
+      "type": "string",
+      "default": "",
+      "description": "Canonical engine market key where the pasted market maps (O2.5, 1, X2, DNB1, AH1:-1.5, THO0.5\u2026) \u2014 empty when unmapped"
+    },
+    "canonical_market": {
+      "type": "string",
+      "default": "",
+      "description": "Canonical internal market ID this selection maps to \u2014 incompatible markets are never compared"
+    },
+    "market_family": {
+      "type": "string",
+      "default": "",
+      "description": "Market family for segmented learning \u2014 over/under, 1x2, double chance, draw no bet, asian handicap, team goals, btts, corners, combined, special"
+    },
+    "odds": {
+      "type": "number",
+      "default": 0,
+      "description": "Real decimal price exactly as printed on the ticket (0 = not printed)"
+    },
+    "home_goals": {
+      "type": "number",
+      "description": "FT home goals when a score was pasted"
+    },
+    "away_goals": {
+      "type": "number",
+      "description": "FT away goals when a score was pasted"
+    },
+    "supplied_outcome": {
+      "type": "string",
+      "default": "",
+      "description": "Outcome exactly as printed on the ticket \u2014 preserved verbatim, never silently replaced"
+    },
+    "computed_settlement": {
+      "type": "string",
+      "default": "",
+      "description": "Canonical settlement independently derived from the FT score under the market's official rule \u2014 when it disagrees with the supplied outcome the leg is a SETTLEMENT CONFLICT and both values stay on record"
+    },
+    "settlement_status": {
+      "type": "string",
+      "enum": [
+        "settled_from_score",
+        "supplied_only",
+        "pending",
+        "conflict",
+        "unknown"
+      ],
+      "default": "pending",
+      "description": "settled_from_score = graded from the real score \u00b7 supplied_only = ticket outcome kept but unverifiable \u00b7 pending = no final score yet \u00b7 conflict = supplied vs computed disagree (never silently chosen) \u00b7 unknown = cannot be graded"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "won",
+        "lost",
+        "push",
+        "pending",
+        "unknown",
+        "conflict"
+      ],
+      "default": "pending",
+      "description": "The leg's settled state \u2014 won/lost/push only when independently derivable or the ticket result conflicts"
+    },
+    "match_status": {
+      "type": "string",
+      "enum": [
+        "external",
+        "exact_match",
+        "high_confidence_match",
+        "possible_match",
+        "no_match"
+      ],
+      "default": "external",
+      "description": "Whether this leg matched a RIDE X prediction \u2014 external legs are research evidence and are NEVER counted as a RIDE X success or failure"
+    },
+    "matched_prediction_ids": {
+      "type": "string",
+      "default": "",
+      "description": "GlobalPredictionLedger row ids this leg matched \u2014 shared evidence, never a fabricated prediction"
+    },
+    "research_only": {
+      "type": "boolean",
+      "default": true,
+      "description": "True = this result was NOT predicted by RIDE X \u2014 market baseline, competition context and odds-band research only, never attributed to a RIDE X model"
+    },
+    "unresolved_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Exact reason the leg could not be independently settled (never a guess)"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this historical observation was recorded"
+    }
+  },
+  "required": [
+    "external_id",
+    "home",
+    "away",
+    "status",
+    "settlement_status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

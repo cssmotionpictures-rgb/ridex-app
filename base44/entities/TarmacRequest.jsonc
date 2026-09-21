@@ -1,0 +1,77 @@
+{
+  "name": "TarmacRequest",
+  "type": "object",
+  "properties": {
+    "artist_stage_name": {
+      "type": "string"
+    },
+    "artist_legal_name": {
+      "type": "string"
+    },
+    "entourage_size": {
+      "type": "number",
+      "default": 0
+    },
+    "arrival_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "arrival_time": {
+      "type": "string"
+    },
+    "carrier_flight": {
+      "type": "string",
+      "description": "Flight number or private jet tail ID"
+    },
+    "routing": {
+      "type": "string",
+      "description": "Departure hub -> arrival hub (e.g. LHR -> LOS Terminal 2)"
+    },
+    "vehicle1_type": {
+      "type": "string"
+    },
+    "vehicle1_plate": {
+      "type": "string"
+    },
+    "vehicle1_driver": {
+      "type": "string"
+    },
+    "vehicle2_type": {
+      "type": "string"
+    },
+    "vehicle2_plate": {
+      "type": "string"
+    },
+    "vehicle2_driver": {
+      "type": "string"
+    },
+    "vehicle3_type": {
+      "type": "string"
+    },
+    "vehicle3_plate": {
+      "type": "string"
+    },
+    "vehicle3_driver": {
+      "type": "string"
+    },
+    "lounge": {
+      "type": "string",
+      "default": "FAAN Presidential VIP Lounge"
+    },
+    "bag_count": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "submitted"
+      ],
+      "default": "draft"
+    }
+  },
+  "required": [
+    "artist_stage_name"
+  ]
+}

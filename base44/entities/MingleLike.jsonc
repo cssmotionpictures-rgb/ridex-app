@@ -1,0 +1,54 @@
+{
+  "name": "MingleLike",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "The user who liked/passed \u2014 RLS enforces this is always the creator's own id"
+    },
+    "target_user_id": {
+      "type": "string",
+      "description": "The profile they reacted to"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "LIKE",
+        "PASS"
+      ],
+      "description": "LIKE = open to matching. A LIKE alone never exposes contact details \u2014 only a MUTUAL like creates a match and unlocks communication"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "user_id",
+    "target_user_id",
+    "action"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "data.target_user_id": "{{user.id}}"
+        }
+      ]
+    },
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

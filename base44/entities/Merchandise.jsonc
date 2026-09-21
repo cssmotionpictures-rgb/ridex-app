@@ -1,0 +1,41 @@
+{
+  "name": "Merchandise",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "seller_id": {
+      "type": "string"
+    },
+    "seller_name": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "stock": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "rejected"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "ChatMessage",
+  "type": "object",
+  "properties": {
+    "ride_id": {
+      "type": "string"
+    },
+    "sender": {
+      "type": "string",
+      "enum": [
+        "customer",
+        "driver"
+      ],
+      "default": "customer"
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "ride_id",
+    "text"
+  ]
+}

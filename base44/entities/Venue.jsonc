@@ -1,0 +1,74 @@
+{
+  "name": "Venue",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Fine Dining",
+        "Casual",
+        "Fast Food",
+        "Sports Bar",
+        "Cocktail Lounge",
+        "Nightclub",
+        "Wine Bar",
+        "Rooftop Bar",
+        "Beach Bar",
+        "Pub & Grill",
+        "Carwash"
+      ],
+      "default": "Casual"
+    },
+    "description": {
+      "type": "string"
+    },
+    "photo_url": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lng": {
+      "type": "number"
+    },
+    "price_level": {
+      "type": "string",
+      "enum": [
+        "$",
+        "$$",
+        "$$$",
+        "$$$$"
+      ],
+      "default": "$$"
+    },
+    "rating": {
+      "type": "number",
+      "default": 4.5
+    },
+    "bookings_count": {
+      "type": "number",
+      "default": 0
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "hidden"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "name": "InfringementCase",
+  "type": "object",
+  "properties": {
+    "track_title": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "infringing_party": {
+      "type": "string"
+    },
+    "infringing_company": {
+      "type": "string"
+    },
+    "infringing_address": {
+      "type": "string"
+    },
+    "event_campaign": {
+      "type": "string",
+      "description": "Venue / event / campaign where the unauthorized use occurred"
+    },
+    "sent_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "settlement_amount": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "sent",
+        "resolved",
+        "escalated"
+      ],
+      "default": "sent"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "track_title",
+    "infringing_party"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "name": "LenderDirectory",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Lender / funding institution name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Official loan-application contact email (stored lowercase)"
+    },
+    "website": {
+      "type": "string",
+      "default": "",
+      "description": "Lender website"
+    },
+    "keywords": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated keywords matched against the applicant's chosen funding source (e.g. 'boi, bank of industry')"
+    },
+    "min_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Minimum loan amount (NGN) this lender handles"
+    },
+    "max_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Maximum loan amount (NGN) \u2014 0 = no upper bound"
+    },
+    "notes": {
+      "type": "string",
+      "default": ""
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Inactive entries are skipped by the automatic fallback"
+    }
+  },
+  "required": [
+    "name",
+    "email"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

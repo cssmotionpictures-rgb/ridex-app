@@ -1,0 +1,127 @@
+{
+  "name": "StudioFeatureBooking",
+  "type": "object",
+  "properties": {
+    "guest_artist_id": {
+      "type": "string"
+    },
+    "guest_artist_name": {
+      "type": "string"
+    },
+    "principal_artist": {
+      "type": "string",
+      "description": "Main artist commissioning the feature"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Label / investor / sponsor entity paying the escrow"
+    },
+    "client_email": {
+      "type": "string"
+    },
+    "song_title": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string"
+    },
+    "bpm": {
+      "type": "string"
+    },
+    "song_key": {
+      "type": "string"
+    },
+    "release_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "net_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Net studio feature fee USD"
+    },
+    "agency_commission": {
+      "type": "number",
+      "default": 0,
+      "description": "20% gross-up agency surcharge USD"
+    },
+    "engineering_surcharge": {
+      "type": "number",
+      "default": 1500
+    },
+    "total": {
+      "type": "number",
+      "default": 0,
+      "description": "Total escrow funding required USD"
+    },
+    "escrow_status": {
+      "type": "string",
+      "enum": [
+        "held",
+        "released",
+        "refunded"
+      ],
+      "default": "held"
+    },
+    "escrow_released_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "split_sheet_signed": {
+      "type": "boolean",
+      "default": false
+    },
+    "stems_delivered": {
+      "type": "boolean",
+      "default": false
+    },
+    "fee_bypassed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Admin waived agency commission + engineering surcharge"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "in_studio",
+        "delivered",
+        "cancelled"
+      ],
+      "default": "confirmed"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "guest_artist_name",
+    "principal_artist",
+    "total"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

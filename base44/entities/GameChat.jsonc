@@ -1,0 +1,41 @@
+{
+  "name": "GameChat",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "character_id": {
+      "type": "number"
+    },
+    "character_name": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "room": {
+      "type": "string",
+      "default": "",
+      "description": "Channel scope \u2014 empty = global arena chat; 'live:<user_id>' = live battle commentary."
+    }
+  },
+  "required": [
+    "message"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

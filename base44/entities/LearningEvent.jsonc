@@ -1,0 +1,224 @@
+{
+  "name": "LearningEvent",
+  "type": "object",
+  "properties": {
+    "event_key": {
+      "type": "string",
+      "description": "Deterministic idempotency key \u2014 learn|<global_prediction_id>. The global id already encodes prediction identity + selection identity (source|model|fixture|market|vN) and an outcome is created once per prediction with an immutable single settlement, so the key IS prediction_id + selection_id + settlement_version. Exactly ONE counted learning event per eligible settled selection; reprocessing the same result never counts it twice"
+    },
+    "global_prediction_id": {
+      "type": "string",
+      "description": "Canonical prediction identity the event learns from"
+    },
+    "prediction_row_id": {
+      "type": "string",
+      "default": "",
+      "description": "GlobalPredictionLedger row id \u2014 the audit path back to the immutable prediction"
+    },
+    "source_section": {
+      "type": "string",
+      "description": "Prediction tab the selection came from (kala, win-raba, monster, banku, kala-drop\u2026)"
+    },
+    "model_version": {
+      "type": "string",
+      "default": "",
+      "description": "Model version that produced the prediction"
+    },
+    "learning_version": {
+      "type": "string",
+      "default": "L-000",
+      "description": "Global learning version active when the prediction was made"
+    },
+    "fixture_id": {
+      "type": "string",
+      "default": ""
+    },
+    "home": {
+      "type": "string",
+      "default": ""
+    },
+    "away": {
+      "type": "string",
+      "default": ""
+    },
+    "league": {
+      "type": "string",
+      "default": ""
+    },
+    "market_key": {
+      "type": "string",
+      "default": ""
+    },
+    "market_label": {
+      "type": "string",
+      "default": ""
+    },
+    "kickoff": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Kickoff when known (empty when the source feed carried no time \u2014 never guessed)"
+    },
+    "predicted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the prediction was permanently recorded (pre-kickoff \u2014 no data leakage)"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the selection was graded from the real result"
+    },
+    "counted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the event was counted into the learning evidence"
+    },
+    "predicted_probability": {
+      "type": "number",
+      "description": "Model probability recorded pre-kickoff (0\u20131)"
+    },
+    "predicted_class": {
+      "type": "string",
+      "default": "",
+      "description": "The exact selection (market key) the model chose"
+    },
+    "confidence": {
+      "type": "number",
+      "default": 0
+    },
+    "kala_score": {
+      "type": "number",
+      "default": 0
+    },
+    "grade": {
+      "type": "string",
+      "default": ""
+    },
+    "market_odds": {
+      "type": "number",
+      "default": 0
+    },
+    "bookmaker": {
+      "type": "string",
+      "default": ""
+    },
+    "fair_odds": {
+      "type": "number",
+      "default": 0
+    },
+    "edge_pct": {
+      "type": "number",
+      "default": 0
+    },
+    "adjusted_edge_pct": {
+      "type": "number",
+      "default": 0
+    },
+    "ev_pct": {
+      "type": "number",
+      "default": 0
+    },
+    "odds_status": {
+      "type": "string",
+      "default": ""
+    },
+    "final_home": {
+      "type": "number",
+      "default": 0
+    },
+    "final_away": {
+      "type": "number",
+      "default": 0
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "won",
+        "lost"
+      ],
+      "description": "Eligible settlement only \u2014 VOID/PUSH/CANCELLED never create a learning event"
+    },
+    "verification_source": {
+      "type": "string",
+      "default": "",
+      "description": "verified_provider | user_supplied | conflict \u2014 where the graded result came from"
+    },
+    "result_source": {
+      "type": "string",
+      "default": ""
+    },
+    "features_json": {
+      "type": "string",
+      "default": "{}",
+      "description": "FROZEN PRE-KICKOFF FEATURE DIGEST \u2014 probability, confidence, agreement, uncertainty, data quality, odds/value metrics, injury/lineup state at prediction time. No post-kickoff information ever enters training"
+    },
+    "forensics_json": {
+      "type": "string",
+      "default": "",
+      "description": "EVIDENCE-BASED FORENSICS \u2014 attribution computed from the frozen pre-kickoff features plus the graded outcome: classification, exact basis, evidence level. When the recorded features cannot attribute a result it stays INSUFFICIENT EVIDENCE, never an invented cause. Enrichment-only on historical rows (filled only when empty); counted training data is never rewritten"
+    },
+    "agreement": {
+      "type": "number",
+      "default": 1
+    },
+    "uncertainty": {
+      "type": "number",
+      "default": 0
+    },
+    "data_quality": {
+      "type": "string",
+      "default": ""
+    },
+    "injury_state": {
+      "type": "string",
+      "default": ""
+    },
+    "lineup_state": {
+      "type": "string",
+      "default": ""
+    },
+    "clv_pct": {
+      "type": "number",
+      "default": 0
+    },
+    "learning_batch": {
+      "type": "string",
+      "default": "",
+      "description": "Training/evaluation batch identifier of the cycle that counted this event"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "counted"
+      ],
+      "default": "counted",
+      "description": "counted \u2014 the event is part of the training/evaluation evidence exactly once"
+    }
+  },
+  "required": [
+    "event_key",
+    "global_prediction_id",
+    "source_section",
+    "outcome",
+    "counted_at",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

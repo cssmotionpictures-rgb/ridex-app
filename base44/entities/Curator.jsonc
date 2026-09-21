@@ -1,0 +1,116 @@
+{
+  "name": "Curator",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "Spotify",
+        "Apple Music",
+        "YouTube Music",
+        "Audiomack",
+        "Boomplay",
+        "SoundCloud",
+        "Deezer",
+        "YouTube",
+        "Netflix",
+        "Amazon Prime Video",
+        "Showmax",
+        "TikTok",
+        "Vevo",
+        "MTV",
+        "Trace",
+        "Soundcity",
+        "Channel O",
+        "FilmOne",
+        "iROKOtv",
+        "SubmitHub",
+        "Groover",
+        "SubmitLink",
+        "Instagram",
+        "Blog",
+        "Web",
+        "Stream",
+        "Everjamz"
+      ],
+      "default": "Spotify"
+    },
+    "curator_type": {
+      "type": "string",
+      "enum": [
+        "music",
+        "movie",
+        "music_video"
+      ],
+      "default": "music"
+    },
+    "auto_approve": {
+      "type": "boolean",
+      "default": false,
+      "description": "RIDE X Boost mod \u2014 submissions to this curator are auto-accepted on payment"
+    },
+    "playlist_url": {
+      "type": "string"
+    },
+    "submission_url": {
+      "type": "string",
+      "description": "Real external submission link on the curator's own platform (Spotify for Artists, SubmitHub, Groover, etc.) so the artist can submit directly for genuine placement."
+    },
+    "playlist_name": {
+      "type": "string"
+    },
+    "follower_count": {
+      "type": "number",
+      "default": 0
+    },
+    "plays": {
+      "type": "number",
+      "default": 0,
+      "description": "Total playlist/channel plays \u2014 surfaced in Auto-Promote selection"
+    },
+    "genres": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "is_free": {
+      "type": "boolean",
+      "default": true
+    },
+    "submission_fee": {
+      "type": "number",
+      "default": 10000,
+      "minimum": 10000
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "suspended"
+      ],
+      "default": "approved"
+    },
+    "rejection_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Auto-Promote rejections \u2014 revokes Boost (auto_approve) on first rejection"
+    },
+    "is_standby": {
+      "type": "boolean",
+      "default": false,
+      "description": "Eligible as a replacement curator in Auto-Promote batches"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

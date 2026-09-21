@@ -1,0 +1,71 @@
+{
+  "name": "RawProviderFeed",
+  "type": "object",
+  "properties": {
+    "provider": {
+      "type": "string",
+      "default": "sportradar",
+      "description": "Provider this raw response came from"
+    },
+    "feed": {
+      "type": "string",
+      "description": "Feed name, e.g. summary, timeline, lineups, season_schedules"
+    },
+    "cache_key": {
+      "type": "string",
+      "description": "Unique lookup key \u2014 provider:feed:entity_id"
+    },
+    "part": {
+      "type": "number",
+      "default": 0,
+      "description": "Chunk index (payloads are split to respect field size limits)"
+    },
+    "total_parts": {
+      "type": "number",
+      "default": 1
+    },
+    "http_status": {
+      "type": "number"
+    },
+    "latency_ms": {
+      "type": "number",
+      "default": 0
+    },
+    "data_hash": {
+      "type": "string",
+      "default": "",
+      "description": "Hash of the full unchunked response \u2014 change detection"
+    },
+    "payload": {
+      "type": "string",
+      "description": "Raw provider response chunk (exact bytes, never edited)"
+    },
+    "fetched_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "cache_key",
+    "feed",
+    "payload"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

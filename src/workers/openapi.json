@@ -1,0 +1,48 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "CRIXCOIN Engine (Read-Only)",
+    "version": "3.0.0",
+    "description": "Diagnostic read-only CRIXCOIN dual-rail engine. Base and Solana health/chain/balance/receipt reads only. There are NO fund-movement, signing, paymaster-submission or wallet-creation endpoints by design — all money movement stays on the Base44 platform backend, and external transfers stay PAUSED. (This file is also served live at GET /openapi.json by the Worker itself.)"
+  },
+  "servers": [{ "url": "https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev", "description": "Your deployed CRIXCOIN engine Worker" }],
+  "paths": {
+    "/openapi.json": { "get": { "summary": "This OpenAPI specification", "responses": { "200": { "description": "The spec JSON" } } } },
+    "/health": { "get": { "summary": "Engine + rail honest status summary", "responses": { "200": { description: "Rail summary (all read-only)" } } } },
+    "/chain/base": { "get": { "summary": "Base Mainnet chain id + latest block (read-only)", "responses": { "200": { description: "Live chain state" } } } },
+    "/chain/solana": { "get": { "summary": "Solana slot + block height (read-only)", "responses": { "200": { description: "Live chain state" } } } },
+    "/crixcoin/deployment": { "get": { "summary": "Contract existence/code check (?address=0x…)", "responses": { "200": { description: "Honest deployment state" } } } },
+    "/crixcoin/balance/{address}": { "get": { "summary": "CRXS balance read (?contract=0x…)", "responses": { "200": { description: "Live balance" }, "409": { description: "No production contract" } } } },
+    "/crixcoin/transaction/{hash}": { "get": { "summary": "Base Mainnet receipt read", "responses": { "200": { description: "Live receipt state" } } } },
+    "/solana/token/{address}": { "get": { "summary": "SPL token accounts read (?mint=…)", "responses": { "200": { description: "Live token accounts" } } } },
+    "/aa-health": {
+      "post": {
+        "summary": "Provider health probes (read-only, live responses only)",
+        "requestBody": { "required": false, "content": { "application/json": { "schema": { type: "object" } } } },
+        "responses": { "200": { "description": "Per-provider honest states with evidence" } }
+      }
+    },
+    "/chain-read": {
+      "post": {
+        "summary": "Whitelisted read-only EVM RPC query on Base Sepolia or Base Mainnet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["method"],
+                "properties": {
+                  "chain": { "type": "string", "enum": ["sepolia", "mainnet"] },
+                  "method": { "type": "string", "description": "One of: eth_chainId, eth_blockNumber, eth_getBalance, eth_getCode, eth_getTransactionCount, eth_getTransactionReceipt, eth_getTransactionByHash, eth_call, eth_estimateGas" },
+                  "params": { "type": "array" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Live RPC result with evidence" }, "403": { "description": "Method not whitelisted" } }
+      }
+    }
+  }
+}

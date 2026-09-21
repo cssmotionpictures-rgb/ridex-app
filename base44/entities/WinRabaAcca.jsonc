@@ -1,0 +1,115 @@
+{
+  "name": "WinRabaAcca",
+  "type": "object",
+  "properties": {
+    "level": {
+      "type": "string",
+      "enum": [
+        "morning",
+        "evening",
+        "fullday",
+        "rollover5"
+      ],
+      "description": "Accumulator level \u2014 morning / evening / full-day for one board day, or rollover5 = the strongest selections ranked globally across all five days"
+    },
+    "date_key": {
+      "type": "string",
+      "description": "Lagos date the acca belongs to (rollover5: the window's Day-1 date)"
+    },
+    "legs_count": {
+      "type": "number",
+      "description": "Number of selections on the ticket"
+    },
+    "combined_odds": {
+      "type": "number",
+      "description": "Product of the legs' prices"
+    },
+    "odds_basis": {
+      "type": "string",
+      "enum": [
+        "real",
+        "model"
+      ],
+      "description": "real = every leg carried a real bookmaker price; model = combined from model fair odds \u2014 always labeled, never presented as bookmaker prices"
+    },
+    "combined_probability": {
+      "type": "number",
+      "description": "Model-estimated combined probability (0\u20131) \u2014 an independent-legs estimate, never a guarantee"
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH"
+      ]
+    },
+    "correlation_note": {
+      "type": "string",
+      "default": "",
+      "description": "Shown when two legs share a team \u2014 simple multiplication is only an approximation then"
+    },
+    "paper_stake": {
+      "type": "number",
+      "default": 1000,
+      "description": "PAPER MODE hypothetical stake (\u20a6) \u2014 WIN RABA never places real bets"
+    },
+    "potential_return": {
+      "type": "number",
+      "description": "Hypothetical paper return (stake \u00d7 combined odds)"
+    },
+    "member_ids": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-joined WinRabaSelection ids of the members at build time"
+    },
+    "legs_json": {
+      "type": "string",
+      "description": "Permanent snapshot of every leg (match, kickoff, market, pick, odds, confidence, probability, edge, data quality) \u2014 never rewritten"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "won",
+        "lost",
+        "void"
+      ],
+      "default": "open",
+      "description": "Won only when every non-void leg won \u2014 a failed acca never rewrites its legs"
+    },
+    "won_legs": {
+      "type": "number",
+      "default": 0
+    },
+    "lost_legs": {
+      "type": "number",
+      "default": 0
+    },
+    "void_legs": {
+      "type": "number",
+      "default": 0
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the accumulator was graded from its legs' real results"
+    }
+  },
+  "required": [
+    "level",
+    "date_key",
+    "legs_count",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

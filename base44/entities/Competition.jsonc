@@ -1,0 +1,76 @@
+{
+  "name": "Competition",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "competition_type": {
+      "type": "string",
+      "enum": [
+        "predict_win",
+        "fan_contest"
+      ],
+      "default": "predict_win"
+    },
+    "theme": {
+      "type": "string",
+      "description": "e.g. 'Week 33 \u2014 Afrobeats Dance Challenge'"
+    },
+    "week_key": {
+      "type": "string",
+      "description": "ISO week key e.g. 2026-W33"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "prize_coins": {
+      "type": "number",
+      "default": 5000
+    },
+    "prize_description": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "string"
+    },
+    "entry_count": {
+      "type": "number",
+      "default": 0
+    },
+    "vote_count": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "voting",
+        "completed",
+        "cancelled"
+      ],
+      "default": "active"
+    },
+    "winner_id": {
+      "type": "string"
+    },
+    "winner_name": {
+      "type": "string"
+    },
+    "auto_created": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "title",
+    "competition_type"
+  ]
+}

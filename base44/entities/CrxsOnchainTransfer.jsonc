@@ -1,0 +1,75 @@
+{
+  "name": "CrxsOnchainTransfer",
+  "type": "object",
+  "properties": {
+    "event_key": {
+      "type": "string",
+      "description": "Deterministic identity \u2014 crxs-transfer|<tx_hash>|<log_index>. Written ONLY by the server-side crxs-transfer-verify function after it independently verifies the real Transfer event against Base Sepolia. Idempotent: the same on-chain transfer is never indexed twice, and a value is never typed in manually."
+    },
+    "contract_address": {
+      "type": "string",
+      "description": "REAL CRXS contract address this transfer belongs to \u2014 always taken from the recorded verified deployment, never from a client submission. The zero address and placeholders are refused."
+    },
+    "tx_hash": {
+      "type": "string",
+      "description": "ACTUAL transaction hash of the owner-signed transfer \u2014 read from the chain receipt"
+    },
+    "block_number": {
+      "type": "number",
+      "description": "Actual confirmation block of the transfer"
+    },
+    "from_address": {
+      "type": "string",
+      "description": "Transfer sender \u2014 verified to be the approved deployment wallet for indexed testnet transfers"
+    },
+    "to_address": {
+      "type": "string",
+      "description": "Transfer recipient \u2014 verified non-zero and confirmed via on-chain balanceOf()"
+    },
+    "amount_raw": {
+      "type": "string",
+      "description": "Raw token units of the transfer, decoded from the real Transfer event data"
+    },
+    "amount_display": {
+      "type": "string",
+      "default": "",
+      "description": "Human-readable amount at 18 decimals (e.g. '1 CRXS')"
+    },
+    "verified_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side verification evidence \u2014 each check with pass/value, from real RPC responses only"
+    },
+    "indexed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the verified transfer was indexed"
+    }
+  },
+  "required": [
+    "event_key",
+    "contract_address",
+    "tx_hash",
+    "from_address",
+    "to_address",
+    "amount_raw"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

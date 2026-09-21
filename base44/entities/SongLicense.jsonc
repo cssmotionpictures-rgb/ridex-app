@@ -1,0 +1,62 @@
+{
+  "name": "SongLicense",
+  "type": "object",
+  "properties": {
+    "artist_name": {
+      "type": "string"
+    },
+    "song_title": {
+      "type": "string"
+    },
+    "licensee_name": {
+      "type": "string"
+    },
+    "licensee_email": {
+      "type": "string"
+    },
+    "license_type": {
+      "type": "string",
+      "enum": [
+        "sync",
+        "mechanical",
+        "exclusive"
+      ],
+      "default": "sync"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "commission": {
+      "type": "number",
+      "default": 0.15
+    },
+    "usage_scope": {
+      "type": "string"
+    },
+    "contract_url": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "payment_reference": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "rejected",
+        "completed"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "artist_name",
+    "song_title",
+    "license_type"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "SongPremiere",
+  "type": "object",
+  "properties": {
+    "artist_name": {
+      "type": "string"
+    },
+    "song_title": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "premiere_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "stream_url": {
+      "type": "string"
+    },
+    "cover_url": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "scheduled",
+        "live",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "artist_name",
+    "song_title"
+  ]
+}

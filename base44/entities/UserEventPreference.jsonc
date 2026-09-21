@@ -1,0 +1,39 @@
+{
+  "name": "UserEventPreference",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "preferred_genres": {
+      "type": "string",
+      "description": "Comma-separated"
+    },
+    "preferred_artists": {
+      "type": "string",
+      "description": "Comma-separated"
+    },
+    "city": {
+      "type": "string"
+    },
+    "event_types": {
+      "type": "string",
+      "description": "Comma-separated: concert,festival,live_stream,meet_greet,album_launch"
+    },
+    "notify_in_app": {
+      "type": "boolean",
+      "default": true
+    },
+    "notify_email": {
+      "type": "boolean",
+      "default": true
+    },
+    "notify_sms": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "user_id"
+  ]
+}

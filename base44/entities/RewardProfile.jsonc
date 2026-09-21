@@ -1,0 +1,54 @@
+{
+  "name": "RewardProfile",
+  "type": "object",
+  "properties": {
+    "points": {
+      "type": "number",
+      "default": 0
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "New User",
+        "Bronze",
+        "Silver",
+        "Gold",
+        "Platinum",
+        "Diamond"
+      ],
+      "default": "New User"
+    },
+    "streak_days": {
+      "type": "number",
+      "default": 0
+    },
+    "last_check_in": {
+      "type": "string"
+    },
+    "badges": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "weekly_points": {
+      "type": "number",
+      "default": 0
+    },
+    "week_key": {
+      "type": "string"
+    },
+    "last_weekly_claim": {
+      "type": "string"
+    },
+    "total_redeemed": {
+      "type": "number",
+      "default": 0
+    },
+    "owner_name": {
+      "type": "string"
+    }
+  },
+  "required": []
+}

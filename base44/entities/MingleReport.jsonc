@@ -1,0 +1,76 @@
+{
+  "name": "MingleReport",
+  "type": "object",
+  "properties": {
+    "reporter_id": {
+      "type": "string",
+      "description": "Reporting user \u2014 RLS enforces the creator's own id"
+    },
+    "reported_id": {
+      "type": "string",
+      "description": "The reported user"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "HARASSMENT",
+        "SCAM",
+        "IMPERSONATION",
+        "SEXUAL_HARASSMENT",
+        "THREATS",
+        "UNWANTED_CONTACT",
+        "INAPPROPRIATE_CONTENT",
+        "OTHER"
+      ]
+    },
+    "context": {
+      "type": "string",
+      "default": "",
+      "description": "Where it happened (chat, voice call, video call, profile, discovery)"
+    },
+    "detail": {
+      "type": "string",
+      "default": "",
+      "description": "Reporter's own description"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "OPEN",
+        "REVIEWED",
+        "ACTION_TAKEN"
+      ],
+      "default": "OPEN",
+      "description": "Only admins see and work reports; reporters can never read other users' reports"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "reporter_id",
+    "reported_id",
+    "category"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "data.reporter_id": "{{user.id}}"
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

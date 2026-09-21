@@ -1,0 +1,37 @@
+{
+  "name": "RestaurantBooking",
+  "type": "object",
+  "properties": {
+    "venue_id": {
+      "type": "string"
+    },
+    "venue_name": {
+      "type": "string"
+    },
+    "booking_date": {
+      "type": "string"
+    },
+    "number_of_guests": {
+      "type": "number",
+      "default": 2
+    },
+    "special_requests": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "seated",
+        "completed",
+        "cancelled"
+      ],
+      "default": "confirmed"
+    }
+  },
+  "required": [
+    "venue_name",
+    "booking_date"
+  ]
+}

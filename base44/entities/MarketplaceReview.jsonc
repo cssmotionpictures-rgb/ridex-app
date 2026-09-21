@@ -1,0 +1,43 @@
+{
+  "name": "MarketplaceReview",
+  "type": "object",
+  "properties": {
+    "order_id": {
+      "type": "string"
+    },
+    "listing_id": {
+      "type": "string"
+    },
+    "reviewer_id": {
+      "type": "string"
+    },
+    "reviewer_name": {
+      "type": "string"
+    },
+    "reviewee_id": {
+      "type": "string"
+    },
+    "reviewee_role": {
+      "type": "string",
+      "enum": [
+        "buyer",
+        "seller"
+      ],
+      "default": "seller"
+    },
+    "rating": {
+      "type": "number",
+      "default": 5
+    },
+    "review": {
+      "type": "string"
+    },
+    "complaint": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "rating"
+  ]
+}

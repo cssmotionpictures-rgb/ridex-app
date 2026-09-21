@@ -1,0 +1,72 @@
+{
+  "name": "SplitSheet",
+  "type": "object",
+  "properties": {
+    "song_title": {
+      "type": "string"
+    },
+    "studio_location": {
+      "type": "string"
+    },
+    "isrc_code": {
+      "type": "string"
+    },
+    "upc_code": {
+      "type": "string"
+    },
+    "writers": {
+      "type": "string",
+      "description": "JSON array of {name, role, pro, split}"
+    },
+    "filed_with_mcsn": {
+      "type": "boolean",
+      "default": true,
+      "description": "Auto-filed with MCSN on submission"
+    },
+    "signed_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "signed",
+        "filed"
+      ],
+      "default": "signed"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "song_title",
+    "writers"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

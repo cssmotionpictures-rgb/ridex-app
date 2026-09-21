@@ -1,0 +1,23 @@
+{
+  "name": "SponsorRule",
+  "type": "object",
+  "properties": {
+    "min_budget": {
+      "type": "number",
+      "default": 5000
+    },
+    "min_price": {
+      "type": "number",
+      "default": 25
+    },
+    "allowed_industries": {
+      "type": "string",
+      "default": "food, fashion, events, tech, music, sports"
+    },
+    "auto_approve": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,71 @@
+{
+  "name": "OddsSnapshot",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Provider event id (The Odds API) the quote belongs to"
+    },
+    "sport_key": {
+      "type": "string",
+      "description": "Provider competition key, e.g. soccer_spain_la_liga"
+    },
+    "home_team": {
+      "type": "string"
+    },
+    "away_team": {
+      "type": "string"
+    },
+    "market": {
+      "type": "string",
+      "description": "h2h | totals | btts"
+    },
+    "selection": {
+      "type": "string",
+      "description": "1 / X / 2, 'Over 2.5' / 'Under 2.5', Yes / No"
+    },
+    "bookmaker": {
+      "type": "string",
+      "description": "The bookmaker that actually quoted this price"
+    },
+    "decimal_odds": {
+      "type": "number",
+      "description": "The real quoted decimal price \u2014 never a model number"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the bookmaker quoted this price (provider-supplied)"
+    }
+  },
+  "required": [
+    "event_id",
+    "market",
+    "selection",
+    "bookmaker",
+    "decimal_odds",
+    "timestamp"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

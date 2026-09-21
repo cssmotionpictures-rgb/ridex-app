@@ -1,0 +1,47 @@
+{
+  "name": "ForumThread",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "live_match",
+        "general"
+      ],
+      "default": "general"
+    },
+    "match_id": {
+      "type": "string"
+    },
+    "match_label": {
+      "type": "string"
+    },
+    "author_id": {
+      "type": "string"
+    },
+    "author_name": {
+      "type": "string"
+    },
+    "author_club_id": {
+      "type": "string"
+    },
+    "author_club_name": {
+      "type": "string"
+    },
+    "reply_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "title",
+    "body",
+    "author_id"
+  ]
+}

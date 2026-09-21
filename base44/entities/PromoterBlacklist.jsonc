@@ -1,0 +1,35 @@
+{
+  "name": "PromoterBlacklist",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "description": "Promoter / event company name"
+    },
+    "contact_name": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Default classification (payment default, rider safety failure, technical defiance, etc.)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "permanent_block",
+        "conditional_restructure"
+      ],
+      "default": "permanent_block"
+    },
+    "log_id": {
+      "type": "string"
+    },
+    "added_by_name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_name",
+    "reason"
+  ]
+}

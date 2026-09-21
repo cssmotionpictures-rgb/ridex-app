@@ -1,0 +1,13 @@
+{
+  "name": "accumulator-slip",
+  "entry": "entry.ts",
+  "automations": [
+    {
+      "type": "scheduled",
+      "name": "morning_accumulator_rebuild",
+      "schedule_mode": "recurring",
+      "schedule_type": "cron",
+      "cron_expression": "0 10 * * ?"
+    }
+  ]
+}

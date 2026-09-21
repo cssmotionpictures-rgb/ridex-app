@@ -1,0 +1,54 @@
+{
+  "name": "Series",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "poster_url": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string",
+      "enum": [
+        "Action",
+        "Drama",
+        "Comedy",
+        "Horror",
+        "Romance",
+        "Sci-Fi",
+        "Documentary",
+        "Animation",
+        "Thriller",
+        "Adventure"
+      ],
+      "default": "Drama"
+    },
+    "total_seasons": {
+      "type": "number",
+      "default": 1
+    },
+    "trailer_url": {
+      "type": "string"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "published",
+        "pending",
+        "hidden"
+      ],
+      "default": "published"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

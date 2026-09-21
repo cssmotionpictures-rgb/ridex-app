@@ -1,0 +1,61 @@
+{
+  "name": "EventSubmission",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "artist_lineup": {
+      "type": "string"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "venue": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "genres": {
+      "type": "string"
+    },
+    "ticket_regular_price": {
+      "type": "number",
+      "default": 1500
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "user",
+        "promoter"
+      ],
+      "default": "user"
+    },
+    "submitter_id": {
+      "type": "string"
+    },
+    "submitter_name": {
+      "type": "string"
+    },
+    "submitter_email": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

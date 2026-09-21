@@ -1,0 +1,65 @@
+{
+  "name": "SrProbeResult",
+  "type": "object",
+  "properties": {
+    "suite": {
+      "type": "string",
+      "default": "entitlements",
+      "description": "Probe suite this row belongs to"
+    },
+    "feed": {
+      "type": "string",
+      "description": "Feed / endpoint tested"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "CONNECTED",
+        "NOT_SUBSCRIBED",
+        "NOT_CONNECTED",
+        "AUTH_ERROR",
+        "RATE_LIMITED",
+        "TIMEOUT",
+        "UNAVAILABLE"
+      ]
+    },
+    "http_status": {
+      "type": "number"
+    },
+    "latency_ms": {
+      "type": "number",
+      "default": 0
+    },
+    "note": {
+      "type": "string",
+      "default": ""
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "suite",
+    "feed",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

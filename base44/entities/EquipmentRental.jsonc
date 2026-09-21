@@ -1,0 +1,89 @@
+{
+  "name": "EquipmentRental",
+  "type": "object",
+  "properties": {
+    "machine_category": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "daily_rate": {
+      "type": "number"
+    },
+    "rental_period": {
+      "type": "string",
+      "enum": [
+        "daily",
+        "weekly",
+        "monthly"
+      ],
+      "default": "daily"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "days": {
+      "type": "number"
+    },
+    "with_operator": {
+      "type": "boolean",
+      "default": false
+    },
+    "pickup_address": {
+      "type": "string",
+      "description": "Where the caterpillar is loaded onto the lowbed/flatbed"
+    },
+    "drop_address": {
+      "type": "string",
+      "description": "Delivery site where the caterpillar is dropped for use"
+    },
+    "delivery_km": {
+      "type": "number",
+      "default": 0
+    },
+    "delivery_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Lowbed/flatbed transport fee, charged separately from the hire fee"
+    },
+    "customer_phone": {
+      "type": "string",
+      "description": "Client phone number for follow-up after booking"
+    },
+    "site_address": {
+      "type": "string"
+    },
+    "total_amount": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "active",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "unpaid",
+        "paid",
+        "refunded"
+      ],
+      "default": "unpaid"
+    }
+  },
+  "required": [
+    "model"
+  ]
+}

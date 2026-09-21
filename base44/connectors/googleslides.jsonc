@@ -1,0 +1,7 @@
+{
+  "type": "googleslides",
+  "scopes": [
+    "https://www.googleapis.com/auth/presentations",
+    "email"
+  ]
+}

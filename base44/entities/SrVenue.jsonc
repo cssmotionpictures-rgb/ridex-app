@@ -1,0 +1,56 @@
+{
+  "name": "SrVenue",
+  "type": "object",
+  "properties": {
+    "venue_id": {
+      "type": "string",
+      "description": "Sportradar sr:venue id \u2014 primary key, one row per venue"
+    },
+    "name": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "capacity": {
+      "type": "number",
+      "description": "Provider-supplied capacity \u2014 null when the provider did not return it"
+    },
+    "coordinates": {
+      "type": "string",
+      "description": "JSON of the provider's map_coordinates \u2014 empty when absent"
+    },
+    "data_as_of": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "venue_id",
+    "name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

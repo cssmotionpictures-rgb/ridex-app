@@ -1,0 +1,43 @@
+{
+  "name": "Podcast",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "host_name": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "cover_url": {
+      "type": "string"
+    },
+    "feed_url": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "published",
+        "rejected"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

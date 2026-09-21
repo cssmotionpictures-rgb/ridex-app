@@ -1,0 +1,81 @@
+{
+  "name": "CrixLedgerEntry",
+  "type": "object",
+  "properties": {
+    "entry_key": {
+      "type": "string",
+      "description": "Deterministic entry identity \u2014 <crix_id>|<D1/C1/\u2026>. One entry is never rewritten or deleted; corrections are new reversing entries"
+    },
+    "crix_id": {
+      "type": "string",
+      "description": "The CrixTransaction this entry belongs to"
+    },
+    "pair_key": {
+      "type": "string",
+      "description": "Double-entry pair \u2014 the sum of debits in a pair always equals the sum of credits, so money is never created or destroyed silently"
+    },
+    "account": {
+      "type": "string",
+      "description": "Ledger account \u2014 user:<id>:<currency> for customer wallets, revenue:fees:<currency> for Crix fee revenue"
+    },
+    "user_id": {
+      "type": "string",
+      "default": "",
+      "description": "Owning user for RLS (empty for house accounts like fee revenue \u2014 only admins ever see those)"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "debit",
+        "credit"
+      ],
+      "description": "Debit (money leaves the account) or credit (money enters)"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Entry amount (positive number \u2014 direction carries the sign)"
+    },
+    "memo": {
+      "type": "string",
+      "default": "",
+      "description": "Human-readable movement description for statements"
+    }
+  },
+  "required": [
+    "entry_key",
+    "crix_id",
+    "pair_key",
+    "account",
+    "direction",
+    "amount"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

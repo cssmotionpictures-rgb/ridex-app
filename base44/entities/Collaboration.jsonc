@@ -1,0 +1,62 @@
+{
+  "name": "Collaboration",
+  "type": "object",
+  "properties": {
+    "artist_name": {
+      "type": "string"
+    },
+    "artist_id": {
+      "type": "string"
+    },
+    "provider_name": {
+      "type": "string"
+    },
+    "provider_id": {
+      "type": "string"
+    },
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "Producer",
+        "Singer",
+        "Mixer",
+        "Videographer",
+        "Songwriter"
+      ],
+      "default": "Producer"
+    },
+    "description": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "commission": {
+      "type": "number",
+      "default": 0.15
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "payment_reference": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "booked",
+        "completed",
+        "cancelled"
+      ],
+      "default": "open"
+    }
+  },
+  "required": [
+    "artist_name",
+    "service_type",
+    "price"
+  ]
+}

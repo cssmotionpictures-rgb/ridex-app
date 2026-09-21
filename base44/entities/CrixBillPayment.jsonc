@@ -1,0 +1,155 @@
+{
+  "name": "CrixBillPayment",
+  "type": "object",
+  "properties": {
+    "bill_key": {
+      "type": "string",
+      "description": "Client-supplied idempotency key \u2014 the SAME key NEVER pays twice: a retry returns the original bill record instead of debiting the wallet or calling the biller again"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Paying user \u2014 must own the Naira wallet that was debited"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "AIRTIME",
+        "MOBILEDATA",
+        "CABLEBILLS",
+        "INTSERVICE",
+        "UTILITYBILLS",
+        "TOLLING",
+        "EDUCATION",
+        "RELIGIOUS",
+        "TAX",
+        "BETTING"
+      ],
+      "description": "Bill category \u2014 derived SERVER-SIDE from the live biller catalogue at pay time, never trusted from the client. BETTING covers betting account funding top-ups"
+    },
+    "biller_name": {
+      "type": "string",
+      "description": "Exact package/biller label read from the live catalogue at pay time"
+    },
+    "biller_code": {
+      "type": "string",
+      "description": "Biller code from the live catalogue response"
+    },
+    "item_code": {
+      "type": "string",
+      "description": "Package item code from the live catalogue response"
+    },
+    "customer_reference": {
+      "type": "string",
+      "description": "The customer identifier being topped up \u2014 phone number, smartcard, meter, LCC or account number"
+    },
+    "customer_name": {
+      "type": "string",
+      "default": "",
+      "description": "Name returned by the biller's live customer validation, when one was performed"
+    },
+    "amount_local": {
+      "type": "number",
+      "default": 0,
+      "description": "Exact amount in the bill's own currency as charged by the biller (equals amount_ngn for Naira bills)"
+    },
+    "local_currency": {
+      "type": "string",
+      "default": "NGN",
+      "description": "The bill's own currency \u2014 NGN, GHS, KES, UGX or ZMW, from the live catalogue and the served country"
+    },
+    "fx_rate": {
+      "type": "number",
+      "default": 0,
+      "description": "LIVE exchange rate used to price the bill in Naira (1 = Naira bill) \u2014 read from the live rates endpoint at pay time, never typed or cached"
+    },
+    "amount_ngn": {
+      "type": "number",
+      "description": "Exact Naira value paid for the bill (before the Crix fee), computed at the live rate at pay time"
+    },
+    "fee_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Crix fee charged at execution \u2014 computed by the central fee engine from the active fee rule, never hard-coded"
+    },
+    "total_debit": {
+      "type": "number",
+      "default": 0,
+      "description": "Total debited from the Naira wallet (Naira amount + fee)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "created",
+        "paid",
+        "failed",
+        "refunded",
+        "unknown"
+      ],
+      "default": "created",
+      "description": "Honest state machine \u2014 paid only after the biller's live success response; refunded after a definitive refusal or a provider-confirmed return; unknown = the biller's answer was lost or is still processing (resolved via the live transaction status endpoint and signed webhooks \u2014 never blindly refunded or re-sent)"
+    },
+    "provider_ref": {
+      "type": "string",
+      "default": "",
+      "description": "The biller network's transaction reference from its live response"
+    },
+    "ledger_pair": {
+      "type": "string",
+      "default": "",
+      "description": "Double-entry pair key in CrixLedgerEntry this payment balanced through \u2014 every debit equals credits"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real refusal reason from the biller \u2014 kept verbatim, never overwritten silently"
+    },
+    "timeline_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Immutable step history \u2014 requested, validated, reserved, paid/refunded \u2014 with timestamps"
+    },
+    "evidence_json": {
+      "type": "string",
+      "default": "[]",
+      "description": "Server-side evidence trail \u2014 live catalogue read, live FX rate, provider response, ledger writes \u2014 from real responses only"
+    }
+  },
+  "required": [
+    "bill_key",
+    "user_id",
+    "category",
+    "biller_name",
+    "customer_reference",
+    "amount_ngn",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

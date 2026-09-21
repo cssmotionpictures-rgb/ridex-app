@@ -1,0 +1,135 @@
+{
+  "name": "MingleProfile",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Owning app user \u2014 one Mingle profile per user. Server RLS enforces this is always the creator's own id; a client can never create or edit another person's profile"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Chosen display name \u2014 never the account email or phone"
+    },
+    "age": {
+      "type": "number",
+      "description": "Stated adult age. ADULTS ONLY \u2014 the engine refuses to build a profile under 18 and never shows minors in discovery"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female",
+        "other"
+      ]
+    },
+    "seeking": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female",
+        "everyone"
+      ],
+      "description": "Who this user is open to meeting \u2014 proximity + gender alone NEVER creates a match"
+    },
+    "min_age": {
+      "type": "number",
+      "default": 18,
+      "description": "Preferred minimum age of people shown"
+    },
+    "max_age": {
+      "type": "number",
+      "default": 60,
+      "description": "Preferred maximum age of people shown"
+    },
+    "interests": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated interests \u2014 shared interests raise match strength, never gate it alone"
+    },
+    "goal": {
+      "type": "string",
+      "default": "",
+      "description": "What they're looking for (friends, dating, networking\u2026)"
+    },
+    "bio": {
+      "type": "string",
+      "default": ""
+    },
+    "photo_url": {
+      "type": "string",
+      "default": "",
+      "description": "Public photo file URL \u2014 optional"
+    },
+    "area_label": {
+      "type": "string",
+      "default": "",
+      "description": "SELF-ENTERED broad area text only (e.g. 'Lagos Island'). The profile NEVER stores exact coordinates, home address, or live GPS"
+    },
+    "discovery_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "When false the user is excluded from Nearby discovery and receives no proximity alerts"
+    },
+    "show_online_status": {
+      "type": "boolean",
+      "default": true,
+      "description": "When false no online/recently-active status is shown to others (privacy is the default-friendly option)"
+    },
+    "nearby_consent_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "Timestamp of the explicit 'allow nearby discovery' consent \u2014 empty means proximity discovery stays off"
+    },
+    "call_consent_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": "",
+      "description": "Timestamp of the explicit call-privacy consent \u2014 voice/video calls cannot start before it"
+    },
+    "premium": {
+      "type": "boolean",
+      "default": false,
+      "description": "MINGLE PLUS \u2014 expanded 25km discovery range and premium visibility. Revenue tracked separately from ride fares"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "deleted"
+      ],
+      "default": "active",
+      "description": "paused = instantly hidden from discovery, alerts and recommendations while existing matches are preserved \u00b7 deleted = removed from discovery immediately"
+    }
+  },
+  "required": [
+    "user_id",
+    "display_name",
+    "age",
+    "gender",
+    "seeking",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "name": "Movie",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string",
+      "enum": [
+        "Action",
+        "Drama",
+        "Comedy",
+        "Horror",
+        "Romance",
+        "Sci-Fi",
+        "Documentary",
+        "Animation",
+        "Thriller",
+        "Adventure"
+      ],
+      "default": "Drama"
+    },
+    "poster_url": {
+      "type": "string"
+    },
+    "video_url": {
+      "type": "string"
+    },
+    "trailer_url": {
+      "type": "string"
+    },
+    "duration_minutes": {
+      "type": "number"
+    },
+    "release_year": {
+      "type": "number"
+    },
+    "director": {
+      "type": "string"
+    },
+    "cast": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number",
+      "default": 0
+    },
+    "view_count": {
+      "type": "number",
+      "default": 0
+    },
+    "price": {
+      "type": "number",
+      "default": 500
+    },
+    "is_free": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_ad_supported": {
+      "type": "boolean",
+      "default": true
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "series_id": {
+      "type": "string"
+    },
+    "season_number": {
+      "type": "number",
+      "default": 1
+    },
+    "episode_number": {
+      "type": "number",
+      "default": 1
+    },
+    "episode_title": {
+      "type": "string"
+    },
+    "preview_seconds": {
+      "type": "number",
+      "default": 45
+    },
+    "subtitles_en": {
+      "type": "string"
+    },
+    "subtitles_status": {
+      "type": "string",
+      "enum": [
+        "none",
+        "processing",
+        "ready",
+        "failed"
+      ],
+      "default": "none"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "published",
+        "rejected"
+      ],
+      "default": "published"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

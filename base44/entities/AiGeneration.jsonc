@@ -1,0 +1,47 @@
+{
+  "name": "AiGeneration",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "prompt": {
+      "type": "string"
+    },
+    "generation_type": {
+      "type": "string",
+      "enum": [
+        "lyrics",
+        "melody",
+        "song"
+      ],
+      "default": "lyrics"
+    },
+    "result_url": {
+      "type": "string"
+    },
+    "result_text": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "failed"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "generation_type",
+    "prompt"
+  ]
+}

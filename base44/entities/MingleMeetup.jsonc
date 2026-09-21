@@ -1,0 +1,103 @@
+{
+  "name": "MingleMeetup",
+  "type": "object",
+  "properties": {
+    "match_id": {
+      "type": "string",
+      "description": "The match this meetup belongs to"
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "The two matched user ids \u2014 RLS anchor, only participants can see or respond"
+    },
+    "proposer_id": {
+      "type": "string",
+      "description": "Who suggested the venue"
+    },
+    "venue_name": {
+      "type": "string",
+      "description": "The suggested PUBLIC venue (caf\u00e9, restaurant, mall, park, event\u2026)"
+    },
+    "venue_type": {
+      "type": "string",
+      "enum": [
+        "cafe",
+        "restaurant",
+        "mall",
+        "park",
+        "event",
+        "public_venue"
+      ],
+      "default": "cafe"
+    },
+    "area_label": {
+      "type": "string",
+      "default": "",
+      "description": "Broad area of the venue. Only the agreed meeting venue is ever shared \u2014 never anyone's home or live location"
+    },
+    "note": {
+      "type": "string",
+      "default": ""
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PROPOSED",
+        "CONFIRMED",
+        "CANCELLED"
+      ],
+      "default": "PROPOSED",
+      "description": "CONFIRMED only after BOTH users agree \u2014 then GET A RIDEX becomes available"
+    },
+    "proposed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "responded_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": ""
+    }
+  },
+  "required": [
+    "match_id",
+    "members",
+    "proposer_id",
+    "venue_name",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "data.members": "{{user.id}}"
+    },
+    "create": {
+      "$and": [
+        {
+          "data.proposer_id": "{{user.id}}"
+        },
+        {
+          "data.members": {
+            "$in": [
+              "{{user.id}}"
+            ]
+          }
+        }
+      ]
+    },
+    "update": {
+      "data.members": {
+        "$in": [
+          "{{user.id}}"
+        ]
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

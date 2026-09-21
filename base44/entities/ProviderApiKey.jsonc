@@ -1,0 +1,45 @@
+{
+  "name": "ProviderApiKey",
+  "type": "object",
+  "properties": {
+    "provider": {
+      "type": "string",
+      "description": "Provider key this credential belongs to (e.g. 'sportradar')"
+    },
+    "api_key": {
+      "type": "string",
+      "description": "The provider API key / token \u2014 stored for server-side provider calls, always masked in the UI"
+    },
+    "updated_by": {
+      "type": "string",
+      "default": "",
+      "description": "Email of the admin who last saved this key"
+    }
+  },
+  "required": [
+    "provider",
+    "api_key"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "name": "SrBackfillLog",
+  "type": "object",
+  "properties": {
+    "day": {
+      "type": "string",
+      "description": "Backfilled schedule date (YYYY-MM-DD) \u2014 one row per day"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "done",
+        "failed"
+      ],
+      "description": "done = the day's archive is ingested (even if 0 matches played); failed = provider unavailable that run, retried next run"
+    },
+    "matches_found": {
+      "type": "number",
+      "default": 0,
+      "description": "Ended matches the provider had for this day"
+    },
+    "ingested": {
+      "type": "number",
+      "default": 0,
+      "description": "Matches actually stored/refreshed in SrMatchResult this run"
+    },
+    "skipped": {
+      "type": "number",
+      "default": 0,
+      "description": "Matches skipped \u2014 provider summary unavailable"
+    },
+    "players_added": {
+      "type": "number",
+      "default": 0,
+      "description": "New players normalized from lineups this run (0 unless lineups were requested)"
+    },
+    "venues_added": {
+      "type": "number",
+      "default": 0,
+      "description": "New venues normalized from summaries this run"
+    },
+    "ran_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "day",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

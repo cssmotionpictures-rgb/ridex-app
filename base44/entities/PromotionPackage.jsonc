@@ -1,0 +1,56 @@
+{
+  "name": "PromotionPackage",
+  "type": "object",
+  "properties": {
+    "artist_name": {
+      "type": "string"
+    },
+    "song_title": {
+      "type": "string"
+    },
+    "song_url": {
+      "type": "string"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "basic",
+        "premium",
+        "ultimate"
+      ],
+      "default": "basic"
+    },
+    "price": {
+      "type": "number"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "payment_reference": {
+      "type": "string"
+    },
+    "features_included": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "artist_name",
+    "tier"
+  ]
+}

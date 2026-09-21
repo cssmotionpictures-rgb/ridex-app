@@ -1,0 +1,85 @@
+{
+  "name": "CuratorSubmission",
+  "type": "object",
+  "properties": {
+    "curator_id": {
+      "type": "string"
+    },
+    "curator_name": {
+      "type": "string"
+    },
+    "artist_name": {
+      "type": "string"
+    },
+    "song_title": {
+      "type": "string"
+    },
+    "audio_url": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string"
+    },
+    "submitted_by_id": {
+      "type": "string"
+    },
+    "submitted_by_name": {
+      "type": "string"
+    },
+    "fee_paid": {
+      "type": "number",
+      "default": 0
+    },
+    "curator_review": {
+      "type": "string"
+    },
+    "curator_reply": {
+      "type": "string",
+      "description": "Out-of-band reply / placement confirmation logged manually when a curator responds outside the app."
+    },
+    "replied_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the logged curator reply was recorded"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "promote_batch_id": {
+      "type": "string",
+      "description": "Groups the 60 submissions created by one Auto-Promote payment"
+    },
+    "auto_approve_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When a pending Auto-Promote submission auto-approves if not rejected"
+    },
+    "match_score": {
+      "type": "number",
+      "default": 0
+    },
+    "track_bpm": {
+      "type": "number",
+      "default": 0
+    },
+    "track_key": {
+      "type": "string"
+    },
+    "is_standby": {
+      "type": "boolean",
+      "default": false,
+      "description": "Replacement curator assigned after a rejection"
+    }
+  },
+  "required": [
+    "curator_id",
+    "artist_name",
+    "song_title"
+  ]
+}

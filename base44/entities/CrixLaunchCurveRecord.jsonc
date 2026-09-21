@@ -1,0 +1,124 @@
+{
+  "name": "CrixLaunchCurveRecord",
+  "type": "object",
+  "properties": {
+    "registry_key": {
+      "type": "string",
+      "description": "Registry identity \u2014 'crxs-curve-deployment'. Single row holding the REAL owner-signed bonding-curve launch record for the EXISTING verified CRXS token. No new token is created; the curve address, hashes and states are only written after the owner personally signed the transactions in MetaMask and the chain confirmed them \u2014 never typed in, never fabricated."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NOT_DEPLOYED",
+        "DEPLOYED",
+        "FUNDED",
+        "GRADUATED",
+        "MIGRATED",
+        "FAILED"
+      ],
+      "default": "NOT_DEPLOYED",
+      "description": "Honest state machine \u2014 DEPLOYED = the owner signed the curve deployment and Base Mainnet confirmed it \u00b7 FUNDED = the owner approved and transferred real CRXS into the curve \u00b7 GRADUATED = the ETH reserve reached the threshold and curve trading closed \u00b7 MIGRATED = reserve + remaining CRXS moved to a DEX pool \u00b7 FAILED = a signed transaction reverted \u2014 the real reason is kept"
+    },
+    "token_address": {
+      "type": "string",
+      "default": "0xb7a10024941f5286d9686b0bb8ebf6cb88c7453f",
+      "description": "The EXISTING verified CRXS token the curve sells \u2014 never replaced by a third-party launchpad token"
+    },
+    "curve_address": {
+      "type": "string",
+      "default": "",
+      "description": "REAL curve contract address from the owner-signed deployment receipt \u2014 empty until the chain confirmed it"
+    },
+    "deployer": {
+      "type": "string",
+      "default": "",
+      "description": "Wallet that signed the deployment (public address only \u2014 the private key never touches this app)"
+    },
+    "deployment_tx_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL Base Mainnet transaction hash of the curve deployment \u2014 empty until real"
+    },
+    "block_number": {
+      "type": "number",
+      "default": 0
+    },
+    "deployed_at": {
+      "type": "string",
+      "format": "date-time",
+      "default": ""
+    },
+    "virtual_eth_offset_wei": {
+      "type": "string",
+      "default": "1000000000000000000",
+      "description": "Virtual ETH offset (default 1.0 ETH) \u2014 sets the near-zero starting price of the curve while keeping the first buyer's share small enough to defeat sniper bots"
+    },
+    "graduation_threshold_wei": {
+      "type": "string",
+      "default": "5000000000000000000",
+      "description": "ETH reserve (default 5 ETH) at which the curve closes and trading graduates to a DEX"
+    },
+    "buy_fee_bps": {
+      "type": "number",
+      "default": 100,
+      "description": "Buy fee in basis points, fixed at deployment, hard-capped at 5% by the contract"
+    },
+    "sell_fee_bps": {
+      "type": "number",
+      "default": 100,
+      "description": "Sell fee in basis points, fixed at deployment, hard-capped at 5% by the contract"
+    },
+    "funded_amount_raw": {
+      "type": "string",
+      "default": "",
+      "description": "Exact CRXS amount (raw 18-decimal units) the owner approved and funded into the curve"
+    },
+    "fund_tx_hash": {
+      "type": "string",
+      "default": "",
+      "description": "REAL transaction hash of the owner-signed fund() call"
+    },
+    "graduation_threshold_reached": {
+      "type": "boolean",
+      "default": false,
+      "description": "True once the live chain reserve read confirms the ETH threshold was reached"
+    },
+    "migrated_to": {
+      "type": "string",
+      "default": "",
+      "description": "DEX pool/recipient address the graduated reserve was owner-migrated to \u2014 empty until the real migration is signed and confirmed"
+    },
+    "failure_reason": {
+      "type": "string",
+      "default": "",
+      "description": "Real failure reason when a signed transaction reverted \u2014 kept verbatim, never overwritten silently"
+    },
+    "notes": {
+      "type": "string",
+      "default": "",
+      "description": "Honest explanation of the current launch state and the next real-world action"
+    }
+  },
+  "required": [
+    "registry_key",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

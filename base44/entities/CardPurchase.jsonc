@@ -1,0 +1,195 @@
+{
+  "name": "CardPurchase",
+  "type": "object",
+  "properties": {
+    "correlation_id": {
+      "type": "string",
+      "description": "End-to-end trace ID for this webhook\u2192ledger\u2192Sheet journey"
+    },
+    "provider_transaction_id": {
+      "type": "string",
+      "description": "Provider card-transaction id \u2014 the idempotency key. One record per purchase; retried webhooks are recognized, never duplicated"
+    },
+    "provider_reference": {
+      "type": "string",
+      "description": "Provider reference for this transaction"
+    },
+    "card_id": {
+      "type": "string",
+      "description": "Internal VirtualCard id the purchase belongs to"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Card owner's user id"
+    },
+    "merchant_name": {
+      "type": "string"
+    },
+    "merchant_country": {
+      "type": "string"
+    },
+    "merchant_category": {
+      "type": "string"
+    },
+    "transaction_type": {
+      "type": "string",
+      "enum": [
+        "debit",
+        "credit",
+        "refund"
+      ],
+      "default": "debit"
+    },
+    "transaction_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "failed",
+        "refunded"
+      ],
+      "default": "completed"
+    },
+    "transaction_currency": {
+      "type": "string",
+      "description": "Currency the merchant charged in"
+    },
+    "transaction_amount": {
+      "type": "number",
+      "description": "Original purchase amount in transaction_currency"
+    },
+    "card_currency": {
+      "type": "string",
+      "description": "Currency of the card used"
+    },
+    "settlement_currency": {
+      "type": "string",
+      "description": "Currency the purchase settled in (after any conversion)"
+    },
+    "settlement_amount": {
+      "type": "number",
+      "description": "Final customer charge in settlement_currency \u2014 purchase + all applicable fees"
+    },
+    "fx_conversion_required": {
+      "type": "boolean",
+      "default": false,
+      "description": "True only when an actual currency conversion occurred (transaction currency differs from card currency)"
+    },
+    "fx_rate": {
+      "type": "number",
+      "default": 0,
+      "description": "Exchange rate used/recorded for the conversion \u2014 provider-supplied when available, else the configured platform rate"
+    },
+    "fx_rate_source": {
+      "type": "string",
+      "default": "",
+      "description": "provider | provider_live | admin_config | admin_fallback | none"
+    },
+    "provider_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Actual provider fee as reported by the card program \u2014 0 when none was reported, never invented"
+    },
+    "provider_fx_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Actual provider FX cost/markup as reported \u2014 only when conversion occurred"
+    },
+    "platform_fx_markup": {
+      "type": "number",
+      "default": 0,
+      "description": "Our platform FX markup \u2014 charged ONLY when an actual conversion occurred"
+    },
+    "cross_border_transaction": {
+      "type": "boolean",
+      "default": false,
+      "description": "True ONLY when the card program/provider explicitly classified the transaction as cross-border"
+    },
+    "cross_border_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Actual provider cross-border fee as reported \u2014 never manufactured"
+    },
+    "platform_cross_border_markup": {
+      "type": "number",
+      "default": 0,
+      "description": "Our platform cross-border markup \u2014 charged ONLY on provider-confirmed cross-border transactions"
+    },
+    "platform_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Our total platform fees on this purchase (transaction fee + FX markup + cross-border markup) in card currency"
+    },
+    "platform_transaction_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Our base platform transaction fee in card currency"
+    },
+    "total_customer_charge": {
+      "type": "number",
+      "default": 0,
+      "description": "Purchase + provider fees + our platform fees \u2014 what the customer actually paid"
+    },
+    "platform_fee_charged": {
+      "type": "boolean",
+      "default": false,
+      "description": "True once our platform fees were deducted from the owner's Ride X wallet"
+    },
+    "platform_fee_owed": {
+      "type": "number",
+      "default": 0,
+      "description": "Platform fee still owed (naira) when the wallet could not cover it \u2014 retried on later top-ups"
+    },
+    "sheet_log_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "logged",
+        "failed"
+      ],
+      "default": "pending",
+      "description": "Google Sheet record state \u2014 'failed' is never silently treated as success"
+    },
+    "sheet_log_error": {
+      "type": "string",
+      "default": "",
+      "description": "Exact Google Sheets API error when the record failed to log"
+    }
+  },
+  "required": [
+    "provider_transaction_id",
+    "card_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

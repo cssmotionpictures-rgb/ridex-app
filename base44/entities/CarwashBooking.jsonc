@@ -1,0 +1,56 @@
+{
+  "name": "CarwashBooking",
+  "type": "object",
+  "properties": {
+    "service_type": {
+      "type": "string"
+    },
+    "location_type": {
+      "type": "string",
+      "enum": [
+        "mobile",
+        "fixed"
+      ],
+      "default": "mobile"
+    },
+    "address": {
+      "type": "string"
+    },
+    "booking_date": {
+      "type": "string"
+    },
+    "vehicle": {
+      "type": "string"
+    },
+    "discount_applied": {
+      "type": "number",
+      "default": 0
+    },
+    "total_amount": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "in_progress",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "unpaid",
+        "paid",
+        "refunded"
+      ],
+      "default": "unpaid"
+    }
+  },
+  "required": [
+    "service_type"
+  ]
+}

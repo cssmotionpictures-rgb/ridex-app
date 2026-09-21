@@ -1,0 +1,123 @@
+{
+  "name": "LoanApplication",
+  "type": "object",
+  "properties": {
+    "tier": {
+      "type": "string",
+      "description": "Wealth Lab capital tier label (e.g. \u20a6200,000)"
+    },
+    "amount_requested": {
+      "type": "number",
+      "default": 0,
+      "description": "Funding amount requested (NGN)"
+    },
+    "business_name": {
+      "type": "string",
+      "description": "Name of the applicant's business / venture"
+    },
+    "business_type": {
+      "type": "string",
+      "description": "Type of business (e.g. POS Agency Banking, Mini Poultry)"
+    },
+    "applicant_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "description": "Applicant contact email (stored lowercase)"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "bvn": {
+      "type": "string",
+      "description": "Bank Verification Number (optional)"
+    },
+    "has_cac": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the business is CAC-registered"
+    },
+    "funding_source": {
+      "type": "string",
+      "description": "Preferred funding source (auto-matched loan source or custom)"
+    },
+    "business_plan_summary": {
+      "type": "string",
+      "description": "One-paragraph business plan / use of funds"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "reviewed",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "admin_notes": {
+      "type": "string",
+      "description": "Internal review notes (admin only)"
+    },
+    "delivery_status": {
+      "type": "string",
+      "enum": [
+        "not_sent",
+        "sent",
+        "failed"
+      ],
+      "default": "not_sent",
+      "description": "Automatic lender-email delivery state"
+    },
+    "delivery_email": {
+      "type": "string",
+      "default": "",
+      "description": "Lender email address the proposal was sent to"
+    },
+    "delivery_error": {
+      "type": "string",
+      "default": "",
+      "description": "Why the automatic delivery failed, when it failed"
+    },
+    "delivered_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the proposal email was delivered to the lender"
+    }
+  },
+  "required": [
+    "tier",
+    "amount_requested",
+    "business_name",
+    "applicant_name",
+    "email"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "name": "VirtualCard",
+  "type": "object",
+  "properties": {
+    "cardholder_id": {
+      "type": "string",
+      "description": "Flutterwave cardholder id this card belongs to"
+    },
+    "flw_card_id": {
+      "type": "string",
+      "description": "Flutterwave card id \u2014 used for fund / freeze / history calls"
+    },
+    "cardholder_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "card_number": {
+      "type": "string",
+      "description": "Full PAN as returned at issue \u2014 masked in the UI until revealed"
+    },
+    "card_last4": {
+      "type": "string"
+    },
+    "cvv": {
+      "type": "string"
+    },
+    "expiry_month": {
+      "type": "number"
+    },
+    "expiry_year": {
+      "type": "number"
+    },
+    "card_type": {
+      "type": "string",
+      "default": "virtual"
+    },
+    "currency": {
+      "type": "string",
+      "default": "NGN"
+    },
+    "balance": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "frozen"
+      ],
+      "default": "active"
+    },
+    "issuer": {
+      "type": "string",
+      "default": "flutterwave"
+    },
+    "monthly_limit": {
+      "type": "number",
+      "default": 0,
+      "description": "Owner-set monthly spending cap (card currency) \u2014 0 = no limit"
+    },
+    "spent_this_month": {
+      "type": "number",
+      "default": 0,
+      "description": "Debits counted this calendar month \u2014 maintained by card transaction events"
+    },
+    "spend_month_key": {
+      "type": "string",
+      "default": "",
+      "description": "YYYY-MM the spent_this_month counter applies to \u2014 resets automatically each new month"
+    },
+    "low_balance_threshold": {
+      "type": "number",
+      "default": 0,
+      "description": "Owner-set low-balance alert level (card currency) \u2014 the owner is emailed when the balance drops below it. 0 = no alert"
+    },
+    "maintenance_month": {
+      "type": "string",
+      "default": "",
+      "description": "YYYY-MM the monthly maintenance fee was last charged for. Empty = never charged; the issue month itself is free. Maintained by the daily card summary job."
+    }
+  },
+  "required": [
+    "cardholder_name",
+    "email"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

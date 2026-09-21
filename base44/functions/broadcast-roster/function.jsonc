@@ -1,0 +1,13 @@
+{
+  "name": "broadcast-roster",
+  "entry": "entry.ts",
+  "automations": [
+    {
+      "type": "scheduled",
+      "name": "weekly_monday_08am_lagos",
+      "schedule_mode": "recurring",
+      "schedule_type": "cron",
+      "cron_expression": "0 7 * * 1"
+    }
+  ]
+}

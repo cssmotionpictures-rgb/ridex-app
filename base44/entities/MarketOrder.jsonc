@@ -1,0 +1,83 @@
+{
+  "name": "MarketOrder",
+  "type": "object",
+  "properties": {
+    "listing_id": {
+      "type": "string"
+    },
+    "listing_title": {
+      "type": "string"
+    },
+    "buyer_id": {
+      "type": "string"
+    },
+    "buyer_name": {
+      "type": "string"
+    },
+    "seller_id": {
+      "type": "string"
+    },
+    "seller_name": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "commission": {
+      "type": "number",
+      "default": 0
+    },
+    "delivery_fee": {
+      "type": "number",
+      "default": 0
+    },
+    "use_logistics": {
+      "type": "boolean",
+      "default": false
+    },
+    "logistics_id": {
+      "type": "string"
+    },
+    "tracking_number": {
+      "type": "string"
+    },
+    "delivery_address": {
+      "type": "string"
+    },
+    "transaction_id": {
+      "type": "string"
+    },
+    "dispute_reason": {
+      "type": "string"
+    },
+    "refund_reason": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "escrow",
+        "in_transit",
+        "delivered",
+        "completed",
+        "disputed",
+        "refunded"
+      ],
+      "default": "escrow"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "held",
+        "released",
+        "refunded"
+      ],
+      "default": "held"
+    }
+  },
+  "required": [
+    "listing_id",
+    "buyer_id"
+  ]
+}

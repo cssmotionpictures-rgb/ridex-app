@@ -1,0 +1,15 @@
+{
+  "_doc": "Honest customer-support templates for CRIXCOIN money states. Never promise guaranteed outcomes; never blame 'the blockchain' vaguely; statuses match what the backend can actually prove.",
+  "payment_pending": "Your payment is being confirmed by the payment provider. Your CRIXCOIN balance updates as soon as we receive verified confirmation — we never credit a payment before it is genuinely confirmed. This usually takes a few minutes.",
+  "transfer_processing": "Your transfer is on its way. It stays in Processing until the network independently confirms it — we never mark a transfer complete before it actually is.",
+  "transfer_confirmed_base": "Your CRIXCOIN transfer was confirmed on Base. The money has reached the recipient's address.",
+  "transfer_needs_attention": "Your transfer needs a moment of verification on our side. Nothing is lost — your funds are reserved and protected while we confirm the exact network status. Our team is already on it and you do not need to do anything.",
+  "transaction_unknown_state": "We could not immediately confirm the network's response for this transaction, so we are checking it directly with the network before taking any action. We will never resend or duplicate it while we verify. Your money is accounted for the whole time.",
+  "emergency_pause_active": "Transfers are temporarily paused across CRIXCOIN for everyone's protection. Your balance is safe and fully visible. We will notify you the moment transfers resume — you do not need to contact support to re-enable anything.",
+  "insufficient_balance": "Your available balance is lower than the amount plus the transfer fee. The exact fee is always shown before you confirm a send.",
+  "wallet_frozen": "Your wallet is currently frozen (by you or by protection review). Unfreeze it in Crix Protection to send again, or reply here and our team will help.",
+  "duplicate_request": "We received this request twice — good news: our system only processes it once, so you will never be charged or send twice for the same request.",
+  "deposit_not_credited_yet": "We have not yet received verified confirmation from the payment provider for this deposit. Once they confirm it, your CRIXCOIN is credited automatically. If it has been more than 30 minutes, reply here and we will check with them directly.",
+  "bill_payment_pending": "Your bill payment is being processed with the biller. Your CRIXCOIN was reserved (not lost) and is only finally deducted once the biller confirms. If the biller fails, the reserved amount is returned to you in full.",
+  "no_promise_disclaimer": "CRIXCOIN moves real value, so every transfer is verified, reconciled and protected — but no financial system can promise that nothing will ever need a moment of review. When something needs attention, we tell you exactly what state it is in."
+}
