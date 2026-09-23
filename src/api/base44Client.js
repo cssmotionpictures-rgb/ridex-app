@@ -44,17 +44,16 @@ const auth = {
   },
   signIn: (email, password) => supabase.auth.signInWithPassword({ email, password }),
   register: async (emailOrObj, password, options = {}) => {
-    let email = emailOrObj, opts = options;
+    let email = emailOrObj, pwd = password, opts = options;
     if (typeof emailOrObj === 'object' && emailOrObj !== null) {
-      email = emailOrObj.email; opts = emailOrObj;
+      email = emailOrObj.email; pwd = emailOrObj.password; opts = emailOrObj;
     }
     const metadata = {};
     if (opts.full_name) metadata.full_name = opts.full_name;
     if (opts.name) metadata.full_name = opts.name;
     if (opts.username) metadata.username = opts.username;
-    const { data, error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { shouldCreateUser: true, data: metadata },
+    const { data, error } = await supabase.auth.signUp({
+      email, password: pwd, options: { data: metadata },
     });
     if (error) throw error;
     return data;
