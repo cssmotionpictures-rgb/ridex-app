@@ -119,28 +119,48 @@ const toSnake = (name) => {
 };
 
 const makeEntity = (tableName) => ({
-  list: (sort, limit) => {
+  list: async (sort, limit) => {
     let q = supabase.from(tableName).select('*');
     if (sort) {
       const col = sort.startsWith('-') ? sort.slice(1) : sort;
       q = q.order(col, { ascending: !sort.startsWith('-') });
     }
     if (limit) q = q.limit(limit);
-    return q;
+    const { data, error } = await q;
+    if (error) throw error;
+    return data || [];
   },
-  filter: (query, sort) => {
+  filter: async (query, sort) => {
     let q = supabase.from(tableName).select('*');
     for (const [k, v] of Object.entries(query || {})) q = q.eq(k, v);
     if (sort) {
       const col = sort.startsWith('-') ? sort.slice(1) : sort;
       q = q.order(col, { ascending: !sort.startsWith('-') });
     }
-    return q;
+    const { data, error } = await q;
+    if (error) throw error;
+    return data || [];
   },
-  get: (id) => supabase.from(tableName).select('*').eq('id', id).single(),
-  create: (data) => supabase.from(tableName).insert(data).select().single(),
-  update: (id, data) => supabase.from(tableName).update(data).eq('id', id).select().single(),
-  delete: (id) => supabase.from(tableName).delete().eq('id', id),
+  get: async (id) => {
+    const { data, error } = await supabase.from(tableName).select('*').eq('id', id).single();
+    if (error) throw error;
+    return data;
+  },
+  create: async (payload) => {
+    const { data, error } = await supabase.from(tableName).insert(payload).select().single();
+    if (error) throw error;
+    return data;
+  },
+  update: async (id, payload) => {
+    const { data, error } = await supabase.from(tableName).update(payload).eq('id', id).select().single();
+    if (error) throw error;
+    return data;
+  },
+  delete: async (id) => {
+    const { error } = await supabase.from(tableName).delete().eq('id', id);
+    if (error) throw error;
+    return { success: true };
+  },
   subscribe: () => () => {},
 });
 
