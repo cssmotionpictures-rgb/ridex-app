@@ -15,6 +15,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
     "@base44/sdk": "^0.8.48",
     "@base44/vite-plugin": "^1.0.41",
     "@coinbase/cdp-sdk": "^1.55.0",
