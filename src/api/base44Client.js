@@ -93,3 +93,5 @@ const functions = {
 };
 
 export const base44 = { auth, entities, functions, supabase };
+
+export { supabase };
