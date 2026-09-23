@@ -17,6 +17,7 @@ import CrixDollarCardPanel from "@/components/crix/CrixDollarCardPanel";
 import QuidaxOnrampPanel from "@/components/crix/QuidaxOnrampPanel";
 import CrixCoinAddressCard from "@/components/crxs/CrixCoinAddressCard";
 import CrixWalletDisplay from "@/components/crix/CrixWalletDisplay";
+import CrixDeposit from "@/components/crix/CrixDeposit";
 
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: LayoutGrid },
@@ -95,7 +96,7 @@ export default function CrixCoin() {
       ) : tab === "dashboard" ? (
         <CrixHomeDashboard user={user} wallets={wallets} />
       ) : tab === "home" ? (
-        <div className="space-y-5"><CrixWalletDisplay /><WalletOverview wallets={wallets} busy={busy} onOpenWallet={openWallet} user={user} /></div>
+        <div className="space-y-5"><CrixWalletDisplay /><CrixDeposit onSuccess={loadWallets} /><WalletOverview wallets={wallets} busy={busy} onOpenWallet={openWallet} user={user} /></div>
       ) : tab === "send" ? (
         <SendMoney wallets={wallets} myEmail={user?.email} onDone={loadWallets} />
       ) : tab === "bills" ? (
