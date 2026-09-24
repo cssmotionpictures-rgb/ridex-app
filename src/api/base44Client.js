@@ -110,7 +110,9 @@ const TABLE_MAP = {
   Deposit: 'crix_deposits', CrixDeposit: 'crix_deposits',
   CurveTrade: 'crix_curve_trades', CrixCurveTrade: 'crix_curve_trades',
   VirtualCard: 'crix_virtual_cards', CrixVirtualCard: 'crix_virtual_cards',
-  Activity: 'crix_activity', CrixActivity: 'crix_activity',
+  Activity: 'crix_activity',
+  Movie: 'movies',
+  Series: 'series', CrixActivity: 'crix_activity',
 };
 
 const toSnake = (name) => {
