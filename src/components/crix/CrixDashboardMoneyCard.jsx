@@ -65,7 +65,7 @@ export default function CrixDashboardMoneyCard({ user }) {
           <div className="rounded-2xl bg-secondary/50 border border-border p-4 flex flex-col justify-between">
             <div>
               <p className="text-xs text-muted-foreground">Naira wallet balance</p>
-              <p className="text-2xl font-extrabold mt-1">{ngn(wallet?.available)}</p>
+              <p className="text-2xl font-extrabold mt-1">{ngn(wallet?.balance_crxs)}</p>
             </div>
             <Link to="/crix" className="mt-3 text-xs font-semibold text-primary">Fund wallet · Pay bills →</Link>
           </div>

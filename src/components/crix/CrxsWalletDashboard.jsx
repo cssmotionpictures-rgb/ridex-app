@@ -32,7 +32,7 @@ export default function CrxsWalletDashboard({ userId }) {
     return <div className="flex justify-center py-10"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
   }
 
-  const balance = wallet?.available || 0;
+  const balance = wallet?.balance_crxs || 0;
 
   return (
     <div className="space-y-5">

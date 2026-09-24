@@ -16,7 +16,7 @@ export default function QcOverview({ wallet, loading }) {
         {loading ? (
           <p className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" /> Loading…</p>
         ) : (
-          <p className="text-4xl font-extrabold gold-text font-heading">{formatCrxs(wallet?.available)}</p>
+          <p className="text-4xl font-extrabold gold-text font-heading">{formatCrxs(wallet?.balance_crxs)}</p>
         )}
         <p className="text-[10px] text-muted-foreground mt-2">
           Instant transfers between CRIXCOIN users. Moving CRIXCOIN out to external wallets is temporarily unavailable.

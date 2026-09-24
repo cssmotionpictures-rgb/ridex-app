@@ -29,7 +29,7 @@ export default function ProtectionCenter({ wallets, onChanged }) {
           {(wallets || []).map((w) => (
             <div key={w.id} className="flex items-center justify-between gap-3 rounded-xl border border-border px-3.5 py-2.5">
               <div>
-                <p className="text-sm font-semibold">{w.currency} wallet · {formatCrix(w.available, w.currency)}</p>
+                <p className="text-sm font-semibold">{w.currency} wallet · {formatCrix(w.balance_crxs, w.currency)}</p>
                 <p className="text-[11px] text-muted-foreground">{w.status === "frozen" ? "Frozen — sending blocked" : "Active — sending allowed"}</p>
               </div>
               <Button

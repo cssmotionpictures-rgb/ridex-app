@@ -41,8 +41,9 @@ export default function CrixCoin() {
   const { toast } = useToast();
 
   const loadWallets = React.useCallback(() => {
-    base44.entities.CrixWallet.list("-created_date", 50).then(setWallets).catch(() => setWallets([]));
-  }, []);
+    if (!user?.id) return;
+    base44.entities.CrixWallet.filter({ user_id: user.id }, "-created_date", 50).then(setWallets).catch(() => setWallets([]));
+  }, [user?.id]);
 
   React.useEffect(() => {
     base44.auth.me().then(setUser).catch(() => setUser(null));

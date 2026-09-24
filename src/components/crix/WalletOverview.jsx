@@ -27,7 +27,7 @@ export default function WalletOverview({ wallets, busy, onOpenWallet, user }) {
                 </span>
               )}
             </div>
-            <p className="text-2xl font-extrabold mt-2 tabular-nums">{formatCrix(w.available, w.currency)}</p>
+            <p className="text-2xl font-extrabold mt-2 tabular-nums">{formatCrix(w.balance_crxs, w.currency)}</p>
             <p className="text-[11px] text-muted-foreground">Available to spend</p>
           </div>
         ))}

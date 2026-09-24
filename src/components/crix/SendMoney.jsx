@@ -116,7 +116,7 @@ export default function SendMoney({ wallets, myEmail, onDone }) {
                   onClick={() => setCurrency(w.currency)}
                   className={"rounded-full border px-4 py-2 text-sm font-semibold " + (currency === w.currency ? "border-primary bg-primary/10 text-primary" : "border-border bg-secondary")}
                 >
-                  {w.currency} · {formatCrix(w.available, w.currency)}
+                  {w.currency} · {formatCrix(w.balance_crxs, w.currency)}
                 </button>
               ))}
             </div>

@@ -181,7 +181,7 @@ export default function PayBills({ user, onChanged }) {
         <div className="flex items-center gap-2 mb-4">
           <Zap className="w-4 h-4 text-primary" />
           <h3 className="font-semibold">Pay bills instantly</h3>
-          {balance ? <span className="ml-auto text-xs text-muted-foreground">Wallet: {ngn(balance.available)}</span> : null}
+          {balance ? <span className="ml-auto text-xs text-muted-foreground">Wallet: {ngn(balance.balance_crxs)}</span> : null}
         </div>
 
         {!items ? (

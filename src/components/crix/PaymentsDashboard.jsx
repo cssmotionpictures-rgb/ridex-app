@@ -37,7 +37,7 @@ export default function PaymentsDashboard({ user }) {
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-3xl border border-border/60 bg-card p-4">
           <p className="text-[11px] uppercase tracking-wide text-muted-foreground inline-flex items-center gap-1.5"><Wallet className="w-3.5 h-3.5" /> Wallet balance</p>
-          <p className="text-xl font-bold text-primary mt-1.5">{wallet ? ngn(wallet.available) : "—"}</p>
+          <p className="text-xl font-bold text-primary mt-1.5">{wallet ? ngn(wallet.balance_crxs) : "—"}</p>
         </div>
         <div className="rounded-3xl border border-border/60 bg-card p-4">
           <p className="text-[11px] uppercase tracking-wide text-muted-foreground inline-flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5" /> Bills paid</p>

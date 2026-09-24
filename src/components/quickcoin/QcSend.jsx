@@ -47,7 +47,7 @@ export default function QcSend({ wallet, onDone }) {
 
   return (
     <div className="rounded-2xl border border-border/60 bg-card p-4 space-y-3">
-      <p className="text-xs text-muted-foreground">Available: <span className="text-foreground font-semibold">{formatCrxs(wallet?.available)}</span></p>
+      <p className="text-xs text-muted-foreground">Available: <span className="text-foreground font-semibold">{formatCrxs(wallet?.balance_crxs)}</span></p>
       <input value={recipient} onChange={(e) => { setRecipient(e.target.value); setQuote(null); }}
         placeholder="@handle or email" className="w-full h-10 rounded-xl border border-input bg-transparent px-3 text-sm" />
       <input value={amount} onChange={(e) => { setAmount(e.target.value.replace(/[^\d.]/g, "")); setQuote(null); }}

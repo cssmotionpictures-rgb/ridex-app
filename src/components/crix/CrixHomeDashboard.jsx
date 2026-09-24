@@ -86,7 +86,7 @@ export default function CrixHomeDashboard({ user, wallets }) {
             <span className="text-[11px] font-bold uppercase tracking-wider">RIDE X BALANCE</span>
           </div>
           <p className="text-3xl font-extrabold font-heading mt-3 tabular-nums">
-            {ngnWallet ? formatCrix(ngnWallet.available, "NGN") : "—"}
+            {ngnWallet ? formatCrix(ngnWallet.balance_crxs, "NGN") : "—"}
           </p>
           <p className="text-[11px] text-muted-foreground mt-1">Spendable Naira across every RIDE X service</p>
           <Link to="/ride" className="mt-3 pt-3 border-t border-border/50 flex items-center gap-1 text-xs font-semibold text-primary">
