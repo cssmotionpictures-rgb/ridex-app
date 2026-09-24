@@ -85,9 +85,10 @@ export default function BettingTopup({ onChanged }) {
     if (!provider || !customerId.trim() || !(Number(amount) > 0) || busy) return;
     setBusy(true); setResult(null);
     try {
-      // No PIN system yet — go straight to top-up
+      const st = await invokeCrix({ action: "pin_status" });
+      setPinHas(!!st.has_pin);
       afterPin.current = doTopup;
-      doTopup(null);
+      setPinPrompt(st.has_pin ? "verify" : "set");
     } catch (e) {
       toast({ title: "Cannot start the top-up", description: e.message, variant: "destructive" });
     }
