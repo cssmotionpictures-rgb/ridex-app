@@ -27,7 +27,7 @@ export default function CardSpendingChart({ summary }) {
   const [cur, setCur] = React.useState("NGN");
 
   const currencies = summary
-    ? [...new Set((summary.cards || []).map((c) => c.currency || "NGN"))]
+    ? [...new Set((summary?.cards || []).map((c) => c.currency || "NGN"))]
     : ["NGN"];
   const activeCur = currencies.includes(cur) ? cur : currencies[0];
   const curCards = (summary?.cards || []).filter((c) => (c.currency || "NGN") === activeCur);
