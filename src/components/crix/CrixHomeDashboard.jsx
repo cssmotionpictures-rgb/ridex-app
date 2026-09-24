@@ -36,8 +36,8 @@ export default function CrixHomeDashboard({ user, wallets }) {
       .catch(() => setRides([]));
   }, [user?.id]);
 
-  const crxsWallet = (wallets || []).find((w) => w.currency === "CRXS");
-  const ngnWallet = (wallets || []).find((w) => w.currency === "NGN");
+  const crxsWallet = (wallets || [])[0] || null;
+  const ngnWallet = null;
   const deployed = token?.deployment_status === "DEPLOYED";
   const verified = token?.verification_status === "SOURCE_VERIFIED" || token?.verification_status === "ONCHAIN_VERIFIED";
 
@@ -66,7 +66,7 @@ export default function CrixHomeDashboard({ user, wallets }) {
             <span className="text-[11px] font-bold uppercase tracking-wider">CRIXCOIN</span>
           </div>
           <p className="text-3xl font-extrabold font-heading mt-3 tabular-nums">
-            {crxsWallet ? Number(crxsWallet.available || 0).toLocaleString("en-NG") : "—"} <span className="text-base text-primary">CRXS</span>
+            {crxsWallet ? Number(crxsWallet.balance_crxs || 0).toLocaleString("en-NG") : "—"} <span className="text-base text-primary">CRXS</span>
           </p>
           <p className="text-[11px] text-muted-foreground mt-1">Your internal CrixCoin balance</p>
           <div className="mt-3 pt-3 border-t border-border/50 text-xs space-y-1">
