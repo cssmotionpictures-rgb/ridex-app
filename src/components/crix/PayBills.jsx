@@ -43,7 +43,7 @@ export default function PayBills({ user, onChanged }) {
 
   React.useEffect(() => {
     invokeCrixFunction("crix-bill-payment", { action: "catalog" })
-      .then((d) => setItems(d.items || []))
+      .then((d) => setItems(d?.items || d?.data || []))
       .catch((e) => setCatalogError(e.message));
   }, []);
 
