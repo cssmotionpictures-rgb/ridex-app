@@ -1,185 +1,297 @@
-import React from "react";
-import { invokeCrixFunction } from "@/lib/crix";
-import { useToast } from "@/components/ui/use-toast";
-import CrixCoinCardVisual from "@/components/crix/CrixCoinCardVisual";
-import IssueDollarCardDialog from "@/components/crix/IssueDollarCardDialog";
-import DollarCardDetailDialog from "@/components/crix/DollarCardDetailDialog";
-import DollarCardTopUpDialog from "@/components/crix/DollarCardTopUpDialog";
-import CrixDollarCardSummary from "@/components/crix/CrixDollarCardSummary";
-import { CreditCard, Loader2, Plus, Snowflake, Sun, Eye } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/api/base44Client';
+import { Loader2, CreditCard, Plus, Snowflake, Trash2, DollarSign, X } from 'lucide-react';
 
-const usd = (v) => "$" + Number(v || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
+const ngn = (v) => "$" + Number(v || 0).toFixed(2);
 
-const STATUS_BADGE = {
-  issued: { label: "Issued", cls: "bg-primary/15 text-primary" },
-  active: { label: "Active", cls: "bg-emerald-500/15 text-emerald-400" },
-  created: { label: "Processing", cls: "bg-amber-500/15 text-amber-400" },
-  unknown: { label: "Confirming", cls: "bg-amber-500/15 text-amber-400" },
-  frozen: { label: "Frozen", cls: "bg-sky-500/15 text-sky-400" },
-  refunded: { label: "Refunded", cls: "bg-slate-500/15 text-slate-400" },
-  failed: { label: "Failed", cls: "bg-destructive/15 text-destructive" },
-};
+export default function CrixDollarCardPanel({ onChanged }) {
+  const [cards, setCards] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [showFund, setShowFund] = useState(null);
+  const [form, setForm] = useState({ bin: '537872', amount: '20', name_on_card: '', dateOfBirth: '' });
+  const [fundAmount, setFundAmount] = useState('10');
 
-// CRIXCOIN DOLLAR CARDS — the customer's virtual Visa dollar cards on the
-// Strowallet card network. Every action runs on the secured server function;
-// the panel shows the provider's honest live availability (fail-closed).
-export default function CrixDollarCardPanel({ user, onChanged }) {
-  const { toast } = useToast();
-  const [net, setNet] = React.useState(undefined);
-  const [cards, setCards] = React.useState(null);
-  const [kyc, setKyc] = React.useState(null);
-  const [issueOpen, setIssueOpen] = React.useState(false);
-  const [detailCard, setDetailCard] = React.useState(null);
-  const [topUpCard, setTopUpCard] = React.useState(null);
-  const [freezeBusy, setFreezeBusy] = React.useState("");
-
-  const load = React.useCallback(() => {
-    invokeCrixFunction("crix-dollar-card", { action: "network" }).then(setNet).catch(() => setNet(null));
-    invokeCrixFunction("crix-dollar-card", { action: "list" })
-      .then((d) => setCards(d?.cards || []))
-      .catch(() => setCards([]));
-    invokeCrixFunction("crix-dollar-card", { action: "kyc_status" }).then(setKyc).catch(() => setKyc(null));
-  }, []);
-  React.useEffect(load, [load]);
-
-  const toggleFreeze = async (card) => {
-    const freezing = card.status !== "frozen";
-    setFreezeBusy(card.card_key);
+  const loadCards = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      await invokeCrixFunction("crix-dollar-card", {
-        action: "status", card_key: card.card_key, status: freezing ? "frozen" : "active",
+      const { data, error: fnErr } = await supabase.functions.invoke('kripicard-services', {
+        body: { action: 'card_list' },
       });
-      toast({ title: freezing ? "Card frozen" : "Card unfrozen", description: freezing ? "New payments on this card are blocked." : "Your card can spend again." });
-      load();
+      if (fnErr) throw fnErr;
+      if (data?.error) throw new Error(data.error);
+      setCards(data.cards || []);
     } catch (e) {
-      toast({ title: "Could not update the card", description: e.message, variant: "destructive" });
+      setError(e.message || 'Could not load cards');
+      setCards([]);
     }
-    setFreezeBusy("");
+    setLoading(false);
   };
 
-  if (net === undefined || cards === null) {
-    return (
-      <div className="flex justify-center py-12">
-        <Loader2 className="w-6 h-6 animate-spin text-primary" />
-      </div>
-    );
-  }
+  useEffect(() => { loadCards(); }, []);
 
-  if (net === null || (!net.reachable && !net.paused)) {
-    return (
-      <div className="rounded-3xl border border-border bg-card p-6 text-center">
-        <CreditCard className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-        <p className="font-semibold">Dollar cards are not available right now</p>
-        <p className="text-sm text-muted-foreground mt-1 max-w-md mx-auto">
-          The card network did not answer — nothing was charged. Your wallet and every other CRIXCOIN service keep working. Please try again shortly.
-        </p>
-      </div>
-    );
-  }
+  const createCard = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      if (Number(form.amount) < 10) throw new Error('Minimum card amount is $10');
+      if (!form.name_on_card || form.name_on_card.length < 2) throw new Error('Cardholder name required');
 
-  const railPaused = !!(net && net.paused);
+      const { data, error: fnErr } = await supabase.functions.invoke('kripicard-services', {
+        body: {
+          action: 'card_create',
+          bin: form.bin,
+          amount: Number(form.amount),
+          name_on_card: form.name_on_card,
+          dateOfBirth: form.dateOfBirth || undefined,
+        },
+      });
+      if (fnErr) throw fnErr;
+      if (data?.error) throw new Error(data.error);
+
+      setShowCreate(false);
+      setForm({ bin: '537872', amount: '20', name_on_card: '', dateOfBirth: '' });
+      await loadCards();
+      onChanged?.();
+    } catch (e) {
+      setError(e.message || 'Could not create card');
+    }
+    setBusy(false);
+  };
+
+  const fundCard = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      if (Number(fundAmount) < 10) throw new Error('Minimum fund is $10');
+      const { data, error: fnErr } = await supabase.functions.invoke('kripicard-services', {
+        body: { action: 'card_fund', card_id: showFund.card_id, amount: Number(fundAmount) },
+      });
+      if (fnErr) throw fnErr;
+      if (data?.error) throw new Error(data.error);
+      setShowFund(null);
+      setFundAmount('10');
+      await loadCards();
+    } catch (e) {
+      setError(e.message || 'Could not fund card');
+    }
+    setBusy(false);
+  };
+
+  const freezeCard = async (card, freeze) => {
+    setBusy(true);
+    try {
+      await supabase.functions.invoke('kripicard-services', {
+        body: { action: 'card_freeze', card_id: card.card_id, freeze },
+      });
+      await loadCards();
+    } catch (e) {
+      setError(e.message);
+    }
+    setBusy(false);
+  };
+
+  const deleteCard = async (card) => {
+    if (!confirm('Delete this card permanently? Funds return to your account.')) return;
+    setBusy(true);
+    try {
+      await supabase.functions.invoke('kripicard-services', {
+        body: { action: 'card_delete', card_id: card.card_id },
+      });
+      await loadCards();
+      onChanged?.();
+    } catch (e) {
+      setError(e.message);
+    }
+    setBusy(false);
+  };
+
+  if (loading) {
+    return <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
+  }
 
   return (
     <div className="space-y-4">
-      {railPaused ? (
-        <div className="rounded-2xl border border-primary/40 bg-primary/10 px-4 py-3 text-sm">
-          <p className="font-semibold text-primary">New dollar cards are paused</p>
-          <p className="text-muted-foreground mt-0.5">
-            {net.reason || "We no longer convert Naira into USD cards — we are moving to a crypto-funded dollar card provider."}
-            {" "}Your existing cards below keep working.
-          </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-white font-bold text-lg">USD Virtual Cards</h3>
+          <p className="text-gray-400 text-xs">Spend anywhere Mastercard is accepted. Load only what you need.</p>
         </div>
-      ) : null}
-      {kyc && kyc.kyc_status === "pending" ? (
-        <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm">
-          <p className="font-semibold text-amber-300">Your identity review is in progress</p>
-          <p className="text-muted-foreground mt-0.5">The card network is reviewing your identity — your dollar card unlocks the moment it is approved.</p>
-        </div>
-      ) : null}
+        <button
+          onClick={() => setShowCreate(true)}
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg"
+        >
+          <Plus className="w-4 h-4" /> New Card
+        </button>
+      </div>
 
-      {cards.length === 0 ? (
-        <div className="rounded-3xl border border-border bg-card p-6 text-center">
-          <CreditCard className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-          <h3 className="text-xl font-extrabold">Crypto-funded dollar cards are coming</h3>
-          <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
-            {railPaused
-              ? "We are moving dollar cards to a crypto-funded provider — Naira is no longer converted into USD cards. We will announce here the moment new cards are live."
-              : "A virtual Visa card that pays from your Naira wallet at the live rate — perfect for online shopping and global subscriptions. One-time identity review, then it is yours in minutes."}
-          </p>
-          {!railPaused ? (
-            <button
-              onClick={() => setIssueOpen(true)}
-              className="mt-5 h-11 px-6 rounded-xl bg-primary text-primary-foreground text-sm font-bold min-h-[44px]"
-            >
-              Get your dollar card
-            </button>
-          ) : null}
+      {error && (
+        <div className="p-3 bg-red-950 border border-red-800 rounded-lg">
+          <p className="text-red-400 text-xs">{error}</p>
         </div>
-      ) : (
-        <>
-          <CrixDollarCardSummary cards={cards} />
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold">Your dollar cards</h3>
-            {!railPaused ? (
-              <button onClick={() => setIssueOpen(true)} className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary min-h-[36px]">
-                <Plus className="w-3.5 h-3.5" /> New card
-              </button>
-            ) : null}
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {cards.map((card) => {
-              const badge = STATUS_BADGE[card.status] || { label: card.status, cls: "bg-secondary text-muted-foreground" };
-              const actionable = card.provider_card_id && ["issued", "active", "frozen"].includes(card.status);
-              return (
-                <div key={card.card_key} className="rounded-3xl border border-border bg-card p-5 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground inline-flex items-center gap-1.5"><CreditCard className="w-3.5 h-3.5" /> Visa · USD</p>
-                    <span className={"text-[11px] font-bold px-2.5 py-1 rounded-full " + badge.cls}>{badge.label}</span>
-                  </div>
-                  <CrixCoinCardVisual pan={card.masked_pan} cardholder={card.cardholder_name || user?.full_name} />
-                  <p className="text-xs text-muted-foreground text-center">Funded {usd(card.funding_usd)} · charged ₦{Number(card.total_debit_ngn || 0).toLocaleString()}</p>
-                  {actionable ? (
-                    <div className={railPaused ? "grid grid-cols-2 gap-2" : "grid grid-cols-3 gap-2"}>
-                      <button onClick={() => setDetailCard(card)} className="h-10 rounded-xl bg-secondary border border-border text-xs font-semibold inline-flex items-center justify-center gap-1 min-h-[40px]">
-                        <Eye className="w-3.5 h-3.5" /> Details
-                      </button>
-                      {!railPaused ? <button onClick={() => setTopUpCard(card)} className="h-10 rounded-xl bg-primary text-primary-foreground text-xs font-bold min-h-[40px]">Top up</button> : null}
-                      <button
-                        onClick={() => toggleFreeze(card)}
-                        disabled={freezeBusy === card.card_key}
-                        className="h-10 rounded-xl bg-secondary border border-border text-xs font-semibold inline-flex items-center justify-center gap-1 disabled:opacity-50 min-h-[40px]"
-                      >
-                        {freezeBusy === card.card_key ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : card.status === "frozen" ? <><Sun className="w-3.5 h-3.5" /> Unfreeze</> : <><Snowflake className="w-3.5 h-3.5" /> Freeze</>}
-                      </button>
-                    </div>
-                  ) : null}
-                  {card.status === "unknown" ? (
-                    <p className="text-[11px] text-amber-400 text-center">Being confirmed with the card network — do not submit the same purchase again.</p>
-                  ) : null}
-                  {card.status === "refunded" || card.status === "failed" ? (
-                    <p className="text-[11px] text-muted-foreground text-center">This purchase did not go through — your wallet was not charged.</p>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
-        </>
       )}
 
-      {issueOpen ? (
-        <IssueDollarCardDialog
-          user={user}
-          kycStatus={kyc ? kyc.kyc_status : "unknown"}
-          onClose={() => setIssueOpen(false)}
-          onChanged={() => { load(); onChanged && onChanged(); }}
-        />
-      ) : null}
-      {detailCard ? (
-        <DollarCardDetailDialog card={detailCard} user={user} onClose={() => setDetailCard(null)} />
-      ) : null}
-      {topUpCard ? (
-        <DollarCardTopUpDialog card={topUpCard} onClose={() => setTopUpCard(null)} onChanged={() => { load(); onChanged && onChanged(); }} />
-      ) : null}
+      {cards.length === 0 && (
+        <div className="p-6 bg-gray-900 border border-gray-800 rounded-xl text-center">
+          <CreditCard className="w-8 h-8 text-orange-500 mx-auto mb-2" />
+          <p className="text-white text-sm">No cards yet</p>
+          <p className="text-gray-400 text-xs mt-1">Create your first USD card to start spending online.</p>
+        </div>
+      )}
+
+      {cards.map((card) => (
+        <div key={card.card_id} className="p-4 bg-gray-900 border border-gray-800 rounded-xl">
+          <div className="flex items-start justify-between mb-3">
+            <div>
+              <p className="text-white font-semibold">{card.name_on_card || 'Cardholder'}</p>
+              <p className="text-gray-400 text-xs font-mono">•••• •••• •••• {card.last4}</p>
+              <p className="text-gray-500 text-[10px] mt-0.5">{card.card_brand || 'Mastercard'} · {card.status || 'active'}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-orange-400 font-bold">{ngn(card.balance)}</p>
+              <p className="text-gray-500 text-[10px]">Balance</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              onClick={() => setShowFund(card)}
+              className="py-2 px-3 bg-gray-800 hover:bg-gray-700 text-white text-xs font-semibold rounded-lg"
+            >
+              <DollarSign className="w-3.5 h-3.5 inline mr-1" /> Fund
+            </button>
+            <button
+              onClick={() => freezeCard(card, card.status !== 'frozen')}
+              disabled={busy}
+              className="py-2 px-3 bg-gray-800 hover:bg-gray-700 text-white text-xs font-semibold rounded-lg disabled:opacity-50"
+            >
+              <Snowflake className="w-3.5 h-3.5 inline mr-1" /> {card.status === 'frozen' ? 'Unfreeze' : 'Freeze'}
+            </button>
+            <button
+              onClick={() => deleteCard(card)}
+              disabled={busy}
+              className="py-2 px-3 bg-gray-800 hover:bg-red-900 text-red-400 text-xs font-semibold rounded-lg disabled:opacity-50"
+            >
+              <Trash2 className="w-3.5 h-3.5 inline mr-1" /> Delete
+            </button>
+          </div>
+        </div>
+      ))}
+
+      <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+        <p className="text-[10px] text-gray-400 leading-relaxed">
+          ⚠️ Load only the exact amount you want to spend. Kripicard charges a $1 + 4% top-up fee and a $1.50 monthly fee. Loading $100 costs $4 in fees — you get $96 to spend.
+        </p>
+      </div>
+
+      {/* CREATE MODAL */}
+      {showCreate && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 max-w-sm w-full">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-white font-bold">Create USD Card</h3>
+              <button onClick={() => setShowCreate(false)} className="text-gray-500 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="text-gray-400 text-xs block mb-1">Card Type</label>
+                <select
+                  value={form.bin}
+                  onChange={(e) => setForm({ ...form, bin: e.target.value })}
+                  className="w-full bg-gray-800 text-white px-3 py-2.5 rounded-lg text-sm"
+                >
+                  <option value="537872">US Mastercard (recommended)</option>
+                  <option value="539502">Global Mastercard</option>
+                  <option value="525847">Global Mastercard 2</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-gray-400 text-xs block mb-1">Cardholder Name</label>
+                <input
+                  type="text"
+                  value={form.name_on_card}
+                  onChange={(e) => setForm({ ...form, name_on_card: e.target.value })}
+                  placeholder="John Alex"
+                  className="w-full bg-gray-800 text-white px-3 py-2.5 rounded-lg text-sm outline-none"
+                />
+              </div>
+
+              {form.bin === '537872' && (
+                <div>
+                  <label className="text-gray-400 text-xs block mb-1">Date of Birth (required for US cards)</label>
+                  <input
+                    type="date"
+                    value={form.dateOfBirth}
+                    onChange={(e) => setForm({ ...form, dateOfBirth: e.target.value })}
+                    className="w-full bg-gray-800 text-white px-3 py-2.5 rounded-lg text-sm outline-none"
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="text-gray-400 text-xs block mb-1">Initial Load (USD, min $10)</label>
+                <input
+                  type="number"
+                  value={form.amount}
+                  onChange={(e) => setForm({ ...form, amount: e.target.value })}
+                  className="w-full bg-gray-800 text-white px-3 py-2.5 rounded-lg text-sm outline-none"
+                />
+                <p className="text-[10px] text-gray-500 mt-1">Fee: $1 + 4% will be added</p>
+              </div>
+
+              <button
+                onClick={createCard}
+                disabled={busy}
+                className="w-full py-3 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-700 text-white font-bold rounded-lg text-sm"
+              >
+                {busy ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : `Create Card · $${form.amount}`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* FUND MODAL */}
+      {showFund && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 max-w-sm w-full">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-white font-bold">Fund Card •••• {showFund.last4}</h3>
+              <button onClick={() => setShowFund(null)} className="text-gray-500 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="text-gray-400 text-xs block mb-1">Amount (USD, min $10)</label>
+                <input
+                  type="number"
+                  value={fundAmount}
+                  onChange={(e) => setFundAmount(e.target.value)}
+                  className="w-full bg-gray-800 text-white px-3 py-2.5 rounded-lg text-sm outline-none"
+                />
+                <p className="text-[10px] text-gray-500 mt-1">Fee: $1 + 4% = ${(Number(fundAmount) * 0.04 + 1).toFixed(2)}</p>
+              </div>
+
+              <button
+                onClick={fundCard}
+                disabled={busy}
+                className="w-full py-3 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-700 text-white font-bold rounded-lg text-sm"
+              >
+                {busy ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : `Fund $${fundAmount}`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
