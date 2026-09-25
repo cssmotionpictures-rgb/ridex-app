@@ -11,7 +11,7 @@ export default function CrixDollarCardPanel({ onChanged }) {
   const [error, setError] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [showFund, setShowFund] = useState(null);
-  const [form, setForm] = useState({ bin: '537872', amount: '20', name_on_card: '', dateOfBirth: '' });
+  const [form, setForm] = useState({ bin: '49387519', amount: '20', name_on_card: '', dateOfBirth: '' });
   const [fundAmount, setFundAmount] = useState('10');
 
   const loadCards = async () => {
@@ -53,7 +53,7 @@ export default function CrixDollarCardPanel({ onChanged }) {
       if (data?.error) throw new Error(data.error);
 
       setShowCreate(false);
-      setForm({ bin: '537872', amount: '20', name_on_card: '', dateOfBirth: '' });
+      setForm({ bin: '49387519', amount: '20', name_on_card: '', dateOfBirth: '' });
       await loadCards();
       onChanged?.();
     } catch (e) {
@@ -206,9 +206,9 @@ export default function CrixDollarCardPanel({ onChanged }) {
                   onChange={(e) => setForm({ ...form, bin: e.target.value })}
                   className="w-full bg-gray-800 text-white px-3 py-2.5 rounded-lg text-sm"
                 >
-                  <option value="537872">US Mastercard (recommended)</option>
-                  <option value="539502">Global Mastercard</option>
-                  <option value="525847">Global Mastercard 2</option>
+                  <option value="49387519">US Mastercard (recommended)</option>
+                  <option value="441357">US Visa</option>
+                  <option value="49387520">US Mastercard 2</option>
                 </select>
               </div>
 
