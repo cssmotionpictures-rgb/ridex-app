@@ -8,7 +8,7 @@ import ProtectionCenter from "@/components/crix/ProtectionCenter";
 import CrixBrandHero from "@/components/crix/CrixBrandHero";
 import { invokeCrix } from "@/lib/crix";
 import { useToast } from "@/components/ui/use-toast";
-import { Wallet, Send, History, ShieldCheck, Layers, Zap, LayoutGrid, CreditCard, Sprout, Bitcoin } from "lucide-react";
+import { Wallet, Send, History, ShieldCheck, Layers, Zap, LayoutGrid, CreditCard, Sprout, Bitcoin, Gift, Globe } from "lucide-react";
 import SymbioticRewards from "@/components/crix/SymbioticRewards";
 import CrxsWalletDashboard from "@/components/crix/CrxsWalletDashboard";
 import PayBills from "@/components/crix/PayBills";
