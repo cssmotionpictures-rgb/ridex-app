@@ -41,7 +41,7 @@ export default function CrixDashboardMoneyCard({ user }) {
     // Live card details (balance, number, expiry) come from the card service
     // when it is reachable; the saved card record is the honest fallback.
     invokeCrixFunction("crix-dollar-card", { action: "list" })
-      .then((d) => setCards((prev) => (d.cards && d.cards.length ? d.cards : prev)))
+      .then((d) => setCards((prev) => (d?.cards && d.cards.length ? d.cards : prev)))
       .catch(() => {});
     return unsub;
   }, [user?.id]);

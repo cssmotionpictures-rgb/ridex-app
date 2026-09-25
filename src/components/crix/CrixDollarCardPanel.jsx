@@ -36,7 +36,7 @@ export default function CrixDollarCardPanel({ user, onChanged }) {
   const load = React.useCallback(() => {
     invokeCrixFunction("crix-dollar-card", { action: "network" }).then(setNet).catch(() => setNet(null));
     invokeCrixFunction("crix-dollar-card", { action: "list" })
-      .then((d) => setCards(d.cards || []))
+      .then((d) => setCards(d?.cards || []))
       .catch(() => setCards([]));
     invokeCrixFunction("crix-dollar-card", { action: "kyc_status" }).then(setKyc).catch(() => setKyc(null));
   }, []);
