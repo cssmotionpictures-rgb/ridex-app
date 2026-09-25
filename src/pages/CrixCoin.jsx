@@ -14,6 +14,8 @@ import CrxsWalletDashboard from "@/components/crix/CrxsWalletDashboard";
 import PayBills from "@/components/crix/PayBills";
 import CrixHomeDashboard from "@/components/crix/CrixHomeDashboard";
 import CrixDollarCardPanel from "@/components/crix/CrixDollarCardPanel";
+import CrixGiftCards from "@/components/crix/CrixGiftCards";
+import CrixESim from "@/components/crix/CrixESim";
 import QuidaxOnrampPanel from "@/components/crix/QuidaxOnrampPanel";
 import CrixCoinAddressCard from "@/components/crxs/CrixCoinAddressCard";
 import CrixWalletDisplay from "@/components/crix/CrixWalletDisplay";
@@ -25,6 +27,8 @@ const TABS = [
   { id: "send", label: "Send", icon: Send },
   { id: "bills", label: "Pay Bills", icon: Zap },
   { id: "dollar-card", label: "Dollar Card", icon: CreditCard },
+  { id: "gift-cards", label: "Gift Cards", icon: Gift },
+  { id: "esim", label: "eSIM", icon: Globe },
   { id: "crypto", label: "Crypto", icon: Bitcoin },
   { id: "rewards", label: "Rewards", icon: Sprout },
   { id: "activity", label: "Activity", icon: History },
@@ -112,6 +116,10 @@ export default function CrixCoin() {
         <ActivityList myId={user?.id} />
       ) : tab === "protection" ? (
         <ProtectionCenter wallets={wallets} onChanged={loadWallets} />
+      ) : tab === "gift-cards" ? (
+        <CrixGiftCards onChanged={loadWallets} />
+      ) : tab === "esim" ? (
+        <CrixESim onChanged={loadWallets} />
       ) : tab === "crxs" ? (
         <div className="space-y-5">
           <CrixCoinAddressCard />
