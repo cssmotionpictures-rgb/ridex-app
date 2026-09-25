@@ -50,7 +50,7 @@ export default function CrixDollarCardSummary({ cards }) {
     return () => { alive = false; };
   }, [cardKey]);
 
-  if (data && !data.cards.length) return null;
+  if (data && !(data.cards || []).length) return null;
 
   return (
     <div className="rounded-3xl border border-border bg-card p-5">
@@ -63,9 +63,9 @@ export default function CrixDollarCardSummary({ cards }) {
           <div className="md:border-r md:border-border md:pr-5">
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1.5"><Wallet2 className="w-3.5 h-3.5" /> Total card balance</p>
             <p className="text-3xl font-extrabold gold-text mt-1">{usd(data.total_usd)}</p>
-            <p className="text-[11px] text-muted-foreground mt-1">{data.cards.length} live card{data.cards.length > 1 ? "s" : ""}</p>
+            <p className="text-[11px] text-muted-foreground mt-1">{(data.cards || []).length} live card{(data.cards || []).length > 1 ? "s" : ""}</p>
             <div className="flex flex-wrap gap-1.5 mt-3">
-              {data.cards.map((c, i) => (
+              {(data.cards || []).map((c, i) => (
                 <span key={i} className="text-[10px] font-bold px-2 py-1 rounded-full bg-secondary border border-border">
                   {c.masked} · {c.status === "active" ? "Active" : c.status === "frozen" ? "Frozen" : c.status}
                 </span>
