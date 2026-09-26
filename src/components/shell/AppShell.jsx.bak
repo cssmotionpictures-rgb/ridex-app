@@ -2,7 +2,7 @@ import React from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { SERVICES, CONTACT } from "@/lib/catalog";
-import { Activity, LayoutGrid, User, ShieldCheck, LifeBuoy, LogOut, Car, Gift, CreditCard, ShieldAlert, Route, Megaphone, Plane, ShieldBan, Send, Receipt, Mic2, ScrollText, Copyright, Volume2, VolumeX, Briefcase, Radar, Radio, CalendarCheck, Sigma, Brain, Lightbulb, Zap, Trophy, Flame, Target, Heart, Coins } from "lucide-react";
+import { LayoutGrid, User, ShieldCheck, LifeBuoy, LogOut, Car, Gift, CreditCard, ShieldAlert, Route, Megaphone, Plane, ShieldBan, Send, Receipt, Mic2, ScrollText, Copyright, Volume2, VolumeX, Briefcase, Radar, Radio, CalendarCheck, Sigma, Brain, Lightbulb, Zap, Trophy, Flame, Target, Heart, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNewBookings } from "@/hooks/useNewBookings";
 import { useClickTone, isClickToneOn, setClickTone } from "@/hooks/useClickTone";
@@ -105,7 +105,6 @@ export default function AppShell() {
         { name: "Wealth Lab", path: "/business-blueprints", icon: Briefcase },
         { name: "Opportunity Radar", path: "/opportunity-radar", icon: Radar },
         { name: "Live Monitor", path: "/live-sports-monitor", icon: Radio },
-        { name: "FX Beast", path: "/fx-beast", icon: Activity },
         { name: "WIN RABA", path: "/win-raba", icon: Sigma },
         { name: "KALA", path: "/kala", icon: Brain },
         { name: "RUN O", path: "/run-o", icon: Zap },
