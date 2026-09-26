@@ -1,4 +1,4 @@
-import { enrichGame, getH2H, getInjuries, getRealOdds, getElo, getStandings, getFixtures } from "@/lib/monsterEnrichment";
+import { enrichGame, getH2H, getInjuries, getRealOdds, getElo } from "@/lib/monsterEnrichment";
 // Client-side "deep search" prediction engine — multi-sport, multi-module.
 // Modules blended for each pick:
 //   1. Recency-weighted last-5 form (recent games count more) — TheSportsDB eventslast (free)
@@ -11,6 +11,33 @@ import { enrichGame, getH2H, getInjuries, getRealOdds, getElo, getStandings, get
 import { fmtTime } from "@/lib/sportsScores";
 import { fetchJsonResilient } from "@/lib/resilient";
 import { loadDealtMemory, recordDealt, saveDealtMemory, todayKey, wasDealtBefore } from "@/lib/dealtPickMemory";
+
+// ---------------------------------------------------------------------
+// ENRICHMENT PRELOADER — fetches Elo, H2H, injuries, odds for the top
+// games. Returns a Map keyed by "home|away" so scoreFixture can look
+// them up. Never blocks: on failure returns whatever it got. Your
+// engine's scoring, thresholds and gates stay unchanged — this just
+// supplies extra signals.
+// ---------------------------------------------------------------------
+async function preloadEnrichments(matches = [], league = "eng.1", limit = 15) {
+  const { enrichGame } = await import("@/lib/monsterEnrichment");
+  const out = new Map();
+  const slice = matches.slice(0, limit);
+  const CONCURRENCY = 4;
+  for (let i = 0; i < slice.length; i += CONCURRENCY) {
+    const chunk = slice.slice(i, i + CONCURRENCY);
+    const results = await Promise.all(chunk.map((m) =>
+      enrichGame({ home: m.home, away: m.away, league }).catch(() => null)
+    ));
+    results.forEach((r, idx) => {
+      if (r) out.set(chunk[idx].home + "|" + chunk[idx].away, r);
+    });
+  }
+  return out;
+}
+
+let __enrichmentCache = new Map();
+
 
 const API_KEY = "3";
 const BASE = `https://www.thesportsdb.com/api/v1/json/${API_KEY}`;
@@ -241,7 +268,10 @@ function scoreTennis(e, homeForm, awayForm, standings) {
   return common(e, market, hs, as, !!(homeForm || awayForm), extra);
 }
 
-export function scoreFixture(e, homeForm, awayForm, sport = "soccer", standings = null) {
+export function scoreFixture(e, homeForm, awayForm, sport = "soccer", standings = null, __enrichment = null) {
+  // === ENRICHMENT SIGNAL (additive — your engine decides weighting) ===
+  const _enr = __enrichment || __enrichmentCache.get((e?.strHomeTeam || "") + "|" + (e?.strAwayTeam || ""));
+
   if (sport === "basketball") return scoreBasketball(e, homeForm, awayForm, standings);
   if (sport === "tennis") return scoreTennis(e, homeForm, awayForm, standings);
   return scoreSoccer(e, homeForm, awayForm, standings);
@@ -306,6 +336,10 @@ export function formFromResults(events, teamLower) {
 // so the scan completes instead of rate-limiting on per-team lookups. Each day
 // surfaces the top 3 morning + 3 evening picks across all leagues.
 export async function buildPlan(matches, sport = "soccer", onProgress, qualifiedMinConf = 0) {
+  // === PRELOAD ENRICHMENT for the first 15 matches (never blocks) ===
+  const __enrich = await preloadEnrichments(matches, sport === "soccer" ? "eng.1" : sport, 15);
+  __enrichmentCache = __enrich;
+
   // Form is derived per league (one call per league). The worldwide eventsday
   // feed can list hundreds of tiny leagues — scanning every one of them is
   // what previously made the fallback board take minutes. Cap the scan at the
