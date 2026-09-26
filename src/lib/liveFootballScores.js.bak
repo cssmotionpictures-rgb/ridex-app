@@ -7,17 +7,15 @@ import { statusOf, fmtTime } from "@/lib/sportsScores";
 // api-football proxy, so the free external quota is never hammered and the
 // key stays server-side.
 
-// Bzzoiro league IDs (not API-Football IDs — bzzoiro uses its own numbering).
-// 1 = Premier League (verified via Arsenal team_id 18).
 export const MAJOR_LEAGUES = [
-  { id: 1,  name: "Premier League" },
-  { id: 2,  name: "Championship" },
-  { id: 3,  name: "Serie A" },
-  { id: 4,  name: "Bundesliga" },
-  { id: 5,  name: "Ligue 1" },
-  { id: 6,  name: "Champions League" },
-  { id: 17, name: "Europa League" },
-  { id: 28, name: "Süper Lig" },
+  { id: 39, name: "Premier League" },
+  { id: 2, name: "Champions League" },
+  { id: 140, name: "La Liga" },
+  { id: 78, name: "Bundesliga" },
+  { id: 135, name: "Serie A" },
+  { id: 61, name: "Ligue 1" },
+  { id: 203, name: "Süper Lig" },
+  { id: 3, name: "Europa League" },
 ];
 
 const MAJOR_IDS = new Set(MAJOR_LEAGUES.map((l) => l.id));
