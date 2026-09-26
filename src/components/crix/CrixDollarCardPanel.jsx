@@ -183,7 +183,7 @@ export default function CrixDollarCardPanel({ onChanged }) {
 
       <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
         <p className="text-[10px] text-gray-400 leading-relaxed">
-          ⚠️ Load only the exact amount you want to spend. Kripicard charges a $1 + 4% top-up fee and a $1.50 monthly fee. Loading $100 costs $4 in fees — you get $96 to spend.
+          ⚠️ Load only the exact amount you want to spend. CRIXCOIN charges a $1 + 4% top-up fee and a $1.50 monthly fee. Loading $100 costs $4 in fees — you get $96 to spend.
         </p>
       </div>
 
