@@ -25,7 +25,10 @@ const LIVE_STATUSES = ["1H", "2H", "HT", "ET", "BT", "P", "LIVE", "INT"];
 const FT_STATUSES = ["FT", "AET", "PEN"];
 
 // The proxy wraps the API-FOOTBALL body as { cached, data, endpoint }.
-const extract = (body) => (Array.isArray(body?.data?.response) ? body.data.response : []);
+const extract = (body) => {
+  const arr = body?.data?.response ?? body?.response;
+  return Array.isArray(arr) ? arr : [];
+};
 
 export function mapFixture(f) {
   const s = (f.fixture?.status?.short || "NS").toUpperCase();
