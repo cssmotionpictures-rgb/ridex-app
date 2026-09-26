@@ -19,11 +19,11 @@ import { loadDealtMemory, recordDealt, saveDealtMemory, todayKey, wasDealtBefore
 // engine's scoring, thresholds and gates stay unchanged — this just
 // supplies extra signals.
 // ---------------------------------------------------------------------
-async function preloadEnrichments(matches = [], league = "eng.1", limit = 15) {
+async function preloadEnrichments(matches = [], league = "eng.1", limit = 50) {
   const { enrichGame } = await import("@/lib/monsterEnrichment");
   const out = new Map();
   const slice = matches.slice(0, limit);
-  const CONCURRENCY = 4;
+  const CONCURRENCY = 6;
   for (let i = 0; i < slice.length; i += CONCURRENCY) {
     const chunk = slice.slice(i, i + CONCURRENCY);
     const results = await Promise.all(chunk.map((m) =>
@@ -389,7 +389,7 @@ export function formFromResults(events, teamLower) {
 // surfaces the top 3 morning + 3 evening picks across all leagues.
 export async function buildPlan(matches, sport = "soccer", onProgress, qualifiedMinConf = 0) {
   // === PRELOAD ENRICHMENT for the first 15 matches (never blocks) ===
-  const __enrich = await preloadEnrichments(matches, sport === "soccer" ? "eng.1" : sport, 15);
+  const __enrich = await preloadEnrichments(matches, sport === "soccer" ? "eng.1" : sport, 50);
   __enrichmentCache = __enrich;
 
   // Form is derived per league (one call per league). The worldwide eventsday
