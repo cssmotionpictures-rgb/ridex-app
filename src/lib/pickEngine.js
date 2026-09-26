@@ -170,6 +170,52 @@ function common(e, market, hs, as, hasData, extra = "") {
 }
 
 // === Soccer === 1 / X / 2 / Over 1.5 / Over 2.5 / Under 2.5 / BTTS / Double Chance
+// === ENRICHMENT ADJUSTMENT HELPER ===
+// Applied inside each scorer. Nudges pH/pA/pD using Elo, H2H, injuries.
+// Capped at +/-8% — never dominates your base probability.
+// Real odds attached as metadata only (no effect on pick).
+const USE_ENRICHMENT = true;
+
+function applyEnrichment(pH, pD, pA, isDrawSport, e) {
+  const _enr = __enrichmentCache.get((e?.strHomeTeam || "") + "|" + (e?.strAwayTeam || ""));
+  if (!USE_ENRICHMENT || !_enr) return { pH, pD: pD || 0, pA, note: "" };
+
+  const notes = [];
+  let newH = pH, newD = pD || 0, newA = pA;
+
+  // 1. Elo (max +/-4%)
+  if (_enr.elo?.home && _enr.elo?.away) {
+    const adj = Math.max(-0.04, Math.min(0.04, ((_enr.elo.home - _enr.elo.away) / 400) * 0.06));
+    newH = Math.max(0.05, newH + adj);
+    newA = Math.max(0.05, newA - adj);
+    notes.push("elo" + (adj > 0 ? "+" : "") + Math.round(adj * 100) + "%");
+  }
+
+  // 2. H2H (max +/-3%, needs 3+ matches)
+  if (_enr.h2h?.matches >= 3) {
+    const rate = (_enr.h2h.homeWins - _enr.h2h.awayWins) / _enr.h2h.matches;
+    const adj = Math.max(-0.03, Math.min(0.03, rate * 0.08));
+    newH = Math.max(0.05, newH + adj);
+    newA = Math.max(0.05, newA - adj);
+    notes.push("h2h" + (adj > 0 ? "+" : "") + Math.round(adj * 100) + "%");
+  }
+
+  // 3. Injuries (downgrade only, max -6%)
+  const injH = _enr.injuries?.home?.impact || 0;
+  const injA = _enr.injuries?.away?.impact || 0;
+  if (injH > 3) { const d = Math.min(0.06, injH * 0.008); newH = Math.max(0.05, newH - d); notes.push("injH-" + Math.round(d * 100) + "%"); }
+  if (injA > 3) { const d = Math.min(0.06, injA * 0.008); newA = Math.max(0.05, newA - d); notes.push("injA-" + Math.round(d * 100) + "%"); }
+
+  // Renormalize
+  const tot = isDrawSport ? newH + newD + newA : newH + newA;
+  if (tot > 0) {
+    newH /= tot; newA /= tot;
+    if (isDrawSport) newD /= tot;
+  }
+
+  return { pH: newH, pD: isDrawSport ? newD : 0, pA: newA, note: notes.length ? " · adj " + notes.join(" ") : "" };
+}
+
 function scoreSoccer(e, homeForm, awayForm, standings) {
   const hf = homeForm?.avg ?? 0.5;
   const af = awayForm?.avg ?? 0.5;
@@ -191,6 +237,8 @@ function scoreSoccer(e, homeForm, awayForm, standings) {
   const pU25 = 1 - pO25;
   const pBttsYes = clamp((1 - Math.exp(-clamp(hgf, 0.2, 3))) * (1 - Math.exp(-clamp(agf, 0.2, 3))), 0, 1);
   const pBttsNo = 1 - pBttsYes;
+  const __adj = applyEnrichment(pH, pD, pA, true, e);
+  pH = __adj.pH; pA = __adj.pA; pD = __adj.pD;
   const primary = [
     { key: "1",  label: "1",  name: "Home Win",   prob: pH },
     { key: "X",  label: "X",  name: "Draw",        prob: pD },
@@ -213,7 +261,7 @@ function scoreSoccer(e, homeForm, awayForm, standings) {
   if (pH >= pA && pH >= pD) { hs = Math.round(clamp(hgf, 1, 3)); as = Math.round(clamp(aga * 0.7, 0, 2)); if (hs <= as) hs = as + 1; }
   else if (pA >= pH && pA >= pD) { as = Math.round(clamp(agf, 1, 3)); hs = Math.round(clamp(hga * 0.7, 0, 2)); if (as <= hs) as = hs + 1; }
   else { hs = Math.round(clamp((hgf + agf) / 2, 1, 2)); as = hs; }
-  const extra = ` · form H ${homeForm ? Math.round(homeForm.avg * 100) : 0}% / A ${awayForm ? Math.round(awayForm.avg * 100) : 0}% · ~${lam.toFixed(1)} goals/g${st.note}`;
+  const extra = ` · form H ${homeForm ? Math.round(homeForm.avg * 100) : 0}% / A ${awayForm ? Math.round(awayForm.avg * 100) : 0}% · ~${lam.toFixed(1)} goals/g${st.note}${__adj?.note || ''}`;
   return common(e, market, hs, as, !!(homeForm || awayForm), extra);
 }
 
@@ -232,6 +280,8 @@ function scoreBasketball(e, homeForm, awayForm, standings) {
   const line = Math.round(lam) - 0.5;
   const pOver = pTotalAtLeast(lam, Math.floor(line) + 1);
   const pUnder = 1 - pOver;
+  const __adj = applyEnrichment(pH, pD, pA, false, e);
+  pH = __adj.pH; pA = __adj.pA; pD = __adj.pD;
   const primary = [
     { key: "1", label: "1", name: "Home Win", prob: pH },
     { key: "2", label: "2", name: "Away Win", prob: pA },
@@ -243,7 +293,7 @@ function scoreBasketball(e, homeForm, awayForm, standings) {
   let as = Math.round(clamp(agf * 0.96, 85, 135));
   if (pH >= pA && hs <= as) hs = as + 1;
   else if (pA > pH && as <= hs) as = hs + 1;
-  const extra = ` · form H ${homeForm ? Math.round(homeForm.avg * 100) : 0}% / A ${awayForm ? Math.round(awayForm.avg * 100) : 0}% · ~${Math.round(lam)} pts/g${st.note}`;
+  const extra = ` · form H ${homeForm ? Math.round(homeForm.avg * 100) : 0}% / A ${awayForm ? Math.round(awayForm.avg * 100) : 0}% · ~${Math.round(lam)} pts/g${st.note}${__adj?.note || ''}`;
   return common(e, market, hs, as, !!(homeForm || awayForm), extra);
 }
 
@@ -255,6 +305,8 @@ function scoreTennis(e, homeForm, awayForm, standings) {
   let pA = 1 - pH;
   const st = applyStandings(pH, pA, e.strHomeTeam, e.strAwayTeam, standings);
   pH = st.pHome; pA = clamp(st.pAway, 0.15, 0.8);
+  const __adj = applyEnrichment(pH, pD, pA, false, e);
+  pH = __adj.pH; pA = __adj.pA; pD = __adj.pD;
   const primary = [
     { key: "1", label: "1", name: `${e.strHomeTeam || "Player A"} to win`, prob: pH },
     { key: "2", label: "2", name: `${e.strAwayTeam || "Player B"} to win`, prob: pA },
@@ -264,7 +316,7 @@ function scoreTennis(e, homeForm, awayForm, standings) {
   const loserSets = (Math.random() < 0.45) ? 1 : 0;
   const hs = homeWins ? 2 : loserSets;
   const as = homeWins ? loserSets : 2;
-  const extra = ` · win-rate H ${homeForm ? Math.round(homeForm.avg * 100) : 50}% / A ${awayForm ? Math.round(awayForm.avg * 100) : 50}%${st.note}`;
+  const extra = ` · win-rate H ${homeForm ? Math.round(homeForm.avg * 100) : 50}% / A ${awayForm ? Math.round(awayForm.avg * 100) : 50}%${st.note}${__adj?.note || ''}`;
   return common(e, market, hs, as, !!(homeForm || awayForm), extra);
 }
 
