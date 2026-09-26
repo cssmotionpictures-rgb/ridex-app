@@ -27,6 +27,7 @@ const Carwash = lazy(() => import('@/pages/Carwash'));
 const Venues = lazy(() => import('@/pages/Venues'));
 const Movies = lazy(() => import('@/pages/Movies'));
 const LiveSports = lazy(() => import('@/pages/LiveSports'));
+const FxBeast = lazy(() => import('@/pages/FxBeast'));
 const MonsterEngine = lazy(() => import('@/pages/MonsterEngine'));
 const WinRaba = lazy(() => import('@/pages/WinRaba'));
 const Kala = lazy(() => import('@/pages/Kala'));
@@ -181,6 +182,7 @@ const AuthenticatedApp = () => {
           <Route path="/venues" element={<Venues />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/sports" element={<LiveSports />} />
+          <Route path="/fx-beast" element={<FxBeast />} />
           <Route path="/sports/forum" element={<SportsForum />} />
           <Route path="/sports/forum/:id" element={<SportsForumThread />} />
           <Route path="/sports/highlights" element={<SportsHighlights />} />
